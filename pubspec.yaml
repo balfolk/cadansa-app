@@ -1,0 +1,29 @@
+name: cadansa_app
+description: CaDansa app
+
+version: 1.0.0
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  flutter_cupertino_localizations: ^1.0.1
+  flutter_dotenv: ^2.0.1
+  photo_view: ^0.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+  assets:
+    - .env
+
+  uses-material-design: true
+
