@@ -14,8 +14,9 @@ class FestivalMap extends StatelessWidget {
     return Container(
       child: PhotoView(
         imageProvider: NetworkImage(path),
-        minScale: 0.20,
-        maxScale: 1.0,
+        initialScale: _mapConfig['initialScale'] ?? null,
+        minScale: _mapConfig['minScale'] ?? 0.2,
+        maxScale: _mapConfig['maxScale'] ?? 1.0,
         backgroundDecoration: BoxDecoration(color: Colors.white),
       ),
     );
