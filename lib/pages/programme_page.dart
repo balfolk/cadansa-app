@@ -1,5 +1,6 @@
 import 'package:cadansa_app/data/programme.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammePage extends StatefulWidget {
   final String _title;
@@ -53,6 +54,8 @@ class _ProgrammePageState extends State<ProgrammePage> {
 
   List<Widget> get tabChildren {
     final Locale locale = Localizations.localeOf(context);
+    final ThemeData theme = Theme.of(context);
+    final TextStyle urlStyle = theme.textTheme.body2.copyWith(color: theme.primaryColor);
     return widget._programme.days.asMap().entries.map((entry) {
       final ProgrammeDay day = entry.value;
       return SingleChildScrollView(
@@ -64,13 +67,13 @@ class _ProgrammePageState extends State<ProgrammePage> {
                   leading: _isPlayingNow(day, band)
                       ? Icon(
                           Icons.music_note,
-                          color: Theme.of(context).accentColor,
+                          color: theme.accentColor,
                           size: 36,
                         )
                       : null,
                   title: Text(
                     _formatBandName(band),
-                    style: Theme.of(context).textTheme.title,
+                    style: theme.textTheme.title,
                     maxLines: 1,
                     softWrap: false,
                     overflow: TextOverflow.fade,
@@ -78,11 +81,16 @@ class _ProgrammePageState extends State<ProgrammePage> {
                   subtitle: Text(
                       '${band.startTime.format(context)} – ${band.endTime.format(context)}'),
                 ),
-            body: Container(
-              child: Text(band.description.get(locale)),
-              padding: EdgeInsetsDirectional.only(
-                  start: 20.0, end: 20.0, bottom: 20.0),
-            ),
+            body: Column(children: <Widget>[
+              Container(
+                child: Text(band.description.get(locale)),
+                padding: EdgeInsetsDirectional.only(
+                    start: 20.0, end: 20.0, bottom: 20.0),
+              ),
+              FlatButton(onPressed: () => launch(band.website),
+                  child: Text('Website', style: urlStyle,)
+              ),
+            ]),
             isExpanded: _expansions[day][entry.key],
             canTapOnHeader: true,
           );
