@@ -87,8 +87,10 @@ class _ProgrammePageState extends State<ProgrammePage> {
                 padding: EdgeInsetsDirectional.only(
                     start: 20.0, end: 20.0, bottom: 20.0),
               ),
-              FlatButton(onPressed: () => launch(band.website),
-                  child: Text('Website', style: urlStyle,)
+              OutlineButton.icon(
+                onPressed: () => launch(band.website),
+                label: Text('Website', style: urlStyle,),
+                icon: Icon(Icons.link),
               ),
             ]),
             isExpanded: _expansions[day][entry.key],
