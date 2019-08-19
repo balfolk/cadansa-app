@@ -1,22 +1,46 @@
+import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/widgets/map.dart';
 import 'package:flutter/material.dart';
 
-class MapPage extends StatelessWidget {
-  final dynamic _config;
+class MapPage extends StatefulWidget {
+  final String _title;
+  final MapData _mapData;
   final BottomNavigationBar Function() _bottomBarGenerator;
 
-  MapPage(this._config, this._bottomBarGenerator);
+  MapPage(this._title, this._mapData, this._bottomBarGenerator);
 
   @override
+  _MapPageState createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  @override
   Widget build(final BuildContext context) {
-    final String title = _config['title'];
-    return Scaffold(
+    return DefaultTabController(
+      length: widget._mapData.floors.length,
+      child: Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          title: Text(widget._title),
+          bottom: TabBar(tabs: tabs),
         ),
-        body: Center(
-          child: FestivalMap(_config['map']),
+        body: TabBarView(
+          children: tabChildren,
+          physics: const NeverScrollableScrollPhysics(),
         ),
-        bottomNavigationBar: _bottomBarGenerator());
+        bottomNavigationBar: widget._bottomBarGenerator(),
+      ),
+    );
+  }
+
+  List<Tab> get tabs {
+    final Locale locale = Localizations.localeOf(context);
+    return widget._mapData.floors.map((flooar) {
+      return Tab(text: flooar.title.get(locale));
+    }).toList(growable: false);
+  }
+
+  List<Widget> get tabChildren {
+    return widget._mapData.floors
+        .map((floor) => FestivalMap(floor)).toList(growable: false);
   }
 }

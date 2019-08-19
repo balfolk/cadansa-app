@@ -2,7 +2,7 @@ import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 
 class Programme {
-  List<ProgrammeDay> _days;
+  final List<ProgrammeDay> _days;
 
   Programme._(this._days);
 
@@ -15,9 +15,9 @@ class Programme {
 }
 
 class ProgrammeDay {
-  LText _name;
-  DateTime _startsOn;
-  List<Band> _bands;
+  final LText _name;
+  final DateTime _startsOn;
+  final List<Band> _bands;
 
   ProgrammeDay._(this._name, this._startsOn, this._bands);
 
@@ -37,11 +37,11 @@ class ProgrammeDay {
 }
 
 class Band {
-  String _name;
-  TimeOfDay _startTime, _endTime;
-  List<String> _countries;
-  LText _description;
-  String _website;
+  final String _name;
+  final TimeOfDay _startTime, _endTime;
+  final List<String> _countries;
+  final LText _description;
+  final String _website;
 
   Band._(this._name, this._startTime, this._endTime, this._countries,
       this._description, this._website);

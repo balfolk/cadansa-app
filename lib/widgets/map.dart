@@ -1,22 +1,22 @@
+import 'package:cadansa_app/data/map.dart';
 import 'package:flutter/material.dart';
 
 import 'package:photo_view/photo_view.dart';
 
 class FestivalMap extends StatelessWidget {
-  final dynamic _mapConfig;
+  final Floor _data;
 
-  FestivalMap(this._mapConfig);
+  FestivalMap(this._data);
 
   @override
   Widget build(final BuildContext context) {
-    final String path =
-        _mapConfig['path'] + '?version=${_mapConfig['version']}';
+    final String path = _data.url + '?version=${_data.version}';
     return Container(
       child: PhotoView(
         imageProvider: NetworkImage(path),
-        initialScale: _mapConfig['initialScale'] ?? null,
-        minScale: _mapConfig['minScale'] ?? 0.2,
-        maxScale: _mapConfig['maxScale'] ?? 1.0,
+        initialScale: PhotoViewComputedScale.contained,// _data.initialScale,
+        minScale: _data.minScale ?? 0.2,
+        maxScale: _data.maxScale ?? 1.0,
         backgroundDecoration: BoxDecoration(color: Colors.white),
       ),
     );

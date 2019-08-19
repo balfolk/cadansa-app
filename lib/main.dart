@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cupertino_localizations/flutter_cupertino_localizations.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -40,14 +41,21 @@ class _CaDansaAppState extends State<CaDansaApp> {
 
   void _init() async {
     await DotEnv().load('.env');
-    final String jsonConfig = (await new HttpClient()
-            .getUrl(Uri.parse(DotEnv().env['CONFIG_URL']))
-            .then((final HttpClientRequest request) => request.close())
-            .then((final HttpClientResponse response) =>
-                response.transform(Utf8Decoder()).toList())
-            .timeout(_LOAD_TIMEOUT, onTimeout: () => null)
-            .catchError((_) => null))
-        ?.join();
+    final String configUrl = DotEnv().env['CONFIG_URL'];
+
+    String jsonConfig;
+    if (configUrl.startsWith('http')) {
+      jsonConfig = (await new HttpClient()
+          .getUrl(Uri.parse(DotEnv().env['CONFIG_URL']))
+          .then((final HttpClientRequest request) => request.close())
+          .then((final HttpClientResponse response) =>
+          response.transform(Utf8Decoder()).toList())
+          .timeout(_LOAD_TIMEOUT, onTimeout: () => null)
+          .catchError((_) => null))
+          ?.join();
+    } else {
+      jsonConfig = await rootBundle.loadString(configUrl);
+    }
 
     if (jsonConfig != null) {
       try {
@@ -79,7 +87,7 @@ class _CaDansaAppState extends State<CaDansaApp> {
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+//        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en'),
@@ -116,16 +124,17 @@ class _CaDansaAppState extends State<CaDansaApp> {
 enum _Page { MAP, PROGRAMME }
 
 class CaDansaHomePage extends StatefulWidget {
-  final dynamic _config;
   final String _title;
   final Map<String, LText> _labels;
+  final MapData _mapData;
   final Programme _programme;
 
-  CaDansaHomePage(this._config)
-      : _title = _config['title'],
-        _labels = (_config['labels'] as Map)
+  CaDansaHomePage(final dynamic config)
+      : _title = config['title'],
+        _labels = (config['labels'] as Map)
             .map((key, value) => MapEntry(key, LText(value))),
-        _programme = Programme.parse(_config['programme']);
+        _mapData = MapData.parse(config['map']),
+        _programme = Programme.parse(config['programme']);
 
   @override
   _CaDansaHomePageState createState() => _CaDansaHomePageState();
@@ -138,7 +147,7 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
   Widget build(final BuildContext context) {
     switch (_page) {
       case _Page.MAP:
-        return MapPage(widget._config, _generateBottomNavigationBar);
+        return MapPage(widget._title, widget._mapData, _generateBottomNavigationBar);
       case _Page.PROGRAMME:
         return ProgrammePage(
             widget._title, widget._programme, _generateBottomNavigationBar);
