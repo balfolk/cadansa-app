@@ -15,7 +15,7 @@ class MapData {
 
 class Floor {
   final LText _title;
-  final String _url;
+  final LText _url;
   final int _version;
   final double _initialScale, _minScale, _maxScale;
 
@@ -24,7 +24,7 @@ class Floor {
   Floor.parse(final dynamic json)
       : this._(
       LText(json['title']),
-      json['path'],
+      LText(json['path']),
       json['version'] as int,
       json['initialScale'] as double,
       json['minScale'] as double,
@@ -32,7 +32,7 @@ class Floor {
 
   LText get title => _title;
 
-  String get url => _url;
+  LText get url => _url;
 
   int get version => _version;
 

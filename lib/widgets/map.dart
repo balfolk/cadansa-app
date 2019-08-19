@@ -10,7 +10,8 @@ class FestivalMap extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final String path = _data.url + '?version=${_data.version}';
+    final Locale locale = Localizations.localeOf(context);
+    final String path = _data.url.get(locale) + '?version=${_data.version}';
     return Container(
       child: PhotoView(
         imageProvider: NetworkImage(path),

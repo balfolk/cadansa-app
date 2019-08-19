@@ -87,7 +87,6 @@ class _CaDansaAppState extends State<CaDansaApp> {
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-//        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en'),
