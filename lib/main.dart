@@ -13,13 +13,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 const String _DEFAULT_TITLE = 'CaDansa';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
-final LText _TIMEOUT_MESSAGE = LText.fromMap({
+final LText _TIMEOUT_MESSAGE = LText({
   'en': "Could not connect to the server. Please make sure you're connected to the internet.",
   'nl': 'Het is niet gelukt verbinding te maken met de server. Zorg ervoor dat je internetverbinding aanstaat.',
+  'fr': 'Échec du téléchargement du fichier. Assurez-vous que votre connexion Internet fonctionne.'
 });
-final LText _REFRESH = LText.fromMap({
-  'en': "Refresh",
-  'nl': "Probeer opnieuw",
+final LText _REFRESH = LText({
+  'en': 'Refresh',
+  'nl': 'Probeer opnieuw',
+  'fr': 'Réessayer',
 });
 
 void main() => runApp(CaDansaApp());

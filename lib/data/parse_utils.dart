@@ -5,9 +5,17 @@ import 'package:flutter/material.dart';
 class LText {
   static final Locale _DEFAULT_LOCALE = Locale('en', 'GB');
 
-  LText(final dynamic json) : this.fromMap(json as Map<String, dynamic>);
+  LText(final dynamic json) {
+    if (json is String) _fromString(json);
+    else if (json is Map<String, dynamic>)_fromMap(json);
+    else _fromString(json?.toString());
+  }
 
-  LText.fromMap(final Map<String, dynamic> strings) {
+  _fromString(final String string) {
+    _strings[_DEFAULT_LOCALE] = string;
+  }
+
+  _fromMap(final Map<String, dynamic> strings) {
     strings.forEach((l, str) {
       final localeParts = l.split('_');
       _strings[Locale(localeParts[0],
