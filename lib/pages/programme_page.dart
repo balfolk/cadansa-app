@@ -20,7 +20,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
   void initState() {
     super.initState();
     widget._programme.days.forEach(
-        (day) => _expansions[day] = List.filled(day.bands.length, false));
+        (day) => _expansions[day] = List.filled(day.items.length, false));
   }
 
   @override
@@ -60,11 +60,11 @@ class _ProgrammePageState extends State<ProgrammePage> {
       final ProgrammeDay day = entry.value;
       return SingleChildScrollView(
           child: ExpansionPanelList(
-        children: day.bands.asMap().entries.map((entry) {
-          final Band band = entry.value;
+        children: day.items.asMap().entries.map((entry) {
+          final ProgrammeItem item = entry.value;
           return ExpansionPanel(
             headerBuilder: (_, __) => ListTile(
-                  leading: _isPlayingNow(day, band)
+                  leading: _isPlayingNow(day, item)
                       ? Icon(
                           Icons.music_note,
                           color: theme.accentColor,
@@ -72,23 +72,23 @@ class _ProgrammePageState extends State<ProgrammePage> {
                         )
                       : null,
                   title: Text(
-                    _formatBandName(band),
+                    _formatItemName(item),
                     style: theme.textTheme.title,
                     maxLines: 1,
                     softWrap: false,
                     overflow: TextOverflow.fade,
                   ),
                   subtitle: Text(
-                      '${band.startTime.format(context)} – ${band.endTime.format(context)}'),
+                      '${item.startTime.format(context)} – ${item.endTime.format(context)}'),
                 ),
             body: Column(children: <Widget>[
               Container(
-                child: Text(band.description.get(locale)),
+                child: Text(item.description.get(locale)),
                 padding: EdgeInsetsDirectional.only(
                     start: 20.0, end: 20.0, bottom: 20.0),
               ),
               OutlineButton.icon(
-                onPressed: () => launch(band.website),
+                onPressed: () => launch(item.website),
                 label: Text('Website', style: urlStyle,),
                 icon: Icon(Icons.link),
               ),
@@ -104,27 +104,27 @@ class _ProgrammePageState extends State<ProgrammePage> {
     }).toList(growable: false);
   }
 
-  static String _formatBandName(final Band band) {
+  static String _formatItemName(final ProgrammeItem item) {
     const int DIFF_FLAG_LETTER = 127462 - 65;
     final stringToUnicodeFlag = (String s) =>
         String.fromCharCodes(s.codeUnits.map((cu) => cu + DIFF_FLAG_LETTER));
-    return '${band.name} ${band.countries.map(stringToUnicodeFlag).join(' ')}';
+    return '${item.name} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 
-  static bool _isPlayingNow(final ProgrammeDay day, final Band band) {
+  static bool _isPlayingNow(final ProgrammeDay day, final ProgrammeItem item) {
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
     const int HOUR_NIGHT_CUTOFF = 6;
 
     final DateTime startDay =
         DateTime(day.startsOn.year, day.startsOn.month, day.startsOn.day);
     final startMoment = startDay.add(Duration(
-        days: band.startTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: band.startTime.hour,
-        minutes: band.startTime.minute));
+        days: item.startTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: item.startTime.hour,
+        minutes: item.startTime.minute));
     final endMoment = startDay.add(Duration(
-        days: band.endTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: band.endTime.hour,
-        minutes: band.endTime.minute));
+        days: item.endTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: item.endTime.hour,
+        minutes: item.endTime.minute));
     final now = DateTime.now();
     return now.isAfter(startMoment) && now.isBefore(endMoment);
   }

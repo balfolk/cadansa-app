@@ -17,36 +17,36 @@ class Programme {
 class ProgrammeDay {
   final LText _name;
   final DateTime _startsOn;
-  final List<Band> _bands;
+  final List<ProgrammeItem> _items;
 
-  ProgrammeDay._(this._name, this._startsOn, this._bands);
+  ProgrammeDay._(this._name, this._startsOn, this._items);
 
   ProgrammeDay.parse(final dynamic json)
       : this._(
             LText(json['name']),
             toDateTime(json['startsOn']),
-            (json['bands'] as List)
-                .map((b) => Band.parse(b))
+            (json['items'] as List)
+                .map((b) => ProgrammeItem.parse(b))
                 .toList(growable: false));
 
   LText get name => _name;
 
   DateTime get startsOn => _startsOn;
 
-  List<Band> get bands => List.unmodifiable(_bands);
+  List<ProgrammeItem> get items => List.unmodifiable(_items);
 }
 
-class Band {
+class ProgrammeItem {
   final String _name;
   final TimeOfDay _startTime, _endTime;
   final List<String> _countries;
   final LText _description;
   final String _website;
 
-  Band._(this._name, this._startTime, this._endTime, this._countries,
+  ProgrammeItem._(this._name, this._startTime, this._endTime, this._countries,
       this._description, this._website);
 
-  Band.parse(final dynamic json)
+  ProgrammeItem.parse(final dynamic json)
       : this._(
             json['name'],
             toTimeOfDay(json['startTime']),
