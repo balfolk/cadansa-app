@@ -12,7 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  flutter_dotenv: ^2.0.1
+  flutter_dotenv: ^2.0.2
   photo_view: ^0.4.2
   url_launcher: ^5.1.2
 
@@ -24,6 +24,7 @@ dev_dependencies:
 flutter:
   assets:
     - .env
+    - config.json
 
   uses-material-design: true
 
