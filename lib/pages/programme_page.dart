@@ -1,6 +1,7 @@
 import 'package:cadansa_app/data/global_conf.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -17,24 +18,6 @@ class ProgrammePage extends StatefulWidget {
 }
 
 class _ProgrammePageState extends State<ProgrammePage> {
-  final Map<ProgrammeDay, List<bool>> _expansions = {};
-
-  @override
-  void initState() {
-    super.initState();
-    widget._programme.days.forEach(
-          (day) => _expansions[day] = List.filled(day.items.length, false),
-    );
-  }
-
-  @override
-  void didUpdateWidget(final ProgrammePage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    widget._programme.days.forEach(
-          (day) => _expansions[day] = List.filled(day.items.length, false),
-    );
-  }
-
   @override
   Widget build(final BuildContext context) {
     return DefaultTabController(
@@ -68,31 +51,33 @@ class _ProgrammePageState extends State<ProgrammePage> {
     final ThemeData theme = Theme.of(context);
     return widget._programme.days.asMap().entries.map((entry) {
       final ProgrammeDay day = entry.value;
-      return SingleChildScrollView(
-          child: ExpansionPanelList(
-        children: day.items.asMap().entries.map((entry) {
-          final ProgrammeItem item = entry.value;
-          return ExpansionPanel(
-            headerBuilder: (_, isExpanded) => ListTile(
-              leading: _showIcon(day, item, isExpanded) ? _getIcon(item, theme.accentColor) : null,
-              title: Text(
-                _formatItemName(item),
-                style: theme.textTheme.title,
-                maxLines: 1,
-                softWrap: false,
-                overflow: TextOverflow.fade,
+      return ListView.separated(
+        itemCount: day.items.length,
+        itemBuilder: (context, index) {
+          final ProgrammeItem item = day.items[index];
+          return ExpandableNotifier(
+            child: ScrollOnExpand(
+              child: ExpandablePanel(
+                header: ListTile(
+                  leading: _showIcon(day, item, false) ? _getIcon(
+                      item, theme.accentColor) : null,
+                  title: Text(
+                    _formatItemName(item),
+                    style: theme.textTheme.title,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                  ),
+                  subtitle: Text('${item.startTime.format(context)} – ${item.endTime.format(context)}'),
+                ),
+                expanded: ProgrammeItemBody(item),
+                tapBodyToCollapse: true,
               ),
-              subtitle: Text('${item.startTime.format(context)} – ${item.endTime.format(context)}'),
             ),
-            body: ProgrammeItemBody(item),
-            isExpanded: _expansions[day][entry.key],
-            canTapOnHeader: true,
           );
-        }).toList(growable: false),
-        expansionCallback: (index, isExpanded) => setState(() {
-              _expansions[day][index] = !isExpanded;
-            }),
-      ));
+        },
+        separatorBuilder: (context, index) => const Divider(),
+      );
     }).toList(growable: false);
   }
 
