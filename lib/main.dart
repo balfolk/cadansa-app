@@ -81,9 +81,9 @@ class _CaDansaAppState extends State<CaDansaApp> {
 
   @override
   Widget build(final BuildContext context) {
-    final String title = (_config ?? const {})['title'] ?? _DEFAULT_TITLE;
+    final title = LText((_config ?? const {})['title'] ?? _DEFAULT_TITLE);
     return MaterialApp(
-      title: title,
+      onGenerateTitle: (context) => title.get(Localizations.localeOf(context)),
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
