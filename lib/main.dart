@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cadansa_app/data/global_conf.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
@@ -79,7 +80,7 @@ class _CaDansaAppState extends State<CaDansaApp> {
 
   @override
   Widget build(final BuildContext context) {
-    final String title = (_config ?? {})['title'] ?? _DEFAULT_TITLE;
+    final String title = (_config ?? const {})['title'] ?? _DEFAULT_TITLE;
     return MaterialApp(
       title: title,
       theme: ThemeData(
@@ -122,20 +123,21 @@ class _CaDansaAppState extends State<CaDansaApp> {
   }
 }
 
-enum _Page { MAP, PROGRAMME }
+enum _Page { MAP, PROGRAMME, WORKSHOPS }
 
 class CaDansaHomePage extends StatefulWidget {
   final String _title;
   final Map<String, LText> _labels;
   final MapData _mapData;
-  final Programme _programme;
+  final Programme _programme, _workshops;
 
   CaDansaHomePage(final dynamic config)
       : _title = config['title'],
         _labels = (config['labels'] as Map)
             .map((key, value) => MapEntry(key, LText(value))),
         _mapData = MapData.parse(config['map']),
-        _programme = Programme.parse(config['programme']);
+        _programme = Programme.parse(config['programme'], GlobalConfiguration(config)),
+        _workshops = Programme.parse(config['workshops'], GlobalConfiguration(config));
 
   @override
   _CaDansaHomePageState createState() => _CaDansaHomePageState();
@@ -151,7 +153,12 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
         return MapPage(widget._title, widget._mapData, _generateBottomNavigationBar);
       case _Page.PROGRAMME:
         return ProgrammePage(
-            widget._title, widget._programme, _generateBottomNavigationBar);
+          widget._title, widget._programme, _generateBottomNavigationBar,
+          key: Key('programme'),);
+      case _Page.WORKSHOPS:
+        return ProgrammePage(
+            widget._title, widget._workshops, _generateBottomNavigationBar,
+            key: Key('workshops'));
     }
 
     return null;
@@ -167,6 +174,9 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
         BottomNavigationBarItem(
             icon: const Icon(Icons.music_note),
             title: Text(widget._labels['programme'].get(locale))),
+        BottomNavigationBarItem(
+            icon: const Icon(Icons.school),
+            title: Text(widget._labels['workshops'].get(locale))),
       ],
       onTap: (int p) => setState(() {
             _page = _Page.values[p];

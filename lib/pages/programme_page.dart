@@ -1,13 +1,14 @@
 import 'package:cadansa_app/data/programme.dart';
+import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammePage extends StatefulWidget {
   final String _title;
   final Programme _programme;
   final BottomNavigationBar Function() _bottomBarGenerator;
 
-  ProgrammePage(this._title, this._programme, this._bottomBarGenerator);
+  ProgrammePage(this._title, this._programme, this._bottomBarGenerator,
+      {final Key key}) : super(key: key);
 
   @override
   _ProgrammePageState createState() => _ProgrammePageState();
@@ -20,7 +21,16 @@ class _ProgrammePageState extends State<ProgrammePage> {
   void initState() {
     super.initState();
     widget._programme.days.forEach(
-        (day) => _expansions[day] = List.filled(day.items.length, false));
+          (day) => _expansions[day] = List.filled(day.items.length, false),
+    );
+  }
+
+  @override
+  void didUpdateWidget(final ProgrammePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    widget._programme.days.forEach(
+          (day) => _expansions[day] = List.filled(day.items.length, false),
+    );
   }
 
   @override
@@ -53,9 +63,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
   }
 
   List<Widget> get tabChildren {
-    final Locale locale = Localizations.localeOf(context);
     final ThemeData theme = Theme.of(context);
-    final TextStyle urlStyle = theme.textTheme.body2.copyWith(color: theme.primaryColor);
     return widget._programme.days.asMap().entries.map((entry) {
       final ProgrammeDay day = entry.value;
       return SingleChildScrollView(
@@ -63,36 +71,24 @@ class _ProgrammePageState extends State<ProgrammePage> {
         children: day.items.asMap().entries.map((entry) {
           final ProgrammeItem item = entry.value;
           return ExpansionPanel(
-            headerBuilder: (_, __) => ListTile(
-                  leading: _isPlayingNow(day, item)
-                      ? Icon(
-                          Icons.music_note,
-                          color: theme.accentColor,
-                          size: 36,
-                        )
-                      : null,
-                  title: Text(
-                    _formatItemName(item),
-                    style: theme.textTheme.title,
-                    maxLines: 1,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                  ),
-                  subtitle: Text(
-                      '${item.startTime.format(context)} – ${item.endTime.format(context)}'),
-                ),
-            body: Column(children: <Widget>[
-              Container(
-                child: Text(item.description.get(locale)),
-                padding: EdgeInsetsDirectional.only(
-                    start: 20.0, end: 20.0, bottom: 20.0),
+            headerBuilder: (_, isExpanded) => ListTile(
+              leading: _isPlayingNow(day, item)
+                ? Icon(
+                    Icons.music_note,
+                    color: theme.accentColor,
+                    size: 36,
+                  )
+                : null,
+              title: Text(
+                _formatItemName(item),
+                style: theme.textTheme.title,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.fade,
               ),
-              OutlineButton.icon(
-                onPressed: () => launch(item.website),
-                label: Text('Website', style: urlStyle,),
-                icon: Icon(Icons.link),
-              ),
-            ]),
+              subtitle: Text('${item.startTime.format(context)} – ${item.endTime.format(context)}'),
+            ),
+            body: ProgrammeItemBody(item),
             isExpanded: _expansions[day][entry.key],
             canTapOnHeader: true,
           );
@@ -104,11 +100,12 @@ class _ProgrammePageState extends State<ProgrammePage> {
     }).toList(growable: false);
   }
 
-  static String _formatItemName(final ProgrammeItem item) {
+  String _formatItemName(final ProgrammeItem item) {
+    final Locale locale = Localizations.localeOf(context);
     const int DIFF_FLAG_LETTER = 127462 - 65;
     final stringToUnicodeFlag = (String s) =>
         String.fromCharCodes(s.codeUnits.map((cu) => cu + DIFF_FLAG_LETTER));
-    return '${item.name} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
+    return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 
   static bool _isPlayingNow(final ProgrammeDay day, final ProgrammeItem item) {

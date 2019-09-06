@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class LText {
-  static final Locale _DEFAULT_LOCALE = Locale('en', 'GB');
+  static const Locale _DEFAULT_LOCALE = const Locale('en', 'GB');
 
   LText(final dynamic json) {
     if (json is String) _fromString(json);
@@ -12,7 +12,7 @@ class LText {
   }
 
   _fromString(final String string) {
-    _strings[_DEFAULT_LOCALE] = string;
+    _strings[_DEFAULT_LOCALE] = string ?? '';
   }
 
   _fromMap(final Map<String, dynamic> strings) {
