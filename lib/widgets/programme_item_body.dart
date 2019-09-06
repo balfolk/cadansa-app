@@ -32,7 +32,7 @@ class ProgrammeItemBody extends StatelessWidget {
       columnItems.add(Row(children: <Widget>[
         Padding(
           padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(Icons.location_on, color: theme.primaryColor),
+          child: Icon(MdiIcons.mapMarker, color: theme.primaryColor),
         ),
         Text(location),
       ]));
@@ -43,7 +43,7 @@ class ProgrammeItemBody extends StatelessWidget {
       columnItems.add(Row(children: <Widget>[
         Padding(
           padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(Icons.person, color: theme.primaryColor),
+          child: Icon(MdiIcons.school, color: theme.primaryColor),
         ),
         Text(teacher),
       ]));
@@ -67,14 +67,17 @@ class ProgrammeItemBody extends StatelessWidget {
     columnItems.add(Container(
       child: Text(_item.description.get(locale)),
       padding: EdgeInsetsDirectional.only(
-          start: 20.0, end: 20.0, bottom: 20.0),
+          start: 20.0, end: 20.0, bottom: 10.0),
     ));
 
     if (_item.website != null && _item.website.isNotEmpty) {
-      columnItems.add(OutlineButton.icon(
-        onPressed: () => launch(_item.website),
-        label: Text('Website', style: urlStyle,),
-        icon: Icon(Icons.link),
+      columnItems.add(Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.0),
+        child: OutlineButton.icon(
+          onPressed: () => launch(_item.website),
+          label: Text('Website', style: urlStyle,),
+          icon: Icon(MdiIcons.web),
+        ),
       ));
     }
 

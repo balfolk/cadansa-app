@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 const String _DEFAULT_TITLE = 'CaDansa';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
@@ -169,13 +170,13 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
-            icon: const Icon(Icons.map),
+            icon: const Icon(MdiIcons.map),
             title: Text(widget._labels['map'].get(locale))),
         BottomNavigationBarItem(
-            icon: const Icon(Icons.music_note),
+            icon: const Icon(MdiIcons.musicNoteEighth),
             title: Text(widget._labels['programme'].get(locale))),
         BottomNavigationBarItem(
-            icon: const Icon(Icons.school),
+            icon: const Icon(MdiIcons.school),
             title: Text(widget._labels['workshops'].get(locale))),
       ],
       onTap: (int p) => setState(() {
@@ -220,7 +221,7 @@ class TimeoutPage extends StatelessWidget {
             ),
             OutlineButton.icon(
                 onPressed: _onRefresh,
-                icon: const Icon(Icons.refresh),
+                icon: const Icon(MdiIcons.refresh),
                 label: Text(_REFRESH.get(Localizations.localeOf(context))))
           ]))),
     );
