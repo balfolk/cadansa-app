@@ -1,5 +1,6 @@
 import 'package:cadansa_app/data/programme.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammeItemBody extends StatelessWidget {
@@ -20,7 +21,7 @@ class ProgrammeItemBody extends StatelessWidget {
       columnItems.add(Row(children: <Widget>[
         Padding(
           padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(Icons.info, color: theme.primaryColor,),
+          child: Icon(MdiIcons.fromString(_item.kind.icon), color: theme.primaryColor),
         ),
         Text(kind),
       ]));
@@ -31,7 +32,7 @@ class ProgrammeItemBody extends StatelessWidget {
       columnItems.add(Row(children: <Widget>[
         Padding(
           padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(Icons.location_on, color: theme.primaryColor,),
+          child: Icon(Icons.location_on, color: theme.primaryColor),
         ),
         Text(location),
       ]));
@@ -42,7 +43,7 @@ class ProgrammeItemBody extends StatelessWidget {
       columnItems.add(Row(children: <Widget>[
         Padding(
           padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(Icons.person, color: theme.primaryColor,),
+          child: Icon(Icons.person, color: theme.primaryColor),
         ),
         Text(teacher),
       ]));
@@ -53,7 +54,7 @@ class ProgrammeItemBody extends StatelessWidget {
       columnItems.add(Row(children: <Widget>[
         Padding(
           padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(Icons.equalizer, color: theme.primaryColor,),
+          child: Icon(MdiIcons.fromString(_item.level.icon), color: theme.primaryColor),
         ),
         Text(level),
       ]));

@@ -20,18 +20,49 @@ class GlobalConfiguration {
 
 class WorkshopLevel {
   final LText _name;
+  final String _icon;
 
-  WorkshopLevel._(final dynamic json) : _name = LText(json);
-  WorkshopLevel.empty() : _name = LText(null);
+  WorkshopLevel._(final dynamic json)
+      : _name = LText(json['name']),
+        _icon = json['icon'];
+
+  WorkshopLevel.empty()
+      : _name = LText(null),
+        _icon = null;
 
   LText get name => _name;
+
+  String get icon => _icon;
+}
+
+enum ProgrammeItemKindShowIcon { always, during, unexpanded, never }
+ProgrammeItemKindShowIcon _parseKindShown(final String string) {
+  return const {
+    'always': ProgrammeItemKindShowIcon.always,
+    'during': ProgrammeItemKindShowIcon.during,
+    'unexpanded': ProgrammeItemKindShowIcon.unexpanded,
+    'never': ProgrammeItemKindShowIcon.never
+  }[string];
 }
 
 class ProgrammeItemKind {
   final LText _name;
+  final String _icon;
+  final ProgrammeItemKindShowIcon _showIcon;
 
-  ProgrammeItemKind._(final dynamic json) : _name = LText(json);
-  ProgrammeItemKind.empty() : _name = LText(null);
+  ProgrammeItemKind._(final dynamic json)
+      : _name = LText(json['name']),
+        _icon = json['icon'],
+        _showIcon = _parseKindShown(json['showIcon']);
+
+  ProgrammeItemKind.empty()
+      : _name = LText(null),
+        _icon = null,
+        _showIcon = null;
 
   LText get name => _name;
+
+  String get icon => _icon;
+
+  ProgrammeItemKindShowIcon get showIcon => _showIcon ?? ProgrammeItemKindShowIcon.never;
 }

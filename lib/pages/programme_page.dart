@@ -1,6 +1,8 @@
+import 'package:cadansa_app/data/global_conf.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ProgrammePage extends StatefulWidget {
   final String _title;
@@ -72,13 +74,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
           final ProgrammeItem item = entry.value;
           return ExpansionPanel(
             headerBuilder: (_, isExpanded) => ListTile(
-              leading: _isPlayingNow(day, item)
-                ? Icon(
-                    Icons.music_note,
-                    color: theme.accentColor,
-                    size: 36,
-                  )
-                : null,
+              leading: _showIcon(day, item, isExpanded) ? _getIcon(item, theme.accentColor) : null,
               title: Text(
                 _formatItemName(item),
                 style: theme.textTheme.title,
@@ -108,7 +104,21 @@ class _ProgrammePageState extends State<ProgrammePage> {
     return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 
-  static bool _isPlayingNow(final ProgrammeDay day, final ProgrammeItem item) {
+  static bool _showIcon(final ProgrammeDay day, final ProgrammeItem item, final bool isExpanded) {
+    switch (item.kind.showIcon) {
+      case ProgrammeItemKindShowIcon.always:
+        return true;
+      case ProgrammeItemKindShowIcon.during:
+        return _isPlaying(day, item);
+      case ProgrammeItemKindShowIcon.unexpanded:
+        return !isExpanded;
+      case ProgrammeItemKindShowIcon.never:
+      default:
+        return false;
+    }
+  }
+
+  static bool _isPlaying(final ProgrammeDay day, final ProgrammeItem item) {
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
     const int HOUR_NIGHT_CUTOFF = 6;
 
@@ -124,5 +134,14 @@ class _ProgrammePageState extends State<ProgrammePage> {
         minutes: item.endTime.minute));
     final now = DateTime.now();
     return now.isAfter(startMoment) && now.isBefore(endMoment);
+  }
+
+  static Widget _getIcon(final ProgrammeItem item, final Color color) {
+    final IconData iconData = MdiIcons.fromString(item.kind.icon);
+    if (iconData == null) return null;
+    return Icon(iconData,
+      color: color,
+      size: 36,
+    );
   }
 }
