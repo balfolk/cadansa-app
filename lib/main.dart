@@ -17,7 +17,7 @@ const String _DEFAULT_TITLE = 'CaDansa';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
 final LText _TIMEOUT_MESSAGE = LText({
   'en': "Could not connect to the server. Please make sure you're connected to the internet.",
-  'nl': 'Het is niet gelukt verbinding te maken met de server. Zorg ervoor dat je internetverbinding aanstaat.',
+  'nl': 'Het is niet gelukt verbinding te maken met de server. Controller of je internetverbinding aanstaat.',
   'fr': 'Échec du téléchargement du fichier. Assurez-vous que votre connexion Internet fonctionne.'
 });
 final LText _REFRESH = LText({
@@ -211,19 +211,24 @@ class TimeoutPage extends StatelessWidget {
         title: Text(_DEFAULT_TITLE),
       ),
       body: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(20.0),
-          child: Center(
-              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(20.0),
+        child: Center(
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             Text(
               _TIMEOUT_MESSAGE.get(Localizations.localeOf(context)),
               textAlign: TextAlign.center,
             ),
             OutlineButton.icon(
-                onPressed: _onRefresh,
-                icon: const Icon(MdiIcons.refresh),
-                label: Text(_REFRESH.get(Localizations.localeOf(context))))
-          ]))),
+              onPressed: _onRefresh,
+              icon: Icon(MdiIcons.refresh, color: Theme.of(context).primaryColor,),
+              label: Text(_REFRESH.get(Localizations.localeOf(context))),
+              color: Theme.of(context).primaryColor,
+            )
+          ],
+          ),
+        ),
+      ),
     );
   }
 }
