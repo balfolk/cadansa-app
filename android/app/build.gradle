@@ -4,6 +4,8 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
+} else {
+    throw new GradleException("local.properties not found")
 }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
@@ -13,12 +15,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    throw new GradleException("Flutter version code not defined.")
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    throw new GradleException("Flutter version name not defined.")
 }
 
 apply plugin: 'com.android.application'
