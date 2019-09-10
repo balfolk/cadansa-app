@@ -12,10 +12,12 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  auto_size_text: ^2.1.0
   expandable: ^3.0.0+1
   flutter_dotenv: ^2.0.2
   material_design_icons_flutter: ^3.2.4096
-  photo_view: ^0.4.2
+  photo_view: ^0.5.0
+  shimmer: ^1.0.0
   url_launcher: ^5.1.2
 
 dev_dependencies:
@@ -26,7 +28,6 @@ dev_dependencies:
 flutter:
   assets:
     - .env
-    - config.json
+    - config/config.json
 
   uses-material-design: true
-

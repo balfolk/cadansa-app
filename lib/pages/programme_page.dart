@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/global_conf.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProgrammePage extends StatefulWidget {
   final String _title;
@@ -42,8 +44,16 @@ class _ProgrammePageState extends State<ProgrammePage> {
 
   List<Tab> get tabs {
     final Locale locale = Localizations.localeOf(context);
+    final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
     return widget._programme.days.map((day) {
-      return Tab(text: day.name.get(locale));
+      return Tab(
+        child: AutoSizeText(
+          day.name.get(locale),
+          maxLines: 1,
+          minFontSize: 11.0,
+          group: autoSizeGroup,
+        ),
+      );
     }).toList(growable: false);
   }
 
@@ -59,14 +69,12 @@ class _ProgrammePageState extends State<ProgrammePage> {
             child: ScrollOnExpand(
               child: ExpandablePanel(
                 header: ListTile(
-                  leading: _showIcon(day, item, false) ? _getIcon(
-                      item, theme.accentColor) : null,
-                  title: Text(
+                  leading: _showIcon(day, item, false) ? _getIcon(day, item) : null,
+                  title: AutoSizeText(
                     _formatItemName(item),
                     style: theme.textTheme.title,
-                    maxLines: 1,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
+                    maxLines: 2,
+                    softWrap: true,
                   ),
                   subtitle: Text('${item.startTime.format(context)} – ${item.endTime.format(context)}'),
                 ),
@@ -94,7 +102,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
       case ProgrammeItemKindShowIcon.always:
         return true;
       case ProgrammeItemKindShowIcon.during:
-        return _isPlaying(day, item);
+        return _getPlayingStatus(day, item) == _PlayingStatus.during;
       case ProgrammeItemKindShowIcon.unexpanded:
         return !isExpanded;
       case ProgrammeItemKindShowIcon.never:
@@ -103,7 +111,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
     }
   }
 
-  static bool _isPlaying(final ProgrammeDay day, final ProgrammeItem item) {
+  static _PlayingStatus _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
     const int HOUR_NIGHT_CUTOFF = 6;
 
@@ -118,15 +126,35 @@ class _ProgrammePageState extends State<ProgrammePage> {
         hours: item.endTime.hour,
         minutes: item.endTime.minute));
     final now = DateTime.now();
-    return now.isAfter(startMoment) && now.isBefore(endMoment);
+    if (now.isBefore(startMoment)) return _PlayingStatus.before;
+    if (now.isAfter(endMoment)) return _PlayingStatus.after;
+    return _PlayingStatus.during;
   }
 
-  static Widget _getIcon(final ProgrammeItem item, final Color color) {
+  Widget _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
     final IconData iconData = MdiIcons.fromString(item.kind.icon);
     if (iconData == null) return null;
-    return Icon(iconData,
+
+    final status = _getPlayingStatus(day, item);
+    final color = status == _PlayingStatus.after
+        ? Colors.grey
+        : Theme.of(context).primaryColor;
+
+    final icon = Icon(iconData,
       color: color,
       size: 36,
     );
+
+    if (status == _PlayingStatus.during) {
+      return Shimmer.fromColors(
+        child: icon,
+        baseColor: Theme.of(context).primaryColor,
+        highlightColor: Theme.of(context).primaryColorLight,
+      );
+    } else {
+      return icon;
+    }
   }
 }
+
+enum _PlayingStatus { before, during, after }

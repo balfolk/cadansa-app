@@ -48,8 +48,6 @@ class ProgrammeItem {
   final LText _description;
   final String _website;
 
-  static const String _DEFAULT_KIND = 'BAND';
-
   ProgrammeItem._(this._name, this._startTime, this._endTime, this._location,
       this._countries, this._teacher, this._level,
       this._kind, this._description, this._website);
@@ -63,7 +61,7 @@ class ProgrammeItem {
             (json['countries'] as List)?.toList(growable: false)?.cast(),
             LText(json['teacher']),
             configuration.getLevel(json['level']?.toString()),
-            configuration.getKind(json['kind']?.toString() ?? _DEFAULT_KIND),
+            configuration.getKind(json['kind']?.toString()),
             LText(json['description']),
             json['website']);
 
