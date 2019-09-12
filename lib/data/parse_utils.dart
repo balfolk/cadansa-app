@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 class LText {
   static const Locale _DEFAULT_LOCALE = const Locale('en', 'GB');
 
+  factory LText.nullable(final dynamic json) {
+    if (json == null) return null;
+    return LText(json);
+  }
+
   factory LText(final dynamic json) {
     if (json is String) return LText._fromString(json);
     else if (json is Map<String, dynamic>) return LText._fromMap(json);
@@ -36,6 +41,7 @@ toDateTime(final dynamic json) =>
     DateTime.fromMillisecondsSinceEpoch(json as int);
 
 toTimeOfDay(final dynamic json) {
+  if (json == null || json.isEmpty) return null;
   final parts = (json as String).split(':');
   return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
 }

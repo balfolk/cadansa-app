@@ -65,24 +65,36 @@ class _ProgrammePageState extends State<ProgrammePage> {
         itemCount: day.items.length,
         itemBuilder: (context, index) {
           final ProgrammeItem item = day.items[index];
-          return ExpandableNotifier(
-            child: ScrollOnExpand(
-              child: ExpandablePanel(
-                header: ListTile(
-                  leading: _showIcon(day, item, false) ? _getIcon(day, item) : null,
-                  title: AutoSizeText(
-                    _formatItemName(item),
-                    style: theme.textTheme.title,
-                    maxLines: 2,
-                    softWrap: true,
-                  ),
-                  subtitle: Text('${item.startTime.format(context)} – ${item.endTime.format(context)}'),
-                ),
-                expanded: ProgrammeItemBody(item),
-                tapBodyToCollapse: true,
-              ),
+
+          Widget subtitle;
+          if (item.startTime != null && item.endTime != null) {
+            subtitle = Text('${item.startTime.format(context)} – ${item.endTime.format(context)}');
+          }
+
+          final Widget header = ListTile(
+            leading: _showIcon(day, item, false) ? _getIcon(day, item) : null,
+            title: AutoSizeText(
+              _formatItemName(item),
+              style: theme.textTheme.title,
+              maxLines: 2,
+              softWrap: true,
             ),
+            subtitle: subtitle,
           );
+
+          if (item.description != null) {
+            return ExpandableNotifier(
+              child: ScrollOnExpand(
+                child: ExpandablePanel(
+                  header: header,
+                  expanded: ProgrammeItemBody(item),
+                  tapBodyToCollapse: true,
+                ),
+              ),
+            );
+          } else {
+            return header;
+          }
         },
         separatorBuilder: (context, index) => const Divider(),
       );

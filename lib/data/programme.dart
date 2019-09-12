@@ -62,7 +62,7 @@ class ProgrammeItem {
             LText(json['teacher']),
             configuration.getLevel(json['level']?.toString()),
             configuration.getKind(json['kind']?.toString()),
-            LText(json['description']),
+            LText.nullable(json['description']),
             json['website']);
 
   LText get name => _name;
