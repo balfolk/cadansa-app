@@ -162,6 +162,7 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
         _currentIndex = index;
       }),
       currentIndex: _currentIndex,
+      type: BottomNavigationBarType.fixed,
     );
   }
 }
