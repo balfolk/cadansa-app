@@ -33,17 +33,33 @@ class CaDansaApp extends StatefulWidget {
   _CaDansaAppState createState() => _CaDansaAppState();
 }
 
-class _CaDansaAppState extends State<CaDansaApp> {
+class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   dynamic _config;
   bool _error = false;
 
   @override
   void initState() {
     super.initState();
-    _init();
+    WidgetsBinding.instance.addObserver(this);
+    _loadConfig();
   }
 
-  void _init() async {
+  @override
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _resetConfig();
+    }
+  }
+
+  void _resetConfig() {
+    setState(() {
+      _error = false;
+      _config = null;
+    });
+    _loadConfig();
+  }
+
+  void _loadConfig() async {
     await DotEnv().load('.env');
     final String configUrl = DotEnv().env['CONFIG_URL'];
 
@@ -79,6 +95,7 @@ class _CaDansaAppState extends State<CaDansaApp> {
     }
   }
 
+
   @override
   Widget build(final BuildContext context) {
     final title = LText((_config ?? const {})['title'] ?? _DEFAULT_TITLE);
@@ -102,13 +119,7 @@ class _CaDansaAppState extends State<CaDansaApp> {
 
   Widget get _homePage {
     if (_error) {
-      return TimeoutPage(() {
-        setState(() {
-          _error = false;
-          _config = null;
-        });
-        _init();
-      });
+      return TimeoutPage(_resetConfig);
     } else if (_config == null) {
       return LoadingPage();
     } else if (DateTime.now().isAfter(_festivalOver)) {
@@ -121,6 +132,12 @@ class _CaDansaAppState extends State<CaDansaApp> {
 
   DateTime get _festivalOver {
     return toDateTime(_config['festivalEnd']);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }
 
