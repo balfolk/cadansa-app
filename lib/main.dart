@@ -36,6 +36,7 @@ class CaDansaApp extends StatefulWidget {
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   dynamic _config;
   bool _error = false;
+  String _configUrl;
 
   @override
   void initState() {
@@ -60,11 +61,13 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   void _loadConfig() async {
-    await DotEnv().load('.env');
-    final String configUrl = DotEnv().env['CONFIG_URL'];
+    if (_configUrl == null) {
+      await DotEnv().load('.env');
+      _configUrl = DotEnv().env['CONFIG_URL'];
+    }
 
     String jsonConfig;
-    if (configUrl.startsWith('http')) {
+    if (_configUrl.startsWith('http')) {
       jsonConfig = (await new HttpClient()
           .getUrl(Uri.parse(DotEnv().env['CONFIG_URL']))
           .then((final HttpClientRequest request) => request.close())
@@ -74,7 +77,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           .catchError((_) => null))
           ?.join();
     } else {
-      jsonConfig = await rootBundle.loadString(configUrl);
+      jsonConfig = await rootBundle.loadString(_configUrl);
     }
 
     if (jsonConfig != null) {
