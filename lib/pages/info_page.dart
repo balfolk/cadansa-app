@@ -1,6 +1,7 @@
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
   final String _title;
@@ -23,7 +24,13 @@ class _InfoPageState extends State<InfoPage> {
       appBar: AppBar(
         title: Text(widget._title),
       ),
-      body: Html(data: widget._content.get(locale)),
+      body: SingleChildScrollView(
+        child: Html(
+          data: widget._content.get(locale),
+          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+          onLinkTap: launch,
+        ),
+      ),
       bottomNavigationBar: widget._bottomBarGenerator(),
     );
   }
