@@ -12,8 +12,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String _DEFAULT_TITLE = 'CaDansa';
+const String _PAGE_INDEX_KEY = 'pageIndex';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
 final LText _TIMEOUT_MESSAGE = LText({
   'en': "Could not connect to the server. Please make sure you're connected to the internet.",
@@ -34,9 +36,10 @@ class CaDansaApp extends StatefulWidget {
 }
 
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
-  dynamic _config;
-  bool _error = false;
   String _configUrl;
+  dynamic _config;
+  int _initialPageIndex;
+  bool _error = false;
 
   @override
   void initState() {
@@ -83,8 +86,10 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     if (jsonConfig != null) {
       try {
         final config = jsonDecode(jsonConfig);
+        final int index = (await SharedPreferences.getInstance()).getInt(_PAGE_INDEX_KEY);
         setState(() {
           _config = config;
+          _initialPageIndex = index;
         });
       } catch (_) {
         setState(() {
@@ -129,7 +134,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       return FestivalOverPage(
           _config['title'], LText(_config['labels']['afterwards']));
     } else {
-      return CaDansaHomePage(_config);
+      return CaDansaHomePage(_config, _initialPageIndex);
     }
   }
 
@@ -147,8 +152,9 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 class CaDansaHomePage extends StatefulWidget {
   final String _title;
   final List<PageData> _pages;
+  final int _initialIndex;
 
-  CaDansaHomePage(final dynamic config)
+  CaDansaHomePage(final dynamic config, this._initialIndex)
       : _title = config['title'],
         _pages = (config['pages'] as List)
             .map((p) => PageData.parse(p, GlobalConfiguration(config))).toList(growable: false);
@@ -158,7 +164,17 @@ class CaDansaHomePage extends StatefulWidget {
 }
 
 class _CaDansaHomePageState extends State<CaDansaHomePage> {
-  int _currentIndex = 0;
+  int _currentIndex;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget._initialIndex != null && widget._initialIndex > 0 && widget._initialIndex < widget._pages.length) {
+      _currentIndex = widget._initialIndex;
+    } else {
+      _currentIndex = 0;
+    }
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -181,9 +197,12 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
         icon: Icon(MdiIcons.fromString(pageData.icon)),
         title: Text(pageData.title.get(locale)),
       )).toList(growable: false),
-      onTap: (int index) => setState(() {
-        _currentIndex = index;
-      }),
+      onTap: (int index) async {
+        setState(() {
+          _currentIndex = index;
+        });
+        (await SharedPreferences.getInstance()).setInt(_PAGE_INDEX_KEY, index);
+      },
       currentIndex: _currentIndex,
       type: BottomNavigationBarType.fixed,
     );
