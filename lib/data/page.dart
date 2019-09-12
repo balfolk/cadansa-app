@@ -50,8 +50,12 @@ class ProgrammePageData extends PageData {
 }
 
 class InfoPageData extends PageData {
+  final LText _content;
 
   InfoPageData._(final LText title, final String icon, final dynamic json)
-      : super._(title, icon);
+      : _content = LText(json['content']),
+        super._(title, icon);
+
+  LText get content => _content;
 }
 

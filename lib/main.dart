@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cadansa_app/data/global_conf.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
+import 'package:cadansa_app/pages/info_page.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
 import 'package:flutter/material.dart';
@@ -147,6 +148,8 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
       return MapPage(widget._title, pageData.mapData, _generateBottomNavigationBar, key: key);
     } else if (pageData is ProgrammePageData) {
       return ProgrammePage(widget._title, pageData.programme, _generateBottomNavigationBar, key: key);
+    } else if (pageData is InfoPageData) {
+      return InfoPage(widget._title, pageData.content, _generateBottomNavigationBar, key: key);
     }
     return null;
   }
