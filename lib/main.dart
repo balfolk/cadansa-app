@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cadansa_app/data/global_conf.dart';
-import 'package:cadansa_app/data/map.dart';
+import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
-import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
 import 'package:flutter/material.dart';
@@ -124,65 +123,45 @@ class _CaDansaAppState extends State<CaDansaApp> {
   }
 }
 
-enum _Page { MAP, PROGRAMME, WORKSHOPS }
-
 class CaDansaHomePage extends StatefulWidget {
   final String _title;
-  final Map<String, LText> _labels;
-  final MapData _mapData;
-  final Programme _programme, _workshops;
+  final List<PageData> _pages;
 
   CaDansaHomePage(final dynamic config)
       : _title = config['title'],
-        _labels = (config['labels'] as Map)
-            .map((key, value) => MapEntry(key, LText(value))),
-        _mapData = MapData.parse(config['map']),
-        _programme = Programme.parse(config['programme'], GlobalConfiguration(config)),
-        _workshops = Programme.parse(config['workshops'], GlobalConfiguration(config));
+        _pages = (config['pages'] as List)
+            .map((p) => PageData.parse(p, GlobalConfiguration(config))).toList(growable: false);
 
   @override
   _CaDansaHomePageState createState() => _CaDansaHomePageState();
 }
 
 class _CaDansaHomePageState extends State<CaDansaHomePage> {
-  _Page _page = _Page.MAP;
+  int _currentIndex = 0;
 
   @override
   Widget build(final BuildContext context) {
-    switch (_page) {
-      case _Page.MAP:
-        return MapPage(widget._title, widget._mapData, _generateBottomNavigationBar);
-      case _Page.PROGRAMME:
-        return ProgrammePage(
-          widget._title, widget._programme, _generateBottomNavigationBar,
-          key: Key('programme'),);
-      case _Page.WORKSHOPS:
-        return ProgrammePage(
-            widget._title, widget._workshops, _generateBottomNavigationBar,
-            key: Key('workshops'));
+    final key = Key('page$_currentIndex');
+    final pageData = widget._pages[_currentIndex];
+    if (pageData is MapPageData) {
+      return MapPage(widget._title, pageData.mapData, _generateBottomNavigationBar, key: key);
+    } else if (pageData is ProgrammePageData) {
+      return ProgrammePage(widget._title, pageData.programme, _generateBottomNavigationBar, key: key);
     }
-
     return null;
   }
 
   BottomNavigationBar _generateBottomNavigationBar() {
     final Locale locale = Localizations.localeOf(context);
     return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-            icon: const Icon(MdiIcons.map),
-            title: Text(widget._labels['map'].get(locale))),
-        BottomNavigationBarItem(
-            icon: const Icon(MdiIcons.musicNoteEighth),
-            title: Text(widget._labels['programme'].get(locale))),
-        BottomNavigationBarItem(
-            icon: const Icon(MdiIcons.school),
-            title: Text(widget._labels['workshops'].get(locale))),
-      ],
-      onTap: (int p) => setState(() {
-            _page = _Page.values[p];
-          }),
-      currentIndex: _page.index,
+      items: widget._pages.map((pageData) => BottomNavigationBarItem(
+        icon: Icon(MdiIcons.fromString(pageData.icon)),
+        title: Text(pageData.title.get(locale)),
+      )).toList(growable: false),
+      onTap: (int index) => setState(() {
+        _currentIndex = index;
+      }),
+      currentIndex: _currentIndex,
     );
   }
 }

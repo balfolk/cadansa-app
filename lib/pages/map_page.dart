@@ -7,7 +7,8 @@ class MapPage extends StatefulWidget {
   final MapData _mapData;
   final BottomNavigationBar Function() _bottomBarGenerator;
 
-  MapPage(this._title, this._mapData, this._bottomBarGenerator);
+  MapPage(this._title, this._mapData, this._bottomBarGenerator, {final Key key})
+      : super(key: key);
 
   @override
   _MapPageState createState() => _MapPageState();
