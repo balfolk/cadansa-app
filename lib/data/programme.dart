@@ -46,7 +46,7 @@ class ProgrammeItem {
   final WorkshopLevel _level;
   final ProgrammeItemKind _kind;
   final LText _description;
-  final String _website;
+  final Website _website;
 
   ProgrammeItem._(this._name, this._startTime, this._endTime, this._location,
       this._countries, this._teacher, this._level,
@@ -63,7 +63,7 @@ class ProgrammeItem {
             configuration.getLevel(json['level']?.toString()),
             configuration.getKind(json['kind']?.toString()),
             LText.nullable(json['description']),
-            json['website']);
+            Website.parse(json['website']));
 
   LText get name => _name;
 
@@ -83,6 +83,39 @@ class ProgrammeItem {
 
   LText get description => _description;
 
-  String get website => _website;
+  Website get website => _website;
 }
 
+class Website {
+  final LText _url;
+  final String _icon;
+  final LText _text;
+
+  factory Website.parse(final dynamic json) {
+    if (json == null) return Website._empty();
+    if (json is String) return Website._parseUrl(json);
+    return Website._parseObject(json);
+  }
+
+  Website._parseObject(final dynamic json)
+      : _url = LText(json['url']),
+        _icon = json['icon'],
+        _text = LText(json['text']);
+
+  @deprecated
+  Website._parseUrl(final String url)
+      : _url = LText(url),
+        _icon = 'web',
+        _text = LText('Website');
+
+  Website._empty()
+      : _url = null,
+        _icon = null,
+        _text = null;
+
+  LText get text => _text;
+
+  String get icon => _icon;
+
+  LText get url => _url;
+}

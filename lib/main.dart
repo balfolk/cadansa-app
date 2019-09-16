@@ -17,12 +17,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String _DEFAULT_TITLE = 'CaDansa';
 const String _PAGE_INDEX_KEY = 'pageIndex';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
-final LText _TIMEOUT_MESSAGE = LText({
+final LText _TIMEOUT_MESSAGE = LText(const {
   'en': "Could not connect to the server. Please make sure you're connected to the internet.",
   'nl': 'Het is niet gelukt verbinding te maken met de server. Controller of je internetverbinding aanstaat.',
   'fr': 'Échec du téléchargement du fichier. Assurez-vous que votre connexion Internet fonctionne.'
 });
-final LText _REFRESH = LText({
+final LText _REFRESH = LText(const {
   'en': 'Refresh',
   'nl': 'Probeer opnieuw',
   'fr': 'Réessayer',
