@@ -18,7 +18,7 @@ const String _DEFAULT_TITLE = 'CaDansa';
 const String _PAGE_INDEX_KEY = 'pageIndex';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
 final LText _TIMEOUT_MESSAGE = LText(const {
-  'en': "Could not connect to the server. Please make sure you're connected to the internet.",
+  'en': "Could not connect to the server. Please make sure you're connected to the Internet.",
   'nl': 'Het is niet gelukt verbinding te maken met de server. Controller of je internetverbinding aanstaat.',
   'fr': 'Échec du téléchargement du fichier. Assurez-vous que votre connexion Internet fonctionne.'
 });
@@ -35,35 +35,52 @@ class CaDansaApp extends StatefulWidget {
   _CaDansaAppState createState() => _CaDansaAppState();
 }
 
+enum _CaDansaAppStateMode { done, loading, error }
+
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
+  _CaDansaAppStateMode _mode;
   String _configUrl;
   dynamic _config;
+  DateTime _lastConfigLoad;
   int _initialPageIndex;
-  bool _error = false;
+
+  static const _CONFIG_LIFETIME = const Duration(hours: 5);
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _mode = _CaDansaAppStateMode.loading;
     _loadConfig();
   }
 
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _resetConfig();
+      _loadConfig();
     }
   }
 
   void _resetConfig() {
     setState(() {
-      _error = false;
-      _config = null;
+      _mode = _CaDansaAppStateMode.loading;
     });
+
     _loadConfig();
   }
 
   void _loadConfig() async {
+    if (_config != null && _lastConfigLoad != null
+        && _lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
+      // Config still valid, use the existing one rather than reloading
+      if (_mode != _CaDansaAppStateMode.done) {
+        setState(() {
+          _mode = _CaDansaAppStateMode.done;
+        });
+      }
+      return;
+    }
+
     if (_configUrl == null) {
       await DotEnv().load('.env');
       _configUrl = DotEnv().env['CONFIG_URL'];
@@ -85,24 +102,25 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
     if (jsonConfig != null) {
       try {
-        final config = jsonDecode(jsonConfig);
+        _config = jsonDecode(jsonConfig);
+        _lastConfigLoad = DateTime.now();
         final int index = (await SharedPreferences.getInstance()).getInt(_PAGE_INDEX_KEY);
+
         setState(() {
-          _config = config;
+          _mode = _CaDansaAppStateMode.done;
           _initialPageIndex = index;
         });
       } catch (_) {
         setState(() {
-          _error = true;
+          _mode = _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
         });
       }
     } else {
       setState(() {
-        _error = true;
+        _mode = _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
       });
     }
   }
-
 
   @override
   Widget build(final BuildContext context) {
@@ -126,15 +144,20 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   Widget get _homePage {
-    if (_error) {
-      return TimeoutPage(_resetConfig);
-    } else if (_config == null) {
-      return LoadingPage();
-    } else if (DateTime.now().isAfter(_festivalOver)) {
-      return FestivalOverPage(
-          _config['title'], LText(_config['labels']['afterwards']));
-    } else {
-      return CaDansaHomePage(_config, _initialPageIndex);
+    switch (_mode) {
+      case _CaDansaAppStateMode.done:
+        if (DateTime.now().isAfter(_festivalOver)) {
+          return FestivalOverPage(
+              _config['title'], LText(_config['labels']['afterwards']));
+        } else {
+          return CaDansaHomePage(_config, _initialPageIndex);
+        }
+        break;
+      case _CaDansaAppStateMode.loading:
+        return LoadingPage();
+      case _CaDansaAppStateMode.error:
+      default:
+        return TimeoutPage(_resetConfig);
     }
   }
 
