@@ -19,7 +19,7 @@ const String _PAGE_INDEX_KEY = 'pageIndex';
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
 final LText _TIMEOUT_MESSAGE = LText(const {
   'en': "Could not connect to the server. Please make sure you're connected to the Internet.",
-  'nl': 'Het is niet gelukt verbinding te maken met de server. Controller of je internetverbinding aanstaat.',
+  'nl': 'Het is niet gelukt verbinding te maken met de server. Controleer of je internetverbinding aanstaat.',
   'fr': 'Échec du téléchargement du fichier. Assurez-vous que votre connexion Internet fonctionne.'
 });
 final LText _REFRESH = LText(const {
