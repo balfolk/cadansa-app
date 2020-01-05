@@ -42,6 +42,6 @@ class _MapPageState extends State<MapPage> {
 
   List<Widget> get tabChildren {
     return widget._mapData.floors
-        .map((floor) => FestivalMap(floor)).toList(growable: false);
+        .map((floor) => MapWidget(floor)).toList(growable: false);
   }
 }
