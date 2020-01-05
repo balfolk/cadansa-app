@@ -89,7 +89,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     String jsonConfig;
     if (_configUrl.startsWith('http')) {
       jsonConfig = (await new HttpClient()
-          .getUrl(Uri.parse(DotEnv().env['CONFIG_URL']))
+          .getUrl(Uri.parse(_configUrl))
           .then((final HttpClientRequest request) => request.close())
           .then((final HttpClientResponse response) =>
           response.transform(Utf8Decoder()).toList())
@@ -257,7 +257,7 @@ class TimeoutPage extends StatelessWidget {
       ),
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             Text(
@@ -269,8 +269,7 @@ class TimeoutPage extends StatelessWidget {
               icon: Icon(MdiIcons.refresh, color: Theme.of(context).primaryColor,),
               label: Text(_REFRESH.get(Localizations.localeOf(context))),
               color: Theme.of(context).primaryColor,
-            )
-          ],
+            )],
           ),
         ),
       ),
@@ -292,7 +291,7 @@ class FestivalOverPage extends StatelessWidget {
       ),
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Text(
           _text.get(Localizations.localeOf(context)),
           style: Theme.of(context).textTheme.display2,

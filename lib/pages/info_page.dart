@@ -27,7 +27,7 @@ class _InfoPageState extends State<InfoPage> {
       body: SingleChildScrollView(
         child: Html(
           data: widget._content.get(locale),
-          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           onLinkTap: launch,
         ),
       ),

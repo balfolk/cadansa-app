@@ -22,7 +22,7 @@ class ProgrammeItemBody extends StatelessWidget {
     if (kind.isNotEmpty) {
       columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         Padding(
-          padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
+          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
           child: Icon(MdiIcons.fromString(_item.kind.icon), color: theme.primaryColor),
         ),
         Expanded(
@@ -38,7 +38,7 @@ class ProgrammeItemBody extends StatelessWidget {
     if (location.isNotEmpty) {
       columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         Padding(
-          padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
+          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
           child: Icon(MdiIcons.mapMarker, color: theme.primaryColor),
         ),
         Expanded(
@@ -54,7 +54,7 @@ class ProgrammeItemBody extends StatelessWidget {
     if (teacher.isNotEmpty) {
       columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         Padding(
-          padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
+          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
           child: Icon(MdiIcons.school, color: theme.primaryColor),
         ),
         Expanded(
@@ -70,7 +70,7 @@ class ProgrammeItemBody extends StatelessWidget {
     if (level.isNotEmpty) {
       columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         Padding(
-          padding: EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
+          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
           child: Icon(MdiIcons.fromString(_item.level.icon), color: theme.primaryColor),
         ),
         Expanded(
@@ -84,13 +84,13 @@ class ProgrammeItemBody extends StatelessWidget {
 
     columnItems.add(Container(
       child: Text(_item.description.get(locale)),
-      padding: EdgeInsetsDirectional.only(
+      padding: const EdgeInsetsDirectional.only(
           start: 20.0, end: 20.0, top: 15.0, bottom: 10.0),
     ));
 
     if (_item.website != null && _item.website.text != null) {
       columnItems.add(Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: OutlineButton.icon(
           onPressed: () => launch(_item.website.url.get(locale)),
           label: Text(_item.website.text.get(locale), style: urlStyle),
