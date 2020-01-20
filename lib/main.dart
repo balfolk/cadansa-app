@@ -28,9 +28,11 @@ final LText _REFRESH = LText(const {
   'fr': 'Réessayer',
 });
 
-void main() => runApp(CaDansaApp());
+void main() => runApp(const CaDansaApp());
 
 class CaDansaApp extends StatefulWidget {
+  const CaDansaApp();
+
   @override
   _CaDansaAppState createState() => _CaDansaAppState();
 }

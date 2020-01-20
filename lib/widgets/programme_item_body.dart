@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/programme.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -18,77 +19,32 @@ class ProgrammeItemBody extends StatelessWidget {
 
     final List<Widget> columnItems = [];
 
-    final String kind = _item.kind?.name?.get(locale);
-    if (kind.isNotEmpty) {
-      columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Padding(
-          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(MdiIcons.fromString(_item.kind.icon), color: theme.primaryColor),
-        ),
-        Expanded(
-          child: AutoSizeText(
-            kind,
-            maxLines: 1,
-          ),
-        ),
-      ]));
-    }
-
-    final String location = _item.location.get(locale);
-    if (location.isNotEmpty) {
-      columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Padding(
-          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(MdiIcons.mapMarker, color: theme.primaryColor),
-        ),
-        Expanded(
-          child: AutoSizeText(
-            location,
-            maxLines: 1,
-          ),
-        ),
-      ]));
-    }
-
-    final String teacher = _item.teacher.get(locale);
-    if (teacher.isNotEmpty) {
-      columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Padding(
-          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(MdiIcons.school, color: theme.primaryColor),
-        ),
-        Expanded(
-          child: AutoSizeText(
-            teacher,
-            maxLines: 1,
-          ),
-        ),
-      ]));
-    }
-
-    final String level = _item.level.name.get(locale);
-    if (level.isNotEmpty) {
-      columnItems.add(Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Padding(
-          padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
-          child: Icon(MdiIcons.fromString(_item.level.icon), color: theme.primaryColor),
-        ),
-        Expanded(
-          child: AutoSizeText(
-            level,
-            maxLines: 1,
-          ),
-        ),
-      ]));
-    }
-
-    columnItems.add(Container(
-      child: Text(_item.description.get(locale)),
-      padding: const EdgeInsetsDirectional.only(
-          start: 20.0, end: 20.0, top: 15.0, bottom: 10.0),
+    columnItems.add(ProgrammeItemPropertyWidget(
+      icon: MdiIcons.fromString(_item.kind?.icon),
+      text: _item.kind?.name?.get(locale),
     ));
 
-    if (_item.website != null && _item.website.text != null) {
+    columnItems.add(ProgrammeItemPropertyWidget(
+      icon: MdiIcons.mapMarker,
+      text: _item.location?.get(locale),
+    ));
+
+    columnItems.add(ProgrammeItemPropertyWidget(
+      icon: MdiIcons.school,
+      text: _item.teacher?.get(locale),
+    ));
+
+    columnItems.add(ProgrammeItemPropertyWidget(
+      icon: MdiIcons.fromString(_item.level.icon),
+      text: _item.level?.name?.get(locale),
+    ));
+
+    columnItems.add(Container(
+      child: Text(_item.description?.get(locale) ?? ''),
+      padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0, top: 15.0, bottom: 10.0),
+    ));
+
+    if (_item.website?.text != null) {
       columnItems.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: OutlineButton.icon(
@@ -101,4 +57,46 @@ class ProgrammeItemBody extends StatelessWidget {
 
     return Column(children: columnItems);
   }
+}
+
+class ProgrammeItemPropertyWidget extends StatelessWidget {
+  final IconData _icon;
+  final String _text;
+
+  ProgrammeItemPropertyWidget({
+    @required final IconData icon,
+    @required final String text
+  })
+      : _icon = icon,
+        _text = text ?? '';
+
+  @override
+  Widget build(final BuildContext context) {
+    if (_text.isEmpty) {
+      return SizedBox.shrink();
+    }
+
+    final theme = Theme.of(context);
+    return InkWell(
+      onLongPress: () => _copyText(context),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 20.0, end: 12.0),
+            child: Icon(_icon, color: theme.primaryColor),
+          ),
+          Expanded(
+            child: AutoSizeText(
+              _text,
+              maxLines: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _copyText(final BuildContext context) =>
+      reportClipboardText(context: context, text: _text);
 }
