@@ -20,7 +20,7 @@ class ProgrammeItemBody extends StatelessWidget {
     final List<Widget> columnItems = [];
 
     columnItems.add(ProgrammeItemPropertyWidget(
-      icon: MdiIcons.fromString(_item.kind?.icon),
+      icon: _item.kind?.icon != null ? MdiIcons.fromString(_item.kind?.icon) : null,
       text: _item.kind?.name?.get(locale),
     ));
 
@@ -35,7 +35,7 @@ class ProgrammeItemBody extends StatelessWidget {
     ));
 
     columnItems.add(ProgrammeItemPropertyWidget(
-      icon: MdiIcons.fromString(_item.level.icon),
+      icon: _item.level?.icon != null ? MdiIcons.fromString(_item.level?.icon) : null,
       text: _item.level?.name?.get(locale),
     ));
 
