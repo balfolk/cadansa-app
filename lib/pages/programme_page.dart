@@ -12,6 +12,10 @@ class ProgrammePage extends StatefulWidget {
   final Programme _programme;
   final BottomNavigationBar Function() _bottomBarGenerator;
 
+  static const _EXPANDABLE_THEME = ExpandableThemeData(
+    tapBodyToCollapse: true,
+  );
+
   ProgrammePage(this._title, this._programme, this._bottomBarGenerator,
       {final Key key}) : super(key: key);
 
@@ -22,16 +26,19 @@ class ProgrammePage extends StatefulWidget {
 class _ProgrammePageState extends State<ProgrammePage> {
   @override
   Widget build(final BuildContext context) {
-    return DefaultTabController(
-      initialIndex: _initialIndex,
-      length: widget._programme.days.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget._title),
-          bottom: TabBar(tabs: tabs),
+    return ExpandableTheme(
+      data: ProgrammePage._EXPANDABLE_THEME,
+      child: DefaultTabController(
+        initialIndex: _initialIndex,
+        length: widget._programme.days.length,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget._title),
+            bottom: TabBar(tabs: tabs),
+          ),
+          body: TabBarView(children: tabChildren),
+          bottomNavigationBar: widget._bottomBarGenerator(),
         ),
-        body: TabBarView(children: tabChildren),
-        bottomNavigationBar: widget._bottomBarGenerator(),
       ),
     );
   }
@@ -95,7 +102,6 @@ class _ProgrammePageState extends State<ProgrammePage> {
                 child: ExpandablePanel(
                   header: header,
                   expanded: ProgrammeItemBody(item),
-                  tapBodyToCollapse: true,
                 ),
               ),
             );
