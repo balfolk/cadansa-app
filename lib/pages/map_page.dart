@@ -1,4 +1,5 @@
 import 'package:cadansa_app/data/map.dart';
+import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/widgets/map.dart';
 import 'package:flutter/material.dart';
 
@@ -6,8 +7,9 @@ class MapPage extends StatefulWidget {
   final String _title;
   final MapData _mapData;
   final BottomNavigationBar Function() _bottomBarGenerator;
+  final ActionHandler _actionHandler;
 
-  MapPage(this._title, this._mapData, this._bottomBarGenerator, {final Key key})
+  MapPage(this._title, this._mapData, this._bottomBarGenerator, this._actionHandler, {final Key key})
       : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class _MapPageState extends State<MapPage> {
 
   List<Widget> get tabChildren {
     return widget._mapData.floors
-        .map((floor) => MapWidget(floor)).toList(growable: false);
+        .map((floor) => MapWidget(floor, widget._actionHandler))
+        .toList(growable: false);
   }
 }

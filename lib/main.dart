@@ -13,6 +13,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const String _DEFAULT_TITLE = 'CaDansa';
 const String _PAGE_INDEX_KEY = 'pageIndex';
@@ -206,7 +207,7 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
     final key = Key('page$_currentIndex');
     final pageData = widget._pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(widget._title, pageData.mapData, _generateBottomNavigationBar, key: key);
+      return MapPage(widget._title, pageData.mapData, _generateBottomNavigationBar, _handleAction, key: key);
     } else if (pageData is ProgrammePageData) {
       return ProgrammePage(widget._title, pageData.programme, _generateBottomNavigationBar, key: key);
     } else if (pageData is InfoPageData) {
@@ -231,6 +232,23 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
       currentIndex: _currentIndex,
       type: BottomNavigationBarType.fixed,
     );
+  }
+
+  void _handleAction(final String action) {
+    switch (action.split(':').first) {
+      case 'page':
+        final index = int.tryParse(action.substring('page:'.length));
+        if (index != null) {
+          setState(() {
+            _currentIndex = index;
+          });
+        }
+        break;
+      case 'url':
+        final url = action.substring('url:'.length);
+        launch(url);
+        break;
+    }
   }
 }
 

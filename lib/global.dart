@@ -1,0 +1,1 @@
+typedef ActionHandler = Function(String);
