@@ -34,10 +34,27 @@ const _DEFAULT_PRIMARY_SWATCH = Colors.teal;
 const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
-void main() => runApp(const CaDansaApp());
+const _PRIMARY_SWATCH_INDEX_KEY = 'primarySwatchIndex';
+const _ACCENT_COLOR_KEY = 'accentColor';
+const _EVENT_INDEX_KEY = 'eventIndex';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPrefs = await SharedPreferences.getInstance();
+
+  final primarySwatchIndex = sharedPrefs.getInt(_PRIMARY_SWATCH_INDEX_KEY);
+  final primarySwatch = primarySwatchIndex != null ? Colors.primaries[primarySwatchIndex] : null;
+  final accentColorValue = sharedPrefs.getInt(_ACCENT_COLOR_KEY);
+  final accentColor = accentColorValue != null ? Color(accentColorValue) : null;
+
+  runApp(CaDansaApp(primarySwatch, accentColor));
+}
 
 class CaDansaApp extends StatefulWidget {
-  const CaDansaApp();
+  final MaterialColor _initialPrimarySwatch;
+  final Color _initialAccentColor;
+
+  CaDansaApp(this._initialPrimarySwatch, this._initialAccentColor);
 
   @override
   _CaDansaAppState createState() => _CaDansaAppState();
@@ -111,7 +128,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         _config = GlobalConfig(jsonConfig);
         _lastConfigLoad = DateTime.now();
 
-        final eventIndex = sharedPrefs.getInt(EVENT_INDEX_KEY)?.clamp(0, _config.events.length - 1) ?? _DEFAULT_EVENT_INDEX;
+        final eventIndex = sharedPrefs.getInt(_EVENT_INDEX_KEY)?.clamp(0, _config.events.length - 1) ?? _DEFAULT_EVENT_INDEX;
         await _switchToEvent(eventIndex);
 
         final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
@@ -148,8 +165,8 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   @override
   Widget build(final BuildContext context) {
     final title = _currentGlobalEvent?.title ?? _config?.title ?? LText(APP_TITLE);
-    final primarySwatch = _currentGlobalEvent?.primarySwatch ?? _DEFAULT_PRIMARY_SWATCH;
-    final accentColor = _currentGlobalEvent?.accentColor ?? _DEFAULT_ACCENT_COLOR;
+    final primarySwatch = _currentGlobalEvent?.primarySwatch ?? widget._initialPrimarySwatch ?? _DEFAULT_PRIMARY_SWATCH;
+    final accentColor = _currentGlobalEvent?.accentColor ?? widget._initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
 
     return MaterialApp(
       onGenerateTitle: (context) => title.get(Localizations.localeOf(context)),
@@ -237,10 +254,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   Future<void> _switchToEvent(final int index) async {
     _currentEventIndex = index;
-    (await SharedPreferences.getInstance()).setInt(EVENT_INDEX_KEY, index);
     final currentEvent = _currentGlobalEvent;
     _currentEventConfig = await _loadJson(currentEvent.configUri);
     _initialPageIndex = 0;
+
+    final sharedPrefs = await SharedPreferences.getInstance();
+    sharedPrefs.setInt(_EVENT_INDEX_KEY, index);
+    sharedPrefs.setInt(_PRIMARY_SWATCH_INDEX_KEY, currentEvent.primarySwatchIndex);
+    sharedPrefs.setInt(_ACCENT_COLOR_KEY, currentEvent.accentColor.value);
   }
 
   GlobalEvent get _currentGlobalEvent => _config?.events?.elementAt(_currentEventIndex);

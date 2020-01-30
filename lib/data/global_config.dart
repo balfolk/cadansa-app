@@ -16,7 +16,7 @@ class GlobalEvent {
   final LText title, subtitle;
   final String avatarUri;
   final String configUri;
-  final int _primarySwatchIndex, _accentColorIndex;
+  final int primarySwatchIndex, _accentColorIndex;
   final List<Locale> supportedLocales;
 
   GlobalEvent(final dynamic json)
@@ -24,11 +24,11 @@ class GlobalEvent {
         subtitle = LText(json['subtitle']),
         avatarUri = json['avatar'],
         configUri = json['config'],
-        _primarySwatchIndex = json['primarySwatchIndex'],
+        primarySwatchIndex = json['primarySwatchIndex'],
         _accentColorIndex = json['accentColorIndex'],
         supportedLocales = List.unmodifiable(json['locales'].map((l) => Locale(l)));
 
-  MaterialColor get primarySwatch => Colors.primaries[_primarySwatchIndex];
+  MaterialColor get primarySwatch => Colors.primaries[primarySwatchIndex];
 
   Color get accentColor => Colors.accents[_accentColorIndex];
 
