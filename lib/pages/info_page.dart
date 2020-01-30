@@ -4,7 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
-  final String _title;
+  final LText _title;
   final LText _content;
   final Widget Function(BuildContext) _buildDrawer;
   final Widget Function() _buildBottomBar;
@@ -23,7 +23,7 @@ class _InfoPageState extends State<InfoPage> {
     final Locale locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._title),
+        title: Text(widget._title.get(locale)),
       ),
       body: SingleChildScrollView(
         child: Html(

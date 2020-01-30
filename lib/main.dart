@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
@@ -46,6 +47,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   int _currentEventIndex;
   dynamic _currentEventConfig;
+  LText _currentEventTitle;
   int _initialPageIndex;
 
   static const _CONFIG_LIFETIME = Duration(hours: 5);
@@ -103,8 +105,8 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         _lastConfigLoad = DateTime.now();
         _events = _config['events'];
 
-        _currentEventIndex = sharedPrefs.getInt(EVENT_INDEX_KEY)?.clamp(0, _events.length - 1) ?? _DEFAULT_EVENT_INDEX;
-        await _switchToEvent(_currentEventIndex);
+        final eventIndex = sharedPrefs.getInt(EVENT_INDEX_KEY)?.clamp(0, _events.length - 1) ?? _DEFAULT_EVENT_INDEX;
+        await _switchToEvent(eventIndex);
 
         final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
         setState(() {
@@ -112,7 +114,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           _initialPageIndex = pageIndex;
         });
       } catch (e) {
-        debugPrint(e);
+        debugPrint('$e');
         setState(() {
           _mode = _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
         });
@@ -168,7 +170,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Widget get _homePage {
     switch (_mode) {
       case _CaDansaAppStateMode.done:
-        return CaDansaEventPage(_currentEventConfig, _initialPageIndex, _buildDrawer);
+        return CaDansaEventPage(Event(_currentEventTitle, _currentEventConfig), _initialPageIndex, _buildDrawer);
       case _CaDansaAppStateMode.loading:
         return LoadingPage();
       case _CaDansaAppStateMode.error:
@@ -216,7 +218,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     (await SharedPreferences.getInstance()).setInt(EVENT_INDEX_KEY, index);
     final currentEvent = _events[index];
     _currentEventConfig = await _loadJson(currentEvent['config']);
-    _currentEventConfig['title'] = currentEvent['title'];
+    _currentEventTitle = LText(currentEvent['title']);
     _initialPageIndex = 0;
   }
 

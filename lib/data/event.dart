@@ -1,10 +1,19 @@
+import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 
-class GlobalConfiguration {
+class Event {
+  final LText title;
+  final List<PageData> pages;
+
+  Event(this.title, final dynamic json)
+      : pages = List.unmodifiable(json['pages'].map((p) => PageData.parse(p, EventConstants(json))));
+}
+
+class EventConstants {
   Map<String, WorkshopLevel> _levels;
   Map<String, ProgrammeItemKind> _kinds;
 
-  GlobalConfiguration(final dynamic json) {
+  EventConstants(final dynamic json) {
     _levels = (json['workshopLevels'] as Map).map((key, value) => MapEntry(key, WorkshopLevel._(value)));
     _kinds = (json['itemKinds'] as Map).map((key, value) => MapEntry(key, ProgrammeItemKind._(value)));
   }

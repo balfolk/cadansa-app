@@ -1,10 +1,11 @@
 import 'package:cadansa_app/data/map.dart';
+import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/widgets/map.dart';
 import 'package:flutter/material.dart';
 
 class MapPage extends StatefulWidget {
-  final String _title;
+  final LText _title;
   final MapData _mapData;
   final Widget Function(BuildContext) _buildDrawer;
   final Widget Function() _buildBottomBar;
@@ -20,11 +21,12 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   @override
   Widget build(final BuildContext context) {
+    final locale = Localizations.localeOf(context);
     return DefaultTabController(
       length: widget._mapData.floors.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget._title),
+          title: Text(widget._title.get(locale)),
           bottom: TabBar(tabs: tabs),
         ),
         body: TabBarView(

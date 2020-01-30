@@ -1,4 +1,4 @@
-import 'package:cadansa_app/data/global_conf.dart';
+import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/info_page.dart';
@@ -10,15 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CaDansaEventPage extends StatefulWidget {
-  final String _title;
-  final List<PageData> _pages;
+  final Event _event;
   final int _initialIndex;
   final Widget Function(BuildContext) _buildDrawer;
 
-  CaDansaEventPage(final dynamic config, this._initialIndex, this._buildDrawer)
-      : _title = config['title'],
-        _pages = (config['pages'] as List)
-            .map((p) => PageData.parse(p, GlobalConfiguration(config))).toList(growable: false);
+  CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer);
 
   @override
   _CaDansaEventPageState createState() => _CaDansaEventPageState();
@@ -42,7 +38,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _validateIndex() {
-    final newIndex = widget._initialIndex?.clamp(0, widget._pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
+    final newIndex = widget._initialIndex?.clamp(0, widget._event.pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
     if (newIndex != _currentIndex) {
       _currentIndex = newIndex;
       _storePageIndex(newIndex);
@@ -52,13 +48,13 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   @override
   Widget build(final BuildContext context) {
     final key = Key('page$_currentIndex');
-    final pageData = widget._pages[_currentIndex];
+    final pageData = widget._event.pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(widget._title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
+      return MapPage(widget._event.title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(widget._title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, key: key);
+      return ProgrammePage(widget._event.title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     } else if (pageData is InfoPageData) {
-      return InfoPage(widget._title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
+      return InfoPage(widget._event.title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     }
     return null;
   }
@@ -66,7 +62,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   Widget _buildBottomNavigationBar() {
     final Locale locale = Localizations.localeOf(context);
     return BottomNavigationBar(
-      items: widget._pages.map((pageData) => BottomNavigationBarItem(
+      items: widget._event.pages.map((pageData) => BottomNavigationBarItem(
         icon: Icon(MdiIcons.fromString(pageData.icon)),
         title: Text(pageData.title.get(locale)),
       )).toList(growable: false),

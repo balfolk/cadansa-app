@@ -1,4 +1,4 @@
-import 'package:cadansa_app/data/global_conf.dart';
+import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +7,9 @@ class Programme {
 
   Programme._(this._days);
 
-  Programme.parse(final dynamic json, final GlobalConfiguration configuration)
+  Programme.parse(final dynamic json, final EventConstants constants)
       : this._((json as List)
-            .map((d) => ProgrammeDay.parse(d, configuration))
+            .map((d) => ProgrammeDay.parse(d, constants))
             .toList(growable: false));
 
   List<ProgrammeDay> get days => List.unmodifiable(_days);
@@ -22,12 +22,12 @@ class ProgrammeDay {
 
   ProgrammeDay._(this._name, this._startsOn, this._items);
 
-  ProgrammeDay.parse(final dynamic json, final GlobalConfiguration configuration)
+  ProgrammeDay.parse(final dynamic json, final EventConstants constants)
       : this._(
             LText(json['name']),
             toDateTime(json['startsOn']),
             (json['items'] as List)
-                .map((b) => ProgrammeItem.parse(b, configuration))
+                .map((b) => ProgrammeItem.parse(b, constants))
                 .toList(growable: false));
 
   LText get name => _name;
@@ -52,7 +52,7 @@ class ProgrammeItem {
       this._countries, this._teacher, this._level,
       this._kind, this._description, this._website);
 
-  ProgrammeItem.parse(final dynamic json, final GlobalConfiguration configuration)
+  ProgrammeItem.parse(final dynamic json, final EventConstants constants)
       : this._(
             LText(json['name']),
             toTimeOfDay(json['startTime']),
@@ -60,8 +60,8 @@ class ProgrammeItem {
             LText(json['location']),
             (json['countries'] as List)?.toList(growable: false)?.cast(),
             LText(json['teacher']),
-            configuration.getLevel(json['level']?.toString()),
-            configuration.getKind(json['kind']?.toString()),
+            constants.getLevel(json['level']?.toString()),
+            constants.getKind(json['kind']?.toString()),
             LText.nullable(json['description']),
             Website.parse(json['website']));
 

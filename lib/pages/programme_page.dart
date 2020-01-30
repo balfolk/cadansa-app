@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cadansa_app/data/global_conf.dart';
+import 'package:cadansa_app/data/event.dart';
+import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:expandable/expandable.dart';
@@ -8,7 +9,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shimmer/shimmer.dart';
 
 class ProgrammePage extends StatefulWidget {
-  final String _title;
+  final LText _title;
   final Programme _programme;
   final Widget Function(BuildContext) _buildDrawer;
   final Widget Function() _buildBottomBar;
@@ -27,6 +28,7 @@ class ProgrammePage extends StatefulWidget {
 class _ProgrammePageState extends State<ProgrammePage> {
   @override
   Widget build(final BuildContext context) {
+    final locale = Localizations.localeOf(context);
     return ExpandableTheme(
       data: ProgrammePage._EXPANDABLE_THEME,
       child: DefaultTabController(
@@ -34,7 +36,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
         length: widget._programme.days.length,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(widget._title),
+            title: Text(widget._title.get(locale)),
             bottom: TabBar(tabs: tabs),
           ),
           body: TabBarView(children: tabChildren),
