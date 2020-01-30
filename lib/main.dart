@@ -25,7 +25,8 @@ final LText _REFRESH = LText(const {
   'fr': 'Réessayer',
 });
 
-const _DEFAULT_PRIMARY_SWATCH_INDEX = 8;
+const _DEFAULT_PRIMARY_SWATCH = Colors.teal;
+const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
 void main() => runApp(const CaDansaApp());
@@ -47,7 +48,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   int _currentEventIndex;
   dynamic _currentEventConfig;
-  LText _currentEventTitle;
   int _initialPageIndex;
 
   static const _CONFIG_LIFETIME = Duration(hours: 5);
@@ -145,31 +145,29 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   @override
   Widget build(final BuildContext context) {
-    final config = _currentEventConfig ?? const {};
-
-    final title = LText(config['title'] ?? APP_TITLE);
-    final primarySwatchIndex = config['primarySwatchIndex'] ?? _DEFAULT_PRIMARY_SWATCH_INDEX;
-    final accentColorIndex = config['accentColorIndex'] ?? primarySwatchIndex;
+    final title = _currentGlobalEvent?.title ?? _config?.title ?? LText(APP_TITLE);
+    final primarySwatch = _currentGlobalEvent?.primarySwatch ?? _DEFAULT_PRIMARY_SWATCH;
+    final accentColor = _currentGlobalEvent?.accentColor ?? _DEFAULT_ACCENT_COLOR;
 
     return MaterialApp(
       onGenerateTitle: (context) => title.get(Localizations.localeOf(context)),
       theme: ThemeData(
-        primarySwatch: Colors.primaries[primarySwatchIndex],
-        accentColor: Colors.accents[accentColorIndex]
+        primarySwatch: primarySwatch,
+        accentColor: accentColor,
       ),
       home: _homePage,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: config['locales']?.map((l) => Locale(l))?.cast<Locale>() ?? _DEFAULT_LOCALES,
+      supportedLocales: _currentGlobalEvent?.supportedLocales ?? _DEFAULT_LOCALES,
     );
   }
 
   Widget get _homePage {
     switch (_mode) {
       case _CaDansaAppStateMode.done:
-        return CaDansaEventPage(Event(_currentEventTitle, _currentEventConfig), _initialPageIndex, _buildDrawer);
+        return CaDansaEventPage(Event(_currentGlobalEvent.title, _currentEventConfig), _initialPageIndex, _buildDrawer);
       case _CaDansaAppStateMode.loading:
         return LoadingPage();
       case _CaDansaAppStateMode.error:
@@ -182,13 +180,13 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
-    final eventWidgets = _config.events.asMap().entries.map((event) => ListTile(
+    final eventWidgets = List<Widget>.unmodifiable(_config.events.asMap().entries.map((event) => ListTile(
       leading: CircleAvatar(
+        backgroundColor: _currentGlobalEvent.primarySwatch.shade500,
         backgroundImage: NetworkImage(event.value.avatarUri),
       ),
       title: Text(
         event.value.title.get(locale),
-        style: _currentEventIndex == event.key ? TextStyle(color: theme.primaryColor) : null,
       ),
       subtitle: Text(
         event.value.subtitle.get(locale),
@@ -198,7 +196,9 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         setState(() {});
         Navigator.pop(context);
       },
-    )).cast<Widget>().toList(growable: false);
+      selected: _currentEventIndex == event.key,
+    )));
+
     final header = _config.logoUri != null
         ? Image.network(_config.logoUri)
         : Text(APP_TITLE, style: theme.textTheme.display3);
@@ -215,11 +215,12 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Future<void> _switchToEvent(final int index) async {
     _currentEventIndex = index;
     (await SharedPreferences.getInstance()).setInt(EVENT_INDEX_KEY, index);
-    final currentEvent = _config.events[index];
+    final currentEvent = _currentGlobalEvent;
     _currentEventConfig = await _loadJson(currentEvent.configUri);
-    _currentEventTitle = currentEvent.title;
     _initialPageIndex = 0;
   }
+
+  GlobalEvent get _currentGlobalEvent => _config?.events?.elementAt(_currentEventIndex);
 
   @override
   void dispose() {
