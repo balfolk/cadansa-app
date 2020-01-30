@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 class MapPage extends StatefulWidget {
   final String _title;
   final MapData _mapData;
-  final BottomNavigationBar Function() _bottomBarGenerator;
+  final Widget Function(BuildContext) _buildDrawer;
+  final Widget Function() _buildBottomBar;
   final ActionHandler _actionHandler;
 
-  MapPage(this._title, this._mapData, this._bottomBarGenerator, this._actionHandler, {final Key key})
+  MapPage(this._title, this._mapData, this._buildDrawer, this._buildBottomBar, this._actionHandler, {final Key key})
       : super(key: key);
 
   @override
@@ -30,7 +31,8 @@ class _MapPageState extends State<MapPage> {
           children: tabChildren,
           physics: const NeverScrollableScrollPhysics(),
         ),
-        bottomNavigationBar: widget._bottomBarGenerator(),
+        drawer: widget._buildDrawer(context),
+        bottomNavigationBar: widget._buildBottomBar(),
       ),
     );
   }

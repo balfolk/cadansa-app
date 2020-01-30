@@ -13,8 +13,9 @@ class CaDansaHomePage extends StatefulWidget {
   final String _title;
   final List<PageData> _pages;
   final int _initialIndex;
+  final Widget Function(BuildContext) _buildDrawer;
 
-  CaDansaHomePage(final dynamic config, this._initialIndex)
+  CaDansaHomePage(final dynamic config, this._initialIndex, this._buildDrawer)
       : _title = config['title'],
         _pages = (config['pages'] as List)
             .map((p) => PageData.parse(p, GlobalConfiguration(config))).toList(growable: false);
@@ -29,6 +30,16 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _validateIndex();
+  }
+
+  @override
+  void didUpdateWidget(CaDansaHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _validateIndex();
+  }
+
+  void _validateIndex() {
     if (widget._initialIndex != null && widget._initialIndex > -1 && widget._initialIndex < widget._pages.length) {
       _currentIndex = widget._initialIndex;
     } else {
@@ -41,16 +52,16 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
     final key = Key('page$_currentIndex');
     final pageData = widget._pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(widget._title, pageData.mapData, _generateBottomNavigationBar, _handleAction, key: key);
+      return MapPage(widget._title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(widget._title, pageData.programme, _generateBottomNavigationBar, key: key);
+      return ProgrammePage(widget._title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     } else if (pageData is InfoPageData) {
-      return InfoPage(widget._title, pageData.content, _generateBottomNavigationBar, key: key);
+      return InfoPage(widget._title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     }
     return null;
   }
 
-  BottomNavigationBar _generateBottomNavigationBar() {
+  Widget _buildBottomNavigationBar() {
     final Locale locale = Localizations.localeOf(context);
     return BottomNavigationBar(
       items: widget._pages.map((pageData) => BottomNavigationBarItem(

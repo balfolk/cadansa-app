@@ -1,3 +1,4 @@
 typedef ActionHandler = Function(String);
 
-const String PAGE_INDEX_KEY = 'pageIndex';
+const APP_TITLE = 'CaDansa';
+const PAGE_INDEX_KEY = 'pageIndex';

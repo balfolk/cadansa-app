@@ -10,13 +10,14 @@ import 'package:shimmer/shimmer.dart';
 class ProgrammePage extends StatefulWidget {
   final String _title;
   final Programme _programme;
-  final BottomNavigationBar Function() _bottomBarGenerator;
+  final Widget Function(BuildContext) _buildDrawer;
+  final Widget Function() _buildBottomBar;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
   );
 
-  ProgrammePage(this._title, this._programme, this._bottomBarGenerator,
+  ProgrammePage(this._title, this._programme, this._buildDrawer, this._buildBottomBar,
       {final Key key}) : super(key: key);
 
   @override
@@ -37,7 +38,8 @@ class _ProgrammePageState extends State<ProgrammePage> {
             bottom: TabBar(tabs: tabs),
           ),
           body: TabBarView(children: tabChildren),
-          bottomNavigationBar: widget._bottomBarGenerator(),
+          drawer: widget._buildDrawer(context),
+          bottomNavigationBar: widget._buildBottomBar(),
         ),
       ),
     );

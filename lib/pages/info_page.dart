@@ -6,9 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 class InfoPage extends StatefulWidget {
   final String _title;
   final LText _content;
-  final BottomNavigationBar Function() _bottomBarGenerator;
+  final Widget Function(BuildContext) _buildDrawer;
+  final Widget Function() _buildBottomBar;
 
-  InfoPage(this._title, this._content, this._bottomBarGenerator,
+  InfoPage(this._title, this._content, this._buildDrawer, this._buildBottomBar,
       {final Key key})
       : super(key: key);
 
@@ -31,7 +32,8 @@ class _InfoPageState extends State<InfoPage> {
           onLinkTap: launch,
         ),
       ),
-      bottomNavigationBar: widget._bottomBarGenerator(),
+      drawer: widget._buildDrawer(context),
+      bottomNavigationBar: widget._buildBottomBar(),
     );
   }
 }
