@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
@@ -51,8 +52,8 @@ class _MapWidgetState extends State<MapWidget> {
     final stackChildren = <Widget>[
       PhotoView(
         controller: _controller,
-        imageProvider: path.startsWith('http') ? NetworkImage(path) : AssetImage(path.split('?')[0]),
-    initialScale: widget._data.initialScale ?? PhotoViewComputedScale.contained,
+        imageProvider: path.startsWith('http') ? CachedNetworkImageProvider(path) : AssetImage(path.split('?')[0]),
+        initialScale: widget._data.initialScale ?? PhotoViewComputedScale.contained,
         minScale: PhotoViewComputedScale.contained,
         maxScale: widget._data.maxScale ?? 1.0,
         backgroundDecoration: BoxDecoration(color: Colors.white),

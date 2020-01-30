@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
@@ -8,9 +8,12 @@ import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
@@ -24,6 +27,8 @@ final LText _REFRESH = LText(const {
   'nl': 'Probeer opnieuw',
   'fr': 'Réessayer',
 });
+
+const _CONFIG_LIFETIME = Duration(hours: 5);
 
 const _DEFAULT_PRIMARY_SWATCH = Colors.teal;
 const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
@@ -41,6 +46,8 @@ class CaDansaApp extends StatefulWidget {
 enum _CaDansaAppStateMode { done, loading, error }
 
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
+  BaseCacheManager _configCacheManager;
+
   _CaDansaAppStateMode _mode;
   String _configUrl;
   GlobalConfig _config;
@@ -50,7 +57,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   dynamic _currentEventConfig;
   int _initialPageIndex;
 
-  static const _CONFIG_LIFETIME = Duration(hours: 5);
   static const _DEFAULT_LOCALES = [
     Locale('en'),
     Locale('nl'),
@@ -62,6 +68,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _mode = _CaDansaAppStateMode.loading;
+    _configCacheManager = _JsonCacheManager();
     _loadConfig();
   }
 
@@ -125,17 +132,12 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
   }
 
-  static Future<dynamic> _loadJson(final String url) async {
+  Future<dynamic> _loadJson(final String url) async {
     String jsonString;
     if (url.startsWith('http')) {
-      jsonString = (await new HttpClient()
-          .getUrl(Uri.parse(url))
-          .then((final HttpClientRequest request) => request.close())
-          .then((final HttpClientResponse response) =>
-          response.transform(Utf8Decoder()).toList())
+      jsonString = (await _configCacheManager.getSingleFile(url)
           .timeout(_LOAD_TIMEOUT, onTimeout: () => null)
-          .catchError((_) => null))
-        ?.join();
+          .catchError((_) => null)).readAsStringSync();
     } else {
       jsonString = await rootBundle.loadString(url);
     }
@@ -197,7 +199,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           ),
           child: CircleAvatar(
             backgroundColor: event.primarySwatch,
-            backgroundImage: NetworkImage(event.avatarUri),
+            backgroundImage: CachedNetworkImageProvider(event.avatarUri),
           ),
         ),
         title: Text(
@@ -215,9 +217,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       );
     }));
 
+    final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.display3);
     final header = _config.logoUri != null
-        ? Image.network(_config.logoUri)
-        : Text(APP_TITLE, style: theme.textTheme.display3);
+        ? CachedNetworkImage(
+            imageUrl: _config.logoUri,
+            errorWidget: (context, url, error) => headerPlaceholder,
+            fadeInDuration: Duration.zero,
+          )
+        : headerPlaceholder;
 
     return Drawer(
       child: ListView(children: <Widget>[
@@ -289,5 +296,26 @@ class TimeoutPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _JsonCacheManager extends BaseCacheManager {
+  static const key = 'jcm';
+
+  static _JsonCacheManager _instance;
+
+  factory _JsonCacheManager() {
+    if (_instance == null) {
+      _instance = new _JsonCacheManager._();
+    }
+    return _instance;
+  }
+
+  _JsonCacheManager._() : super(key, maxAgeCacheObject: _CONFIG_LIFETIME);
+
+  @override
+  Future<String> getFilePath() async {
+    var directory = await getTemporaryDirectory();
+    return p.join(directory.path, key);
   }
 }
