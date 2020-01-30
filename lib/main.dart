@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cadansa_app/data/event.dart';
+import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
@@ -41,8 +42,7 @@ enum _CaDansaAppStateMode { done, loading, error }
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   _CaDansaAppStateMode _mode;
   String _configUrl;
-  dynamic _config;
-  dynamic _events;
+  GlobalConfig _config;
   DateTime _lastConfigLoad;
 
   int _currentEventIndex;
@@ -101,11 +101,10 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final jsonConfig = await _loadJson(_configUrl);
     if (jsonConfig != null) {
       try {
-        _config = jsonConfig;
+        _config = GlobalConfig(jsonConfig);
         _lastConfigLoad = DateTime.now();
-        _events = _config['events'];
 
-        final eventIndex = sharedPrefs.getInt(EVENT_INDEX_KEY)?.clamp(0, _events.length - 1) ?? _DEFAULT_EVENT_INDEX;
+        final eventIndex = sharedPrefs.getInt(EVENT_INDEX_KEY)?.clamp(0, _config.events.length - 1) ?? _DEFAULT_EVENT_INDEX;
         await _switchToEvent(eventIndex);
 
         final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
@@ -183,16 +182,16 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
-    final eventWidgets = _config['events'].asMap().entries.map((event) => ListTile(
+    final eventWidgets = _config.events.asMap().entries.map((event) => ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(event.value['avatar']),
+        backgroundImage: NetworkImage(event.value.avatarUri),
       ),
       title: Text(
-        LText(event.value['title']).get(locale),
+        event.value.title.get(locale),
         style: _currentEventIndex == event.key ? TextStyle(color: theme.primaryColor) : null,
       ),
       subtitle: Text(
-        LText(event.value['subtitle']).get(locale),
+        event.value.subtitle.get(locale),
       ),
       onTap: () async {
         await _switchToEvent(event.key);
@@ -200,8 +199,8 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         Navigator.pop(context);
       },
     )).cast<Widget>().toList(growable: false);
-    final header = _config['logo'] != null
-        ? Image.network(_config['logo'])
+    final header = _config.logoUri != null
+        ? Image.network(_config.logoUri)
         : Text(APP_TITLE, style: theme.textTheme.display3);
 
     return Drawer(
@@ -216,9 +215,9 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Future<void> _switchToEvent(final int index) async {
     _currentEventIndex = index;
     (await SharedPreferences.getInstance()).setInt(EVENT_INDEX_KEY, index);
-    final currentEvent = _events[index];
-    _currentEventConfig = await _loadJson(currentEvent['config']);
-    _currentEventTitle = LText(currentEvent['title']);
+    final currentEvent = _config.events[index];
+    _currentEventConfig = await _loadJson(currentEvent.configUri);
+    _currentEventTitle = currentEvent.title;
     _initialPageIndex = 0;
   }
 
