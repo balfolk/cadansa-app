@@ -9,23 +9,25 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CaDansaHomePage extends StatefulWidget {
+class CaDansaEventPage extends StatefulWidget {
   final String _title;
   final List<PageData> _pages;
   final int _initialIndex;
   final Widget Function(BuildContext) _buildDrawer;
 
-  CaDansaHomePage(final dynamic config, this._initialIndex, this._buildDrawer)
+  CaDansaEventPage(final dynamic config, this._initialIndex, this._buildDrawer)
       : _title = config['title'],
         _pages = (config['pages'] as List)
             .map((p) => PageData.parse(p, GlobalConfiguration(config))).toList(growable: false);
 
   @override
-  _CaDansaHomePageState createState() => _CaDansaHomePageState();
+  _CaDansaEventPageState createState() => _CaDansaEventPageState();
 }
 
-class _CaDansaHomePageState extends State<CaDansaHomePage> {
+class _CaDansaEventPageState extends State<CaDansaEventPage> {
   int _currentIndex;
+
+  static const _DEFAULT_PAGE_INDEX = 0;
 
   @override
   void didChangeDependencies() {
@@ -34,16 +36,16 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
   }
 
   @override
-  void didUpdateWidget(CaDansaHomePage oldWidget) {
+  void didUpdateWidget(CaDansaEventPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     _validateIndex();
   }
 
   void _validateIndex() {
-    if (widget._initialIndex != null && widget._initialIndex > -1 && widget._initialIndex < widget._pages.length) {
-      _currentIndex = widget._initialIndex;
-    } else {
-      _currentIndex = -1;
+    final newIndex = widget._initialIndex?.clamp(0, widget._pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
+    if (newIndex != _currentIndex) {
+      _currentIndex = newIndex;
+      _storePageIndex(newIndex);
     }
   }
 
@@ -72,7 +74,7 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
         setState(() {
           _currentIndex = index;
         });
-        (await SharedPreferences.getInstance()).setInt(PAGE_INDEX_KEY, index);
+        _storePageIndex(index);
       },
       currentIndex: _currentIndex,
       type: BottomNavigationBarType.fixed,
@@ -94,5 +96,9 @@ class _CaDansaHomePageState extends State<CaDansaHomePage> {
         launch(url);
         break;
     }
+  }
+
+  static void _storePageIndex(final int index) async {
+    (await SharedPreferences.getInstance()).setInt(PAGE_INDEX_KEY, index);
   }
 }

@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
-import 'package:cadansa_app/pages/home_page.dart';
+import 'package:cadansa_app/pages/event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,6 +24,7 @@ final LText _REFRESH = LText(const {
 });
 
 const _DEFAULT_PRIMARY_SWATCH_INDEX = 8;
+const _DEFAULT_EVENT_INDEX = 0;
 
 void main() => runApp(const CaDansaApp());
 
@@ -60,7 +60,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _mode = _CaDansaAppStateMode.loading;
-    _currentEventIndex = 0;
     _loadConfig();
   }
 
@@ -96,22 +95,24 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       _configUrl = DotEnv().env['CONFIG_URL'];
     }
 
-
+    final sharedPrefs = await SharedPreferences.getInstance();
     final jsonConfig = await _loadJson(_configUrl);
     if (jsonConfig != null) {
       try {
         _config = jsonConfig;
         _lastConfigLoad = DateTime.now();
         _events = _config['events'];
-        await _switchToEvent(min(_currentEventIndex, _events.length - 1));
 
-        final int pageIndex = (await SharedPreferences.getInstance()).getInt(PAGE_INDEX_KEY);
+        _currentEventIndex = sharedPrefs.getInt(EVENT_INDEX_KEY)?.clamp(0, _events.length - 1) ?? _DEFAULT_EVENT_INDEX;
+        await _switchToEvent(_currentEventIndex);
 
+        final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
         setState(() {
           _mode = _CaDansaAppStateMode.done;
           _initialPageIndex = pageIndex;
         });
-      } catch (_) {
+      } catch (e) {
+        debugPrint(e);
         setState(() {
           _mode = _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
         });
@@ -167,7 +168,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Widget get _homePage {
     switch (_mode) {
       case _CaDansaAppStateMode.done:
-        return CaDansaHomePage(_currentEventConfig, _initialPageIndex, _buildDrawer);
+        return CaDansaEventPage(_currentEventConfig, _initialPageIndex, _buildDrawer);
       case _CaDansaAppStateMode.loading:
         return LoadingPage();
       case _CaDansaAppStateMode.error:
@@ -212,6 +213,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   Future<void> _switchToEvent(final int index) async {
     _currentEventIndex = index;
+    (await SharedPreferences.getInstance()).setInt(EVENT_INDEX_KEY, index);
     final currentEvent = _events[index];
     _currentEventConfig = await _loadJson(currentEvent['config']);
     _currentEventConfig['title'] = currentEvent['title'];
