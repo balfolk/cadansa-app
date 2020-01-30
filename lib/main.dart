@@ -180,24 +180,40 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
-    final eventWidgets = List<Widget>.unmodifiable(_config.events.asMap().entries.map((event) => ListTile(
-      leading: CircleAvatar(
-        backgroundColor: _currentGlobalEvent.primarySwatch.shade500,
-        backgroundImage: NetworkImage(event.value.avatarUri),
-      ),
-      title: Text(
-        event.value.title.get(locale),
-      ),
-      subtitle: Text(
-        event.value.subtitle.get(locale),
-      ),
-      onTap: () async {
-        await _switchToEvent(event.key);
-        setState(() {});
-        Navigator.pop(context);
-      },
-      selected: _currentEventIndex == event.key,
-    )));
+    final eventWidgets = List<Widget>.unmodifiable(_config.events.asMap().entries.map((e) {
+      final index = e.key;
+      final event = e.value;
+      final isSelected = _currentEventIndex == index;
+
+      return ListTile(
+        leading: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: event.primarySwatch,
+              style: isSelected ? BorderStyle.solid : BorderStyle.none,
+              width: 2.0,
+            ),
+            shape: BoxShape.circle,
+          ),
+          child: CircleAvatar(
+            backgroundColor: event.primarySwatch,
+            backgroundImage: NetworkImage(event.avatarUri),
+          ),
+        ),
+        title: Text(
+          event.title.get(locale),
+        ),
+        subtitle: Text(
+          event.subtitle.get(locale),
+        ),
+        onTap: () async {
+          await _switchToEvent(index);
+          setState(() {});
+          Navigator.pop(context);
+        },
+        selected: isSelected,
+      );
+    }));
 
     final header = _config.logoUri != null
         ? Image.network(_config.logoUri)
