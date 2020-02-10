@@ -10,8 +10,9 @@ class MapPage extends StatefulWidget {
   final Widget Function(BuildContext) _buildDrawer;
   final Widget Function() _buildBottomBar;
   final ActionHandler _actionHandler;
+  final int _initialFloorIndex, _highligtAreaIndex;
 
-  MapPage(this._title, this._mapData, this._buildDrawer, this._buildBottomBar, this._actionHandler, {final Key key})
+  MapPage(this._title, this._mapData, this._buildDrawer, this._buildBottomBar, this._actionHandler, this._initialFloorIndex, this._highligtAreaIndex, {final Key key})
       : super(key: key);
 
   @override
@@ -24,6 +25,7 @@ class _MapPageState extends State<MapPage> {
     final locale = Localizations.localeOf(context);
     return DefaultTabController(
       length: widget._mapData.floors.length,
+      initialIndex: widget._initialFloorIndex ?? 0,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget._title.get(locale)),
@@ -41,14 +43,19 @@ class _MapPageState extends State<MapPage> {
 
   List<Tab> get tabs {
     final Locale locale = Localizations.localeOf(context);
-    return widget._mapData.floors.map((flooar) {
-      return Tab(text: flooar.title.get(locale));
+    return widget._mapData.floors.map((floor) {
+      return Tab(text: floor.title.get(locale));
     }).toList(growable: false);
   }
 
   List<Widget> get tabChildren {
     return widget._mapData.floors
-        .map((floor) => MapWidget(floor, widget._actionHandler))
+        .asMap().entries
+        .map((floor) => MapWidget(
+          floor.value,
+          widget._actionHandler,
+          floor.key == widget._initialFloorIndex ? widget._highligtAreaIndex : null,
+        ))
         .toList(growable: false);
   }
 }

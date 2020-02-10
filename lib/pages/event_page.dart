@@ -23,6 +23,8 @@ class CaDansaEventPage extends StatefulWidget {
 class _CaDansaEventPageState extends State<CaDansaEventPage> {
   int _currentIndex;
 
+  int _highlightAreaFloorIndex, _highlightAreaIndex;
+
   static const _DEFAULT_PAGE_INDEX = 0;
 
   @override
@@ -32,9 +34,11 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   @override
-  void didUpdateWidget(CaDansaEventPage oldWidget) {
+  void didUpdateWidget(final CaDansaEventPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _validateIndex();
+    if (oldWidget._initialIndex != widget._initialIndex) {
+      _validateIndex();
+    }
   }
 
   void _validateIndex() {
@@ -50,9 +54,9 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     final key = Key('page$_currentIndex');
     final pageData = widget._event.pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(widget._event.title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
+      return MapPage(widget._event.title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(widget._event.title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, key: key);
+      return ProgrammePage(widget._event.title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
     } else if (pageData is InfoPageData) {
       return InfoPage(widget._event.title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     }
@@ -81,16 +85,51 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     switch (action.split(':').first) {
       case 'page':
         final index = int.tryParse(action.substring('page:'.length));
-        if (index != null) {
-          setState(() {
-            _currentIndex = index;
-          });
-        }
+        _selectPage(index);
         break;
       case 'url':
         final url = action.substring('url:'.length);
         launch(url);
         break;
+      case 'area':
+        final areaId = action.substring('area:'.length);
+        _selectArea(areaId);
+        break;
+    }
+  }
+
+  void _selectPage(final int pageIndex) {
+    if (pageIndex == null) return;
+
+    setState(() {
+      _currentIndex = pageIndex;
+    });
+  }
+
+  void _selectArea(final String areaId) {
+    if (areaId == null) return;
+
+    int pageIndex, floorIndex, areaIndex;
+    for (final page in widget._event.pages.asMap().entries) {
+      if (page.value is MapPageData) {
+        for (final floor in (page.value as MapPageData).mapData.floors.asMap().entries) {
+          final area = floor.value.areas.indexWhere((area) => area.id == areaId);
+          if (area != -1) {
+            pageIndex = page.key;
+            floorIndex = floor.key;
+            areaIndex = area;
+            break;
+          }
+        }
+      }
+    }
+
+    if (pageIndex != null && floorIndex != null && areaIndex != null) {
+      setState(() {
+        _currentIndex = pageIndex;
+        _highlightAreaFloorIndex = floorIndex;
+        _highlightAreaIndex = areaIndex;
+      });
     }
   }
 

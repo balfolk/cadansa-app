@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
+import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,15 @@ class ProgrammePage extends StatefulWidget {
   final Programme _programme;
   final Widget Function(BuildContext) _buildDrawer;
   final Widget Function() _buildBottomBar;
+  final ActionHandler _actionHandler;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
   );
 
-  ProgrammePage(this._title, this._programme, this._buildDrawer, this._buildBottomBar,
-      {final Key key}) : super(key: key);
+  ProgrammePage(this._title, this._programme, this._buildDrawer,
+      this._buildBottomBar, this._actionHandler, {final Key key})
+      : super(key: key);
 
   @override
   _ProgrammePageState createState() => _ProgrammePageState();
@@ -105,7 +108,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
               child: ScrollOnExpand(
                 child: ExpandablePanel(
                   header: header,
-                  expanded: ProgrammeItemBody(item),
+                  expanded: ProgrammeItemBody(item, widget._actionHandler),
                 ),
               ),
             );

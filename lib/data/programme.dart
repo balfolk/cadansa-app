@@ -40,7 +40,7 @@ class ProgrammeDay {
 class ProgrammeItem {
   final LText _name;
   final TimeOfDay _startTime, _endTime;
-  final LText _location;
+  final Location _location;
   final List<String> _countries;
   final LText _teacher;
   final WorkshopLevel _level;
@@ -57,7 +57,7 @@ class ProgrammeItem {
             LText(json['name']),
             toTimeOfDay(json['startTime']),
             toTimeOfDay(json['endTime']),
-            LText(json['location']),
+            Location.parse(json['location']),
             (json['countries'] as List)?.toList(growable: false)?.cast(),
             LText(json['teacher']),
             constants.getLevel(json['level']?.toString()),
@@ -71,7 +71,7 @@ class ProgrammeItem {
 
   TimeOfDay get endTime => _endTime;
 
-  LText get location => _location;
+  Location get location => _location;
 
   List<String> get countries => _countries != null ? List.unmodifiable(_countries) : [];
 
@@ -84,6 +84,18 @@ class ProgrammeItem {
   LText get description => _description;
 
   Website get website => _website;
+}
+
+class Location {
+  final LText title;
+  final String action;
+
+  Location._(this.title, this.action);
+
+  factory Location.parse(final dynamic json) => json != null ? Location._(
+    LText(json['title'] ?? json),
+    json['action'],
+  ) : null;
 }
 
 class Website {

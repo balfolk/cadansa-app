@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/programme.dart';
+import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,8 +9,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammeItemBody extends StatelessWidget {
   final ProgrammeItem _item;
+  final ActionHandler _actionHandler;
 
-  ProgrammeItemBody(this._item);
+  ProgrammeItemBody(this._item, this._actionHandler);
 
   @override
   Widget build(final BuildContext context) {
@@ -26,7 +28,8 @@ class ProgrammeItemBody extends StatelessWidget {
 
     columnItems.add(ProgrammeItemPropertyWidget(
       icon: MdiIcons.mapMarker,
-      text: _item.location?.get(locale),
+      text: _item.location?.title?.get(locale),
+      onTap: _item.location?.action != null ? () => _actionHandler(_item.location.action) : null,
     ));
 
     columnItems.add(ProgrammeItemPropertyWidget(
@@ -62,22 +65,26 @@ class ProgrammeItemBody extends StatelessWidget {
 class ProgrammeItemPropertyWidget extends StatelessWidget {
   final IconData _icon;
   final String _text;
+  final VoidCallback _onTap;
 
   ProgrammeItemPropertyWidget({
     @required final IconData icon,
-    @required final String text
+    @required final String text,
+    final VoidCallback onTap,
   })
       : _icon = icon,
-        _text = text ?? '';
+        _text = text ?? '',
+        _onTap = onTap;
 
   @override
   Widget build(final BuildContext context) {
     if (_text.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     final theme = Theme.of(context);
     return InkWell(
+      onTap: _onTap,
       onLongPress: () => _copyText(context),
       child: Row(
         mainAxisSize: MainAxisSize.min,

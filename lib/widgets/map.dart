@@ -12,6 +12,7 @@ import 'package:photo_view/photo_view.dart';
 class MapWidget extends StatefulWidget {
   final Floor _data;
   final ActionHandler _actionHandler;
+  final int _highlightAreaIndex;
 
   static final LText _MAP_LOAD_FAIL_TEXT = LText(const {
     'en': "Could not load the festival map. Please make sure you're connected to the Internet.",
@@ -23,14 +24,15 @@ class MapWidget extends StatefulWidget {
   static const _POPUP_HEIGHT = 100.0, _POPUP_WIDTH = 215.0;
   static const _POPUP_PADDING = EdgeInsets.all(5.0);
   static const _MAX_INDICATOR_ALIGNMENT = 0.85;
+  static const _MAP_MOVE_ANIMATION_DURATION = Duration(milliseconds: 500);
 
-  MapWidget(this._data, this._actionHandler);
+  MapWidget(this._data, this._actionHandler, this._highlightAreaIndex);
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixin {
   PhotoViewController _controller;
   StreamSubscription _controllerOutputStreamSubscription;
   FloorArea _activeArea;
@@ -38,11 +40,29 @@ class _MapWidgetState extends State<MapWidget> {
   Alignment _indicatorAlignment;
   Size _lastKnownSize;
 
+  AnimationController _mapMoveAnimationController;
+  Animation<Offset> _mapMoveAnimation;
+  FloorArea _mapMoveTargetArea;
+
   @override
   void initState() {
     super.initState();
     _controller = PhotoViewController();
     _controllerOutputStreamSubscription = _controller.outputStateStream.listen(_onMapControllerEvent);
+
+    _mapMoveAnimationController = AnimationController(duration: MapWidget._MAP_MOVE_ANIMATION_DURATION, vsync: this);
+    _mapMoveAnimationController.addListener(() {
+      _controller.position = _mapMoveAnimation.value;
+      if (_mapMoveAnimationController.isCompleted) {
+        setState(() {
+          _activeArea = _mapMoveTargetArea;
+        });
+      }
+    });
+
+    if (widget._highlightAreaIndex != null) {
+      _activeArea = widget._data.areas[widget._highlightAreaIndex];
+    }
   }
 
   @override
@@ -63,7 +83,7 @@ class _MapWidgetState extends State<MapWidget> {
       )
     ];
 
-    if (_activeArea != null) {
+    if (_activeArea != null && _indicatorPosition != null && _indicatorAlignment != null) {
       stackChildren.add(Positioned.fromRect(
         rect: Rect.fromCenter(
           center: _indicatorPosition.translate(0, -_indicatorAlignment.y * (MapWidget._POPUP_HEIGHT / 2.0 + MapWidget._INDICATOR_LENGTH)),
@@ -103,8 +123,10 @@ class _MapWidgetState extends State<MapWidget> {
   });
 
   void _onMapControllerEvent(final PhotoViewControllerValue value) {
+    _lastKnownSize = context.findRenderObject().paintBounds.size;
+
     if (_activeArea != null) {
-      if (_calculateAreaCenter()) {
+      if (_calculateAreaCenter(_activeArea)) {
         setState(() {});
       } else {
         setState(() {
@@ -117,20 +139,35 @@ class _MapWidgetState extends State<MapWidget> {
   void _onTapUp(final BuildContext context, final TapUpDetails tapUpDetails, final PhotoViewControllerValue controllerValue) {
     _lastKnownSize = context.findRenderObject().paintBounds.size;
 
+    if (_mapMoveAnimationController.isAnimating) {
+      return;
+    }
+
     final area = _determinePressedArea(tapUpDetails.localPosition, controllerValue);
     if (area != null && area != _activeArea) {
-      _activeArea = area;
-      final isInView = _calculateAreaCenter();
-      if (!isInView) {
-        final moveTo = -_activeArea.center * _controller.scale;
-        _controller.position = moveTo;
+      final isInView = _calculateAreaCenter(area);
+      if (isInView) {
+        setState(() {
+          _activeArea = area;
+        });
+      } else {
+        _animateAreaMapMove(area);
+        setState(() {
+          _activeArea = null;
+        });
       }
-      setState(() {});
     } else {
       setState(() {
         _deselectArea();
       });
     }
+  }
+
+  void _animateAreaMapMove(final FloorArea targetArea) {
+    final moveTo = -targetArea.center * _controller.scale;
+    _mapMoveAnimation = Tween(begin: _controller.position, end: moveTo).animate(_mapMoveAnimationController);
+    _mapMoveAnimationController.forward(from: _mapMoveAnimationController.lowerBound);
+    _mapMoveTargetArea = targetArea;
   }
 
   FloorArea _determinePressedArea(final Offset tapPosition, final PhotoViewControllerValue controllerValue) {
@@ -144,8 +181,8 @@ class _MapWidgetState extends State<MapWidget> {
     );
   }
 
-  bool _calculateAreaCenter() {
-    final areaCenter = ((_activeArea.center * _controller.scale)
+  bool _calculateAreaCenter(final FloorArea area) {
+    final areaCenter = ((area.center * _controller.scale)
         .translate(_lastKnownSize.width / 2.0, _lastKnownSize.height / 2.0) + _controller.position);
     final verticalTranslation = (areaCenter.dy - MapWidget._INDICATOR_LENGTH - MapWidget._POPUP_PADDING.top) - MapWidget._POPUP_HEIGHT;
     if (verticalTranslation < -(MapWidget._POPUP_HEIGHT + MapWidget._INDICATOR_LENGTH) || verticalTranslation > (_lastKnownSize.height - MapWidget._POPUP_HEIGHT - MapWidget._INDICATOR_LENGTH)) {
@@ -179,6 +216,7 @@ class _MapWidgetState extends State<MapWidget> {
   void dispose() {
     _controllerOutputStreamSubscription?.cancel();
     _controller?.dispose();
+    _mapMoveAnimationController?.dispose();
     super.dispose();
   }
 }

@@ -49,19 +49,23 @@ class Floor {
 }
 
 class FloorArea {
+  final String _id;
   final Path _path;
   final LText _title;
   final String _action;
   final Offset _center;
 
-  FloorArea._(this._path, this._title, this._action, this._center);
+  FloorArea._(this._id, this._path, this._title, this._action, this._center);
 
   FloorArea.parse(final dynamic json) : this._(
+    json['id'],
     Path()..addPolygon(json['path'].map((point) => Offset(point[0].toDouble(), point[1].toDouble())).cast<Offset>().toList(), true),
     LText(json['title']),
     json['action'],
     Offset(json['center'][0].toDouble(), json['center'][1].toDouble()),
   );
+
+  String get id => _id;
 
   Path get path => Path.from(_path);
 
