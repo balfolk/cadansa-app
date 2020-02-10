@@ -181,7 +181,7 @@ packages:
       name: material_design_icons_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.4.4895"
+    version: "3.4.4995"
   meta:
     dependency: transitive
     description:
