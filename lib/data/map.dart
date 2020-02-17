@@ -50,26 +50,54 @@ class Floor {
 
 class FloorArea {
   final String _id;
-  final Path _path;
+  final List<Offset> _points;
   final LText _title;
+  final double _titleFontSize;
+  final String _buttonIcon;
+  final double _buttonSize;
+  final LText _actionTitle;
   final String _action;
   final Offset _center;
 
-  FloorArea._(this._id, this._path, this._title, this._action, this._center);
+  FloorArea._(this._id, this._points, this._title, this._titleFontSize, this._buttonIcon, this._buttonSize, this._actionTitle, this._action, this._center);
 
   FloorArea.parse(final dynamic json) : this._(
     json['id'],
-    Path()..addPolygon(json['path'].map((point) => Offset(point[0].toDouble(), point[1].toDouble())).cast<Offset>().toList(), true),
+    List.unmodifiable(json['path']?.map((point) => Offset(point[0].toDouble(), point[1].toDouble()))?.cast<Offset>() ?? []),
     LText(json['title']),
+    json['titleFontSize'],
+    json['buttonIcon'],
+    json['buttonSize'],
+    LText(json['actionTitle']),
     json['action'],
     Offset(json['center'][0].toDouble(), json['center'][1].toDouble()),
   );
 
   String get id => _id;
 
-  Path get path => Path.from(_path);
+  Path get path => Path()..addPolygon(_points, true);
+
+  Path getTransformedPath(final Offset Function(Offset) transformation) {
+    return Path()..addPolygon(List.unmodifiable(_points.map(transformation)), true);
+  }
+
+  bool contains(final Offset position, final double scale) {
+    if (_points.isNotEmpty) {
+      return path.contains(position);
+    }
+
+    return (position - center).distanceSquared < (scale * scale * 0.5 * buttonSize * 0.5 * buttonSize);
+  }
 
   LText get title => _title;
+
+  double get titleFontSize => _titleFontSize;
+
+  String get buttonIcon => _buttonIcon ?? '';
+
+  double get buttonSize => _buttonSize;
+
+  LText get actionTitle => _actionTitle;
 
   String get action => _action;
 
