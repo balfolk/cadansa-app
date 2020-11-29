@@ -405,7 +405,7 @@ class TimeoutPage extends StatelessWidget {
 class _JsonCacheManager extends CacheManager {
   static const key = 'jcm';
 
-  static late final _JsonCacheManager _instance = _JsonCacheManager();
+  static late final _JsonCacheManager _instance = _JsonCacheManager._();
 
   factory _JsonCacheManager() => _instance;
 
