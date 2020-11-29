@@ -326,7 +326,6 @@ class _AreaPainter extends CustomPainter {
   final Offset Function(Offset) _transformation;
   final ThemeData _theme;
   final Paint _strokePaint, _fillPaint;
-  final _paintText = false;
 
   static const _TEXT_WIDTH = 500.0;
 
@@ -347,19 +346,6 @@ class _AreaPainter extends CustomPainter {
       final path = area.getTransformedPath(_transformation);
       canvas.drawPath(path, _fillPaint);
       canvas.drawPath(path, _strokePaint);
-
-      if (_paintText) {
-        final span = TextSpan(text: 'TITLE',
-            style: _theme.textTheme.headline4.copyWith(
-                fontFamily: MAP_FONT_FAMILY, fontWeight: FontWeight.bold));
-        final painter = TextPainter(text: span,
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
-            maxLines: 1);
-        painter.layout(minWidth: _TEXT_WIDTH);
-        painter.paint(canvas,
-            _transformation(area.center).translate(-_TEXT_WIDTH / 2, 0));
-      }
     });
   }
 
