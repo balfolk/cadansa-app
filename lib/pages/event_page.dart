@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CaDansaEventPage extends StatefulWidget {
   final Event _event;
-  final int _initialIndex;
+  final int? _initialIndex;
   final Widget Function(BuildContext) _buildDrawer;
 
   CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer);
@@ -21,9 +21,9 @@ class CaDansaEventPage extends StatefulWidget {
 }
 
 class _CaDansaEventPageState extends State<CaDansaEventPage> {
-  int _currentIndex;
+  int _currentIndex = _DEFAULT_PAGE_INDEX;
 
-  int _highlightAreaFloorIndex, _highlightAreaIndex;
+  int? _highlightAreaFloorIndex, _highlightAreaIndex;
 
   static const _DEFAULT_PAGE_INDEX = 0;
 
@@ -60,7 +60,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     } else if (pageData is InfoPageData) {
       return InfoPage(widget._event.title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     }
-    return null;
+    throw Exception('Unexpected page type ${pageData.runtimeType}');
   }
 
   Widget _buildBottomNavigationBar() {
@@ -81,7 +81,8 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     );
   }
 
-  void _handleAction(final String action) {
+  void _handleAction(final String? action) {
+    if (action == null || !action.contains(':')) return;
     switch (action.split(':').first) {
       case 'page':
         final index = int.tryParse(action.substring('page:'.length));
@@ -98,7 +99,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     }
   }
 
-  void _selectPage(final int pageIndex) {
+  void _selectPage(final int? pageIndex) {
     if (pageIndex == null) return;
 
     setState(() {
@@ -107,9 +108,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _selectArea(final String areaId) {
-    if (areaId == null) return;
-
-    int pageIndex, floorIndex, areaIndex;
+    int? pageIndex, floorIndex, areaIndex;
     for (final page in widget._event.pages.asMap().entries) {
       if (page.value is MapPageData) {
         for (final floor in (page.value as MapPageData).mapData.floors.asMap().entries) {
@@ -126,7 +125,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
 
     if (pageIndex != null && floorIndex != null && areaIndex != null) {
       setState(() {
-        _currentIndex = pageIndex;
+        _currentIndex = pageIndex!;
         _highlightAreaFloorIndex = floorIndex;
         _highlightAreaIndex = areaIndex;
       });

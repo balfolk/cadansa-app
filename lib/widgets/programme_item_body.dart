@@ -17,29 +17,29 @@ class ProgrammeItemBody extends StatelessWidget {
   Widget build(final BuildContext context) {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
-    final urlStyle = theme.textTheme.bodyText1.copyWith(color: theme.primaryColor);
+    final urlStyle = theme.textTheme.bodyText1?.copyWith(color: theme.primaryColor);
 
     final columnItems = <Widget>[];
 
     columnItems.add(ProgrammeItemPropertyWidget(
-      icon: _item.kind?.icon != null ? MdiIcons.fromString(_item.kind?.icon) : null,
-      text: _item.kind?.name?.get(locale),
+      icon: _item.kind.icon != null ? MdiIcons.fromString(_item.kind.icon) : null,
+      text: _item.kind.name.get(locale),
     ));
 
     columnItems.add(ProgrammeItemPropertyWidget(
       icon: MdiIcons.mapMarker,
-      text: _item.location?.title?.get(locale),
-      onTap: _item.location?.action != null ? () => _actionHandler(_item.location.action) : null,
+      text: _item.location?.title.get(locale),
+      onTap: _item.location?.action != null ? () => _actionHandler(_item.location?.action) : null,
     ));
 
     columnItems.add(ProgrammeItemPropertyWidget(
       icon: MdiIcons.school,
-      text: _item.teacher?.get(locale),
+      text: _item.teacher.get(locale),
     ));
 
     columnItems.add(ProgrammeItemPropertyWidget(
-      icon: _item.level?.icon != null ? MdiIcons.fromString(_item.level?.icon) : null,
-      text: _item.level?.name?.get(locale),
+      icon: _item.level.icon != null ? MdiIcons.fromString(_item.level.icon) : null,
+      text: _item.level.name.get(locale),
     ));
 
     columnItems.add(Container(
@@ -47,13 +47,14 @@ class ProgrammeItemBody extends StatelessWidget {
       child: Text(_item.description?.get(locale) ?? ''),
     ));
 
-    if (_item.website?.text != null) {
+    final website = _item.website;
+    if (website != null) {
       columnItems.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: OutlineButton.icon(
-          onPressed: () => launch(_item.website.url.get(locale)),
-          label: Text(_item.website.text.get(locale), style: urlStyle),
-          icon: Icon(MdiIcons.fromString(_item.website.icon)),
+          onPressed: () => launch(website.url.get(locale)),
+          label: Text(website.text.get(locale), style: urlStyle),
+          icon: Icon(MdiIcons.fromString(website.icon)),
         ),
       ));
     }
@@ -63,16 +64,15 @@ class ProgrammeItemBody extends StatelessWidget {
 }
 
 class ProgrammeItemPropertyWidget extends StatelessWidget {
-  final IconData _icon;
+  final IconData? _icon;
   final String _text;
-  final VoidCallback _onTap;
+  final VoidCallback? _onTap;
 
   ProgrammeItemPropertyWidget({
-    @required final IconData icon,
-    @required final String text,
-    final VoidCallback onTap,
-  })
-      : _icon = icon,
+    required final IconData? icon,
+    required final String? text,
+    final VoidCallback? onTap,
+  })  : _icon = icon,
         _text = text ?? '',
         _onTap = onTap;
 

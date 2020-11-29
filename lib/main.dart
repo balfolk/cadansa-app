@@ -44,17 +44,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPrefs = await SharedPreferences.getInstance();
 
-  final primarySwatchIndex = sharedPrefs.getInt(_PRIMARY_SWATCH_INDEX_KEY);
+  final int? primarySwatchIndex = sharedPrefs.getInt(_PRIMARY_SWATCH_INDEX_KEY);
   final primarySwatch = primarySwatchIndex != null ? Colors.primaries[primarySwatchIndex] : null;
-  final accentColorValue = sharedPrefs.getInt(_ACCENT_COLOR_KEY);
+  final int? accentColorValue = sharedPrefs.getInt(_ACCENT_COLOR_KEY);
   final accentColor = accentColorValue != null ? Color(accentColorValue) : null;
 
-  final localeList = sharedPrefs.getStringList(_LOCALE_KEY);
-  Locale locale;
+  final List<String?>? localeList = sharedPrefs.getStringList(_LOCALE_KEY);
+  Locale? locale;
   if (localeList != null && localeList.length == 3) {
-    locale = Locale.fromSubtags(languageCode: localeList[0],
-        scriptCode: localeList[1],
-        countryCode: localeList[2]);
+    locale = Locale.fromSubtags(
+      languageCode: localeList[0] ?? '',
+      scriptCode: localeList[1],
+      countryCode: localeList[2],
+    );
   } else {
     await sharedPrefs.remove(_LOCALE_KEY);
   }
@@ -63,9 +65,9 @@ void main() async {
 }
 
 class CaDansaApp extends StatefulWidget {
-  final Locale _initialLocale;
-  final MaterialColor _initialPrimarySwatch;
-  final Color _initialAccentColor;
+  final Locale? _initialLocale;
+  final MaterialColor? _initialPrimarySwatch;
+  final Color? _initialAccentColor;
 
   CaDansaApp(this._initialLocale, this._initialPrimarySwatch, this._initialAccentColor);
 
@@ -77,18 +79,18 @@ enum _CaDansaAppStateMode { done, loading, error }
 
 // ignore: prefer_mixin
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
-  BaseCacheManager _configCacheManager;
+  final BaseCacheManager _configCacheManager = _JsonCacheManager();
 
-  _CaDansaAppStateMode _mode;
-  String _configUrl;
-  GlobalConfig _config;
-  DateTime _lastConfigLoad;
+  _CaDansaAppStateMode _mode = _CaDansaAppStateMode.loading;
+  String? _configUrl;
+  GlobalConfig? _config;
+  DateTime? _lastConfigLoad;
 
-  StreamController<Locale> _localeStreamController;
+  final StreamController<Locale> _localeStreamController = StreamController();
 
-  int _currentEventIndex;
+  int? _currentEventIndex;
   dynamic _currentEventConfig;
-  int _initialPageIndex;
+  int? _initialPageIndex;
 
   static const _DEFAULT_LOCALES = [
     Locale('en', 'GB'),
@@ -99,10 +101,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    _mode = _CaDansaAppStateMode.loading;
-    _configCacheManager = _JsonCacheManager();
-    _localeStreamController = StreamController();
+    WidgetsBinding.instance?.addObserver(this);
     _loadConfig();
   }
 
@@ -122,8 +121,9 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   void _loadConfig({final bool force = false}) async {
-    if (!force && _config != null && _lastConfigLoad != null
-        && _lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
+    final lastConfigLoad = _lastConfigLoad;
+    if (!force && _config != null && lastConfigLoad != null
+        && lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
       // Config still valid, use the existing one rather than reloading
       if (_mode != _CaDansaAppStateMode.done) {
         setState(() {
@@ -145,7 +145,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         _config = GlobalConfig(jsonConfig);
         _lastConfigLoad = DateTime.now();
 
-        final eventIndex = sharedPrefs.getInt(_EVENT_INDEX_KEY)?.clamp(0, _config.events.length - 1) ?? _DEFAULT_EVENT_INDEX;
+        final eventIndex = sharedPrefs.getInt(_EVENT_INDEX_KEY)?.clamp(0, _config?.events.length ?? 1 - 1) ?? _DEFAULT_EVENT_INDEX;
         await _switchToEvent(eventIndex);
 
         final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
@@ -167,12 +167,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
   }
 
-  Future<dynamic> _loadJson(final String url) async {
-    String jsonString;
+  Future<dynamic> _loadJson(final String? url) async {
+    if (url == null) return null;
+
+    String? jsonString;
     if (url.startsWith('http')) {
       jsonString = (await _configCacheManager.getSingleFile(url)
           .timeout(_LOAD_TIMEOUT, onTimeout: () => null)
-          .catchError((_) => null)).readAsStringSync();
+          .catchError((_) => null))?.readAsStringSync();
     } else {
       jsonString = await rootBundle.loadString(url);
     }
@@ -212,9 +214,15 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Widget get _homePage {
     switch (_mode) {
       case _CaDansaAppStateMode.done:
-        return CaDansaEventPage(Event(_currentGlobalEvent.title, _currentEventConfig), _initialPageIndex, _buildDrawer);
+        final currentGlobalEvent = _currentGlobalEvent;
+        if (currentGlobalEvent != null && _currentEventConfig != null) {
+          return CaDansaEventPage(
+              Event(currentGlobalEvent.title, _currentEventConfig), _initialPageIndex, _buildDrawer);
+        } else {
+          return const LoadingPage();
+        }
       case _CaDansaAppStateMode.loading:
-        return LoadingPage();
+        return const LoadingPage();
       case _CaDansaAppStateMode.error:
       default:
         return TimeoutPage(_resetConfig);
@@ -225,7 +233,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
-    final eventWidgets = List<Widget>.unmodifiable(_config.events.asMap().entries.map((e) {
+    final eventWidgets = List<Widget>.unmodifiable(_config?.events.asMap().entries.map((e) {
       final index = e.key;
       final event = e.value;
       final isSelected = _currentEventIndex == index;
@@ -258,7 +266,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         },
         selected: isSelected,
       );
-    }));
+    }) ?? []);
 
     final bottomWidgets = <Widget>[Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -267,7 +275,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           await _setLocale(locale);
           Navigator.pop(context);
         },
-        child: Text(stringToUnicodeFlag(locale.countryCode)),
+        child: Text(stringToUnicodeFlag(locale.countryCode ?? '')),
       ))),
     )];
     if (kDebugMode) {
@@ -282,9 +290,9 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
 
     final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.headline2);
-    final header = _config.logoUri != null
+    final header = _config?.logoUri != null
         ? CachedNetworkImage(
-            imageUrl: _config.logoUri,
+            imageUrl: _config?.logoUri,
             errorWidget: (context, url, error) => headerPlaceholder,
             fadeInDuration: Duration.zero,
           )
@@ -310,20 +318,20 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Future<void> _switchToEvent(final int index) async {
     _currentEventIndex = index;
     final currentEvent = _currentGlobalEvent;
-    _currentEventConfig = await _loadJson(currentEvent.configUri);
+    _currentEventConfig = await _loadJson(currentEvent?.configUri);
     _initialPageIndex = 0;
 
     final sharedPrefs = await SharedPreferences.getInstance();
     await sharedPrefs.setInt(_EVENT_INDEX_KEY, index);
-    await sharedPrefs.setInt(_PRIMARY_SWATCH_INDEX_KEY, currentEvent.primarySwatchIndex);
-    await sharedPrefs.setInt(_ACCENT_COLOR_KEY, currentEvent.accentColor.value);
+    await sharedPrefs.setInt(_PRIMARY_SWATCH_INDEX_KEY, currentEvent?.primarySwatchIndex);
+    await sharedPrefs.setInt(_ACCENT_COLOR_KEY, currentEvent?.accentColor.value);
   }
 
   Future<void> _setLocale(final Locale locale) async {
     _localeStreamController.add(locale);
 
     final sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.setStringList(_LOCALE_KEY, [locale.languageCode, locale.scriptCode, locale.countryCode]);
+    await sharedPrefs.setStringList(_LOCALE_KEY, <String?>[locale.languageCode, locale.scriptCode, locale.countryCode]);
   }
 
   Future<void> _reloadConfig() async {
@@ -331,8 +339,8 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     _resetConfig(force: true);
   }
 
-  GlobalEvent get _currentGlobalEvent =>
-      _config?.events?.elementAt(_currentEventIndex);
+  GlobalEvent? get _currentGlobalEvent =>
+      _config?.events[_currentEventIndex ?? 0];
 
   Iterable<Locale> get _supportedLocales =>
       _currentGlobalEvent?.supportedLocales ?? _DEFAULT_LOCALES;
@@ -340,12 +348,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     _localeStreamController.close();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 }
 
 class LoadingPage extends StatelessWidget {
+  const LoadingPage();
+
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
@@ -362,7 +372,7 @@ class LoadingPage extends StatelessWidget {
 class TimeoutPage extends StatelessWidget {
   final VoidCallback _onRefresh;
 
-  TimeoutPage(this._onRefresh);
+  const TimeoutPage(this._onRefresh);
 
   @override
   Widget build(final BuildContext context) {
@@ -395,11 +405,9 @@ class TimeoutPage extends StatelessWidget {
 class _JsonCacheManager extends CacheManager {
   static const key = 'jcm';
 
-  static _JsonCacheManager _instance;
+  static late final _JsonCacheManager _instance = _JsonCacheManager();
 
-  factory _JsonCacheManager() {
-    return _instance ??= _JsonCacheManager._();
-  }
+  factory _JsonCacheManager() => _instance;
 
   _JsonCacheManager._()
       : super(Config(

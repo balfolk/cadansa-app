@@ -39,14 +39,14 @@ class ProgrammeDay {
 
 class ProgrammeItem {
   final LText _name;
-  final TimeOfDay _startTime, _endTime;
-  final Location _location;
+  final TimeOfDay? _startTime, _endTime;
+  final Location? _location;
   final List<String> _countries;
   final LText _teacher;
-  final WorkshopLevel _level;
-  final ProgrammeItemKind _kind;
-  final LText _description;
-  final Website _website;
+  final WorkshopLevel? _level;
+  final ProgrammeItemKind? _kind;
+  final LText? _description;
+  final Website? _website;
 
   ProgrammeItem._(this._name, this._startTime, this._endTime, this._location,
       this._countries, this._teacher, this._level,
@@ -58,22 +58,22 @@ class ProgrammeItem {
             toTimeOfDay(json['startTime']),
             toTimeOfDay(json['endTime']),
             Location.parse(json['location']),
-            (json['countries'] as List)?.toList(growable: false)?.cast(),
+            json['countries'] is List ? (json['countries'] as List).toList(growable: false).cast() : [],
             LText(json['teacher']),
-            constants.getLevel(json['level']?.toString()),
-            constants.getKind(json['kind']?.toString()),
+            constants.getLevel(json['level']?.toString() ?? ''),
+            constants.getKind(json['kind']?.toString() ?? ''),
             LText.nullable(json['description']),
             Website.parse(json['website']));
 
   LText get name => _name;
 
-  TimeOfDay get startTime => _startTime;
+  TimeOfDay? get startTime => _startTime;
 
-  TimeOfDay get endTime => _endTime;
+  TimeOfDay? get endTime => _endTime;
 
-  Location get location => _location;
+  Location? get location => _location;
 
-  List<String> get countries => _countries != null ? List.unmodifiable(_countries) : [];
+  List<String> get countries => List.unmodifiable(_countries);
 
   LText get teacher => _teacher;
 
@@ -81,9 +81,9 @@ class ProgrammeItem {
 
   ProgrammeItemKind get kind => _kind ?? ProgrammeItemKind.empty();
 
-  LText get description => _description;
+  LText? get description => _description;
 
-  Website get website => _website;
+  Website? get website => _website;
 }
 
 class Location {
@@ -92,7 +92,7 @@ class Location {
 
   Location._(this.title, this.action);
 
-  factory Location.parse(final dynamic json) => json != null ? Location._(
+  static Location? parse(final dynamic json) => json != null ? Location._(
     LText(json['title'] ?? json),
     json['action'],
   ) : null;
@@ -103,8 +103,8 @@ class Website {
   final String _icon;
   final LText _text;
 
-  factory Website.parse(final dynamic json) {
-    if (json == null) return Website._empty();
+  static Website? parse(final dynamic json) {
+    if (json == null) return null;
     return Website._parseObject(json);
   }
 
@@ -112,11 +112,6 @@ class Website {
       : _url = LText(json['url']),
         _icon = json['icon'],
         _text = LText(json['text']);
-
-  Website._empty()
-      : _url = null,
-        _icon = null,
-        _text = null;
 
   LText get text => _text;
 

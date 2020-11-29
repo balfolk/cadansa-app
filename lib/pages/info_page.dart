@@ -10,7 +10,7 @@ class InfoPage extends StatefulWidget {
   final Widget Function() _buildBottomBar;
 
   InfoPage(this._title, this._content, this._buildDrawer, this._buildBottomBar,
-      {final Key key})
+      {final Key? key})
       : super(key: key);
 
   @override

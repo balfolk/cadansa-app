@@ -12,15 +12,15 @@ final _COPIED = LText(const {
 });
 
 void reportClipboardText({
-  @required final BuildContext context,
-  @required final String text,
-  String message,
+  required final BuildContext context,
+  required final String text,
+  String? message,
 }) {
   _setClipboardText(text);
 
   message ??= _COPIED.get(Localizations.localeOf(context));
   if (message.isNotEmpty) {
-    Scaffold.of(context, nullOk: true)
+    ScaffoldMessenger.maybeOf(context)
         ?.showSnackBar(SnackBar(content: Text(message)));
   }
 }
@@ -31,7 +31,7 @@ const int _DIFF_FLAG_LETTER = 127462 - 65;
 /// the input string must contain exactly two ASCII letters that together form
 /// a Unicode flag.
 String stringToUnicodeFlag(final String s) {
-  if (s == null || s.isEmpty) return '';
+  if (s.isEmpty) return '';
   return String.fromCharCodes(s.toUpperCase().codeUnits
       .map((cu) => cu + _DIFF_FLAG_LETTER));
 }

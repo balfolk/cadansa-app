@@ -22,7 +22,7 @@ class ProgrammePage extends StatefulWidget {
   );
 
   ProgrammePage(this._title, this._programme, this._buildDrawer,
-      this._buildBottomBar, this._actionHandler, {final Key key})
+      this._buildBottomBar, this._actionHandler, {final Key? key})
       : super(key: key);
 
   @override
@@ -82,13 +82,14 @@ class _ProgrammePageState extends State<ProgrammePage> {
         itemBuilder: (context, index) {
           final item = day.items[index];
 
-          Widget subtitle;
-          if (item.startTime != null || item.endTime != null) {
+          Widget? subtitle;
+          final startTime = item.startTime, endTime = item.endTime;
+          if (startTime != null || endTime != null) {
             String text;
-            if (item.startTime != null && item.endTime != null) {
-              text = '${item.startTime.format(context)} – ${item.endTime.format(context)}';
+            if (startTime != null && endTime != null) {
+              text = '${startTime.format(context)} – ${endTime.format(context)}';
             } else {
-              text = (item.startTime ?? item.endTime).format(context);
+              text = (startTime ?? endTime)!.format(context);
             }
             subtitle = Text(text);
           }
@@ -141,22 +142,27 @@ class _ProgrammePageState extends State<ProgrammePage> {
     }
   }
 
-  static _PlayingStatus _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
+  static _PlayingStatus? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
+    final startTime = item.startTime, endTime = item.endTime;
+    if (startTime == null) return null;
+
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
     const HOUR_NIGHT_CUTOFF = 6;
 
     final startDay =
         DateTime(day.startsOn.year, day.startsOn.month, day.startsOn.day);
     final startMoment = startDay.add(Duration(
-        days: item.startTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: item.startTime.hour,
-        minutes: item.startTime.minute));
-    final endMoment = item.endTime != null ? startDay.add(Duration(
-        days: item.endTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: item.endTime.hour,
-        minutes: item.endTime.minute)) : null;
+        days: startTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: startTime.hour,
+        minutes: startTime.minute));
+    final endMoment = endTime != null ? startDay.add(Duration(
+        days: endTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: endTime.hour,
+        minutes: endTime.minute)) : null;
     final now = DateTime.now();
+
     if (now.isBefore(startMoment)) return _PlayingStatus.before;
+
     if (endMoment != null) {
       if (now.isAfter(endMoment)) return _PlayingStatus.after;
       return _PlayingStatus.during;
@@ -165,8 +171,8 @@ class _ProgrammePageState extends State<ProgrammePage> {
     }
   }
 
-  Widget _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
-    final iconData = MdiIcons.fromString(item.kind.icon);
+  Widget? _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
+    final IconData? iconData = MdiIcons.fromString(item.kind.icon);
     if (iconData?.codePoint == null) {
       print('Invalid icon ${item.kind.icon}');
       return null;

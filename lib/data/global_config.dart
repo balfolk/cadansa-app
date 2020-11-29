@@ -17,7 +17,7 @@ class GlobalEvent {
   final String avatarUri;
   final String configUri;
   final int primarySwatchIndex, _accentColorIndex;
-  final List<Locale> supportedLocales;
+  final List<Locale>? supportedLocales;
 
   GlobalEvent(final dynamic json)
       : title = LText(json['title']),
