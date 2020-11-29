@@ -47,12 +47,12 @@ flutter:
     - cadansa_map_1.png
 
   fonts:
-    - family: CaDansa
+    - family: MapFontFamily
       fonts:
-        - asset: assets/fonts/belta-regular.ttf
-        - asset: assets/fonts/belta-bold.ttf
+        - asset: assets/fonts/map-regular.otf
+        - asset: assets/fonts/map-bold.otf
           weight: 700
-        - asset: assets/fonts/belta-light.ttf
+        - asset: assets/fonts/map-light.otf
           weight: 300
 
   uses-material-design: true

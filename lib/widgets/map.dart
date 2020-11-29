@@ -116,7 +116,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
             text,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyText2.copyWith(
-              fontFamily: 'CaDansa',
+              fontFamily: MAP_FONT_FAMILY,
               fontSize: scale * titleFontSize,
             ),
           ));
@@ -179,7 +179,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
               child: Text(
                 _activeArea.actionTitle.get(locale),
                 style: theme.textTheme.headline4.copyWith(
-                  color: hasAction ? theme.primaryColor : null, fontFamily: 'CaDansa',
+                  color: hasAction ? theme.primaryColor : null, fontFamily: MAP_FONT_FAMILY,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -351,7 +351,7 @@ class _AreaPainter extends CustomPainter {
       if (_paintText) {
         final span = TextSpan(text: 'TITLE',
             style: _theme.textTheme.headline4.copyWith(
-                fontFamily: 'CaDansa', fontWeight: FontWeight.bold));
+                fontFamily: MAP_FONT_FAMILY, fontWeight: FontWeight.bold));
         final painter = TextPainter(text: span,
             textAlign: TextAlign.center,
             textDirection: TextDirection.ltr,
