@@ -166,6 +166,12 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
       };
     }
 
+    if (kDebugMode && _lastKnownSize != null) {
+      stackChildren.add(CustomPaint(
+        painter: _AreaPainter(widget._data.areas, _areaCoordinatesToMap, theme),
+      ));
+    }
+
     if (_activeArea != null && _indicatorPosition != null && _indicatorAlignment != null) {
       final title = _activeArea.actionTitle.get(locale);
       final alignment = _indicatorAlignment.resolve(Directionality.of(context));
@@ -197,12 +203,6 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
           ),
         ));
       }
-    }
-
-    if (kDebugMode && _lastKnownSize != null) {
-      stackChildren.add(CustomPaint(
-          painter: _AreaPainter(widget._data.areas, _areaCoordinatesToMap, theme),
-      ));
     }
 
     return Stack(
