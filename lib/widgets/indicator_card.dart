@@ -40,6 +40,7 @@ class IndicatorCard extends StatelessWidget {
   }
 }
 
+@immutable
 class Indicator {
   final double width, length;
   final AlignmentDirectional alignment;
@@ -70,12 +71,13 @@ class Indicator {
   int get hashCode => hashValues(width, length, alignment);
 
   @override
-  bool operator ==(final other) => other is Indicator
+  bool operator ==(final Object other) => other is Indicator
       && width == other.width
       && length == other.length
       && alignment == other.alignment;
 }
 
+@immutable
 class _IndicatorRectanglePainter extends CustomPainter {
   final Indicator _indicator;
   final Color _color;
@@ -83,8 +85,8 @@ class _IndicatorRectanglePainter extends CustomPainter {
   final double _borderRadius;
   final TextDirection _textDirection;
 
-  _IndicatorRectanglePainter(this._indicator, this._color, this._elevation,
-      this._borderRadius, this._textDirection);
+  const _IndicatorRectanglePainter(this._indicator, this._color,
+      this._elevation, this._borderRadius, this._textDirection);
 
   @override
   void paint(final Canvas canvas, final Size size) {
@@ -126,7 +128,7 @@ class _IndicatorRectanglePainter extends CustomPainter {
   int get hashCode => hashValues(_indicator, _color, _elevation, _borderRadius);
 
   @override
-  bool operator ==(final other) {
+  bool operator ==(final Object other) {
     return other is _IndicatorRectanglePainter
         && _indicator == other._indicator
         && _color == other._color

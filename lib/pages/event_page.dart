@@ -64,7 +64,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   Widget _buildBottomNavigationBar() {
-    final Locale locale = Localizations.localeOf(context);
+    final locale = Localizations.localeOf(context);
     return BottomNavigationBar(
       items: widget._event.pages.map((pageData) => BottomNavigationBarItem(
         icon: Icon(MdiIcons.fromString(pageData.icon)),
@@ -134,6 +134,6 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   static void _storePageIndex(final int index) async {
-    (await SharedPreferences.getInstance()).setInt(PAGE_INDEX_KEY, index);
+    await (await SharedPreferences.getInstance()).setInt(PAGE_INDEX_KEY, index);
   }
 }

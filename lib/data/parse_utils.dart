@@ -10,9 +10,13 @@ abstract class LText {
   }
 
   factory LText(final dynamic json) {
-    if (json is String) return _StringLText(json);
-    else if (json is Map<String, dynamic>) return _MapLText(json);
-    else return _StringLText(json?.toString());
+    if (json is String) {
+      return _StringLText(json);
+    } else if (json is Map<String, dynamic>) {
+      return _MapLText(json);
+    } else {
+      return _StringLText(json?.toString());
+    }
   }
 
   String get(final Locale locale);
@@ -23,12 +27,13 @@ class _StringLText implements LText {
 
   const _StringLText(this._string);
 
+  @override
   String get(final Locale locale) =>
     sprintf(_string ?? '', [locale.languageCode, locale.countryCode]);
 }
 
 class _MapLText implements LText {
-  final Map<Locale, String> _strings = Map();
+  final Map<Locale, String> _strings = {};
 
   _MapLText(final Map<String, dynamic> map) {
     map.forEach((l, str) {
@@ -38,12 +43,13 @@ class _MapLText implements LText {
     });
   }
 
+  @override
   String get(final Locale locale) => _strings[locale]
       ?? _strings.entries.where((s) => s.key.languageCode == locale.languageCode).map((entry) => entry.value).firstWhere((_) => true, orElse: () => '')
       ?? _strings.values.firstWhere((_) => true, orElse: () => '');
 }
 
-toDateTime(final dynamic json) {
+DateTime toDateTime(final dynamic json) {
   num milliseconds;
   if (json is String) {
     milliseconds = num.parse(json);
@@ -53,7 +59,7 @@ toDateTime(final dynamic json) {
   return DateTime.fromMillisecondsSinceEpoch(milliseconds.toInt());
 }
 
-toTimeOfDay(final dynamic json) {
+TimeOfDay toTimeOfDay(final dynamic json) {
   if (json == null || json.isEmpty) return null;
   final parts = (json as String).split(':');
   return TimeOfDay(hour: num.parse(parts[0]).toInt(), minute: num.parse(parts[1]).toInt());

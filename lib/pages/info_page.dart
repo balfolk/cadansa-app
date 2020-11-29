@@ -20,7 +20,7 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(final BuildContext context) {
-    final Locale locale = Localizations.localeOf(context);
+    final locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title.get(locale)),

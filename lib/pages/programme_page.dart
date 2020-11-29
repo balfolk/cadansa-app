@@ -59,8 +59,8 @@ class _ProgrammePageState extends State<ProgrammePage> {
   }
 
   List<Tab> get tabs {
-    final Locale locale = Localizations.localeOf(context);
-    final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
+    final locale = Localizations.localeOf(context);
+    final autoSizeGroup = AutoSizeGroup();
     return widget._programme.days.map((day) {
       return Tab(
         child: AutoSizeText(
@@ -74,13 +74,13 @@ class _ProgrammePageState extends State<ProgrammePage> {
   }
 
   List<Widget> get tabChildren {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return widget._programme.days.asMap().entries.map((entry) {
-      final ProgrammeDay day = entry.value;
+      final day = entry.value;
       return ListView.separated(
         itemCount: day.items.length,
         itemBuilder: (context, index) {
-          final ProgrammeItem item = day.items[index];
+          final item = day.items[index];
 
           Widget subtitle;
           if (item.startTime != null || item.endTime != null) {
@@ -88,7 +88,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
             if (item.startTime != null && item.endTime != null) {
               text = '${item.startTime.format(context)} – ${item.endTime.format(context)}';
             } else {
-              text = '${(item.startTime ?? item.endTime).format(context)}';
+              text = (item.startTime ?? item.endTime).format(context);
             }
             subtitle = Text(text);
           }
@@ -123,7 +123,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
   }
 
   String _formatItemName(final ProgrammeItem item) {
-    final Locale locale = Localizations.localeOf(context);
+    final locale = Localizations.localeOf(context);
     return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 
@@ -143,9 +143,9 @@ class _ProgrammePageState extends State<ProgrammePage> {
 
   static _PlayingStatus _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
-    const int HOUR_NIGHT_CUTOFF = 6;
+    const HOUR_NIGHT_CUTOFF = 6;
 
-    final DateTime startDay =
+    final startDay =
         DateTime(day.startsOn.year, day.startsOn.month, day.startsOn.day);
     final startMoment = startDay.add(Duration(
         days: item.startTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
@@ -166,7 +166,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
   }
 
   Widget _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
-    final IconData iconData = MdiIcons.fromString(item.kind.icon);
+    final iconData = MdiIcons.fromString(item.kind.icon);
     if (iconData?.codePoint == null) {
       print('Invalid icon ${item.kind.icon}');
       return null;
@@ -184,9 +184,9 @@ class _ProgrammePageState extends State<ProgrammePage> {
 
     if (status == _PlayingStatus.during) {
       return Shimmer.fromColors(
-        child: icon,
         baseColor: Theme.of(context).primaryColor,
         highlightColor: Theme.of(context).primaryColorLight,
+        child: icon,
       );
     } else {
       return icon;

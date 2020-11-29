@@ -15,11 +15,11 @@ class ProgrammeItemBody extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final Locale locale = Localizations.localeOf(context);
-    final ThemeData theme = Theme.of(context);
-    final TextStyle urlStyle = theme.textTheme.bodyText1.copyWith(color: theme.primaryColor);
+    final locale = Localizations.localeOf(context);
+    final theme = Theme.of(context);
+    final urlStyle = theme.textTheme.bodyText1.copyWith(color: theme.primaryColor);
 
-    final List<Widget> columnItems = [];
+    final columnItems = <Widget>[];
 
     columnItems.add(ProgrammeItemPropertyWidget(
       icon: _item.kind?.icon != null ? MdiIcons.fromString(_item.kind?.icon) : null,
@@ -43,8 +43,8 @@ class ProgrammeItemBody extends StatelessWidget {
     ));
 
     columnItems.add(Container(
-      child: Text(_item.description?.get(locale) ?? ''),
       padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0, top: 15.0, bottom: 10.0),
+      child: Text(_item.description?.get(locale) ?? ''),
     ));
 
     if (_item.website?.text != null) {

@@ -21,7 +21,7 @@ abstract class PageData {
       return InfoPageData._(title, icon, json);
     }
 
-    throw ArgumentError.value(json, 'json', 'Page doesn\'t contain a type');
+    throw ArgumentError.value(json, 'json', "Page doesn't contain a type");
   }
 
   LText get title => _title;

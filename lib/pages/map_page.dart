@@ -32,8 +32,8 @@ class _MapPageState extends State<MapPage> {
           bottom: TabBar(tabs: tabs),
         ),
         body: TabBarView(
-          children: tabChildren,
           physics: const NeverScrollableScrollPhysics(),
+          children: tabChildren,
         ),
         drawer: widget._buildDrawer(context),
         bottomNavigationBar: widget._buildBottomBar(),
@@ -42,7 +42,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   List<Tab> get tabs {
-    final Locale locale = Localizations.localeOf(context);
+    final locale = Localizations.localeOf(context);
     return widget._mapData.floors.map((floor) {
       return Tab(text: floor.title.get(locale));
     }).toList(growable: false);

@@ -17,7 +17,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
+const Duration _LOAD_TIMEOUT = Duration(seconds: 5);
 final LText _TIMEOUT_MESSAGE = LText(const {
   'en': "Could not connect to the server. Please make sure you're connected to the Internet.",
   'nl': 'Het is niet gelukt verbinding te maken met de server. Controleer of je internetverbinding aanstaat.',
@@ -56,7 +56,7 @@ void main() async {
         scriptCode: localeList[1],
         countryCode: localeList[2]);
   } else {
-    sharedPrefs.remove(_LOCALE_KEY);
+    await sharedPrefs.remove(_LOCALE_KEY);
   }
 
   runApp(CaDansaApp(locale, primarySwatch, accentColor));
@@ -75,6 +75,7 @@ class CaDansaApp extends StatefulWidget {
 
 enum _CaDansaAppStateMode { done, loading, error }
 
+// ignore: prefer_mixin
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   BaseCacheManager _configCacheManager;
 
@@ -133,7 +134,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
 
     if (_configUrl == null) {
-      await DotEnv().load('.env');
+      await DotEnv().load();
       _configUrl = DotEnv().env['CONFIG_URL'];
     }
 
@@ -152,6 +153,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           _mode = _CaDansaAppStateMode.done;
           _initialPageIndex = pageIndex;
         });
+      // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         debugPrint('$e');
         setState(() {
@@ -312,16 +314,16 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     _initialPageIndex = 0;
 
     final sharedPrefs = await SharedPreferences.getInstance();
-    sharedPrefs.setInt(_EVENT_INDEX_KEY, index);
-    sharedPrefs.setInt(_PRIMARY_SWATCH_INDEX_KEY, currentEvent.primarySwatchIndex);
-    sharedPrefs.setInt(_ACCENT_COLOR_KEY, currentEvent.accentColor.value);
+    await sharedPrefs.setInt(_EVENT_INDEX_KEY, index);
+    await sharedPrefs.setInt(_PRIMARY_SWATCH_INDEX_KEY, currentEvent.primarySwatchIndex);
+    await sharedPrefs.setInt(_ACCENT_COLOR_KEY, currentEvent.accentColor.value);
   }
 
   Future<void> _setLocale(final Locale locale) async {
     _localeStreamController.add(locale);
 
     final sharedPrefs = await SharedPreferences.getInstance();
-    sharedPrefs.setStringList(_LOCALE_KEY, [locale.languageCode, locale.scriptCode, locale.countryCode]);
+    await sharedPrefs.setStringList(_LOCALE_KEY, [locale.languageCode, locale.scriptCode, locale.countryCode]);
   }
 
   Future<void> _reloadConfig() async {
@@ -396,10 +398,7 @@ class _JsonCacheManager extends CacheManager {
   static _JsonCacheManager _instance;
 
   factory _JsonCacheManager() {
-    if (_instance == null) {
-      _instance = new _JsonCacheManager._();
-    }
-    return _instance;
+    return _instance ??= _JsonCacheManager._();
   }
 
   _JsonCacheManager._()

@@ -105,7 +105,6 @@ class Website {
 
   factory Website.parse(final dynamic json) {
     if (json == null) return Website._empty();
-    if (json is String) return Website._parseUrl(json);
     return Website._parseObject(json);
   }
 
@@ -113,12 +112,6 @@ class Website {
       : _url = LText(json['url']),
         _icon = json['icon'],
         _text = LText(json['text']);
-
-  @deprecated
-  Website._parseUrl(final String url)
-      : _url = LText(url),
-        _icon = 'web',
-        _text = LText('Website');
 
   Website._empty()
       : _url = null,

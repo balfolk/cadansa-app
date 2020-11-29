@@ -74,11 +74,21 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
-    final String path = widget._data.url.get(locale) + '?version=${widget._data.version}';
+    final path = widget._data.url.get(locale);
+    ImageProvider imageProvider;
+    if (path.startsWith('http')) {
+      final url = Uri.parse(widget._data.url.get(locale)).replace(
+        queryParameters: {'version': widget._data.version},
+      );
+      imageProvider = CachedNetworkImageProvider(url.toString());
+    } else {
+      imageProvider = AssetImage(path);
+    }
+
     final stackChildren = <Widget>[
       PhotoView(
         controller: _controller,
-        imageProvider: path.startsWith('http') ? CachedNetworkImageProvider(path) : AssetImage(path.split('?')[0]),
+        imageProvider: imageProvider,
         initialScale: widget._data.initialScale ?? PhotoViewComputedScale.contained,
         minScale: PhotoViewComputedScale.contained,
         maxScale: widget._data.maxScale ?? 1.0,
@@ -91,7 +101,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 
     final scale = _controller.value?.scale;
     if (scale != null) {
-      widget._data.areas.forEach((area) {
+      for (final area in widget._data.areas) {
         final size = scale * area.buttonSize;
         final location = _areaCoordinatesToMap(area.center).translate(-2 * size, -size / 2);
 
@@ -133,9 +143,9 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
             ),
           ),
         ));
-      });
+      };
 
-      widget._data.text.forEach((text) {
+      for (final text in widget._data.text) {
         final location = _areaCoordinatesToMap(text.location);
         stackChildren.add(Positioned(
           left: location.dx,
@@ -153,14 +163,14 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
             ),
           ),
         ));
-      });
+      };
     }
 
     if (_activeArea != null && _indicatorPosition != null && _indicatorAlignment != null) {
       final title = _activeArea.actionTitle.get(locale);
       final alignment = _indicatorAlignment.resolve(Directionality.of(context));
       if (title.isNotEmpty) {
-        final String action = _activeArea.action?.get(locale);
+        final action = _activeArea.action?.get(locale);
         final hasAction = action?.isNotEmpty ?? false;
         stackChildren.add(Positioned.fromRect(
           rect: Rect.fromCenter(
@@ -195,10 +205,8 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
       ));
     }
 
-    return Container(
-      child: Stack(
-        children: stackChildren,
-      ),
+    return Stack(
+      children: stackChildren,
     );
   }
 
@@ -247,9 +255,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
         });
       }
     } else {
-      setState(() {
-        _deselectArea();
-      });
+      setState(_deselectArea);
     }
   }
 
@@ -294,7 +300,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   
   Offset _areaCoordinatesToMap(final Offset c) {
     final controllerValue = _controller.value ?? _controller.initial;
-    return ((c * controllerValue.scale).translate(_lastKnownSize.width / 2.0, _lastKnownSize.height / 2.0) + controllerValue.position);
+    return (c * controllerValue.scale).translate(_lastKnownSize.width / 2.0, _lastKnownSize.height / 2.0) + controllerValue.position;
   }
 
   Offset _mapCoordinatesToArea(final Offset c, [final PhotoViewControllerValue value]) {
@@ -339,11 +345,11 @@ class _AreaPainter extends CustomPainter {
 
   @override
   void paint(final Canvas canvas, final Size size) {
-    _areas.forEach((area) {
+    for (final area in _areas) {
       final path = area.getTransformedPath(_transformation);
       canvas.drawPath(path, _fillPaint);
       canvas.drawPath(path, _strokePaint);
-    });
+    };
   }
 
   @override
