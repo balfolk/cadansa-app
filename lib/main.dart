@@ -320,7 +320,7 @@ class TimeoutPage extends StatelessWidget {
   }
 }
 
-class _JsonCacheManager extends BaseCacheManager {
+class _JsonCacheManager extends CacheManager {
   static const key = 'jcm';
 
   static _JsonCacheManager _instance;
@@ -332,11 +332,9 @@ class _JsonCacheManager extends BaseCacheManager {
     return _instance;
   }
 
-  _JsonCacheManager._() : super(key, maxAgeCacheObject: _CONFIG_LIFETIME);
-
-  @override
-  Future<String> getFilePath() async {
-    var directory = await getTemporaryDirectory();
-    return p.join(directory.path, key);
-  }
+  _JsonCacheManager._()
+      : super(Config(
+          key,
+          stalePeriod: _CONFIG_LIFETIME,
+        ));
 }
