@@ -324,19 +324,16 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 class _AreaPainter extends CustomPainter {
   final Set<FloorArea> _areas;
   final Offset Function(Offset) _transformation;
-  final ThemeData _theme;
   final Paint _strokePaint, _fillPaint;
 
-  static const _TEXT_WIDTH = 500.0;
-
-  _AreaPainter(final Iterable<FloorArea> areas, this._transformation, this._theme)
+  _AreaPainter(final Iterable<FloorArea> areas, this._transformation, final ThemeData theme)
       : _areas = Set.of(areas),
         _strokePaint = Paint()
-          ..color = _theme.primaryColor
+          ..color = theme.primaryColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0,
         _fillPaint = Paint()
-          ..color = _theme.primaryColorLight.withOpacity(0.5)
+          ..color = theme.primaryColorLight.withOpacity(0.5)
           ..style = PaintingStyle.fill
           ..strokeWidth = 0.0;
 
