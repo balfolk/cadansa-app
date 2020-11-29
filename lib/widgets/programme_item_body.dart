@@ -17,7 +17,7 @@ class ProgrammeItemBody extends StatelessWidget {
   Widget build(final BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
     final ThemeData theme = Theme.of(context);
-    final TextStyle urlStyle = theme.textTheme.body2.copyWith(color: theme.primaryColor);
+    final TextStyle urlStyle = theme.textTheme.bodyText1.copyWith(color: theme.primaryColor);
 
     final List<Widget> columnItems = [];
 

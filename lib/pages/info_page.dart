@@ -26,10 +26,12 @@ class _InfoPageState extends State<InfoPage> {
         title: Text(widget._title.get(locale)),
       ),
       body: SingleChildScrollView(
-        child: Html(
-          data: widget._content.get(locale),
+        child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-          onLinkTap: launch,
+          child: Html(
+            data: widget._content.get(locale),
+            onLinkTap: launch,
+          ),
         ),
       ),
       drawer: widget._buildDrawer(context),

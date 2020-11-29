@@ -96,7 +96,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
             leading: _showIcon(day, item, false) ? _getIcon(day, item) : null,
             title: AutoSizeText(
               _formatItemName(item),
-              style: theme.textTheme.title,
+              style: theme.textTheme.headline6,
               maxLines: 2,
               softWrap: true,
             ),

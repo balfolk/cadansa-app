@@ -68,7 +68,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     return BottomNavigationBar(
       items: widget._event.pages.map((pageData) => BottomNavigationBarItem(
         icon: Icon(MdiIcons.fromString(pageData.icon)),
-        title: Text(pageData.title.get(locale)),
+        label: pageData.title.get(locale),
       )).toList(growable: false),
       onTap: (int index) async {
         setState(() {
