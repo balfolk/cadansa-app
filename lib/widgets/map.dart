@@ -322,12 +322,12 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 }
 
 class _AreaPainter extends CustomPainter {
-  final Set<FloorArea> _areas;
+  final List<FloorArea> _areas;
   final Offset Function(Offset) _transformation;
   final Paint _strokePaint, _fillPaint;
 
   _AreaPainter(final Iterable<FloorArea> areas, this._transformation, final ThemeData theme)
-      : _areas = Set.of(areas),
+      : _areas = List.of(areas),
         _strokePaint = Paint()
           ..color = theme.primaryColor
           ..style = PaintingStyle.stroke
