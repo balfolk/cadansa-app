@@ -3,6 +3,7 @@ import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/global.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -123,9 +124,6 @@ class _ProgrammePageState extends State<ProgrammePage> {
 
   String _formatItemName(final ProgrammeItem item) {
     final Locale locale = Localizations.localeOf(context);
-    const int DIFF_FLAG_LETTER = 127462 - 65;
-    final stringToUnicodeFlag = (String s) =>
-        String.fromCharCodes(s.codeUnits.map((cu) => cu + DIFF_FLAG_LETTER));
     return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 

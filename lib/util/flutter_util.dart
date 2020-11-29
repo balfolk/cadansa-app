@@ -24,3 +24,14 @@ void reportClipboardText({
         ?.showSnackBar(SnackBar(content: Text(message)));
   }
 }
+
+const int _DIFF_FLAG_LETTER = 127462 - 65;
+
+/// Convert a string to the corresponding Unicode flag emoji. To work properly,
+/// the input string must contain exactly two ASCII letters that together form
+/// a Unicode flag.
+String stringToUnicodeFlag(final String s) {
+  if (s == null || s.isEmpty) return '';
+  return String.fromCharCodes(s.toUpperCase().codeUnits
+      .map((cu) => cu + _DIFF_FLAG_LETTER));
+}
