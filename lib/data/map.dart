@@ -21,8 +21,9 @@ class Floor {
   final int _version;
   final double _initialScale, _minScale, _maxScale;
   final List<FloorArea> _areas;
+  final List<FloorText> _text;
 
-  Floor._(this._title, this._url, this._version, this._initialScale, this._minScale, this._maxScale, this._areas);
+  Floor._(this._title, this._url, this._version, this._initialScale, this._minScale, this._maxScale, this._areas, this._text);
 
   Floor.parse(final dynamic json) : this._(
       LText(json['title']),
@@ -31,7 +32,8 @@ class Floor {
       json['initialScale'] as double,
       json['minScale'] as double,
       json['maxScale'] as double,
-      List.unmodifiable((json['areas'] ?? []).map((area) => FloorArea.parse(area))));
+      List.unmodifiable((json['areas'] ?? []).map((area) => FloorArea.parse(area))),
+      List.unmodifiable((json['text'] ?? []).map((area) => FloorText.parse(area))));
 
   LText get title => _title;
 
@@ -46,6 +48,8 @@ class Floor {
   double get maxScale => _maxScale;
 
   List<FloorArea> get areas => _areas;
+
+  List<FloorText> get text => _text;
 }
 
 class FloorArea {
@@ -56,10 +60,12 @@ class FloorArea {
   final String _buttonIcon;
   final double _buttonSize;
   final LText _actionTitle;
-  final String _action;
+  final LText _action;
   final Offset _center;
 
-  FloorArea._(this._id, this._points, this._title, this._titleFontSize, this._buttonIcon, this._buttonSize, this._actionTitle, this._action, this._center);
+  FloorArea._(this._id, this._points, this._title, this._titleFontSize, this._buttonIcon, this._buttonSize, this._actionTitle, this._action, this._center)
+      : assert(_buttonSize != null),
+        assert(_buttonIcon != null);
 
   FloorArea.parse(final dynamic json) : this._(
     json['id'],
@@ -68,8 +74,8 @@ class FloorArea {
     json['titleFontSize'],
     json['buttonIcon'],
     json['buttonSize'],
-    LText(json['actionTitle']),
-    json['action'],
+    LText.nullable(json['actionTitle']),
+    LText.nullable(json['action']),
     Offset(json['center'][0].toDouble(), json['center'][1].toDouble()),
   );
 
@@ -81,12 +87,12 @@ class FloorArea {
     return Path()..addPolygon(List.unmodifiable(_points.map(transformation)), true);
   }
 
-  bool contains(final Offset position, final double scale) {
+  bool contains(final Offset position) {
     if (_points.isNotEmpty) {
       return path.contains(position);
     }
 
-    return (position - center).distanceSquared < (scale * scale * 0.5 * buttonSize * 0.5 * buttonSize);
+    return (position - center).distanceSquared < _buttonRadiusSquared;
   }
 
   LText get title => _title;
@@ -97,9 +103,40 @@ class FloorArea {
 
   double get buttonSize => _buttonSize;
 
+  double get _buttonRadiusSquared => 0.5 * buttonSize * 0.5 * buttonSize;
+
   LText get actionTitle => _actionTitle;
 
-  String get action => _action;
+  LText get action => _action;
 
   Offset get center => _center;
+}
+
+class FloorText {
+  final Offset _location;
+  final double _angle;
+  final int _align;
+  final double _fontSize;
+  final LText _text;
+
+  FloorText._(this._location, this._angle, this._align, this._fontSize, this._text);
+
+  FloorText.parse(final dynamic json) : this._(
+    Offset(json['location'][0].toDouble(), json['location'][1].toDouble()),
+    json['angle']?.toDouble() ?? 0.0,
+    json['alignment']?.toInt() ?? TextAlign.center.index,
+    json['fontSize']?.toDouble(),
+    LText(json['text']),
+  );
+
+  Offset get location => _location;
+
+  double get angle => _angle;
+
+  TextAlign get textAlign => TextAlign.values.skip(_align).firstWhere((_) => true, orElse: () => TextAlign.center);
+
+  double get fontSize => _fontSize;
+
+  LText get text => _text;
+
 }

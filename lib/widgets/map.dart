@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,6 +7,7 @@ import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/widgets/indicator_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -39,7 +41,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   StreamSubscription _controllerOutputStreamSubscription;
   FloorArea _activeArea;
   Offset _indicatorPosition;
-  Alignment _indicatorAlignment;
+  AlignmentDirectional _indicatorAlignment;
   Size _lastKnownSize;
 
   AnimationController _mapMoveAnimationController;
@@ -55,7 +57,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     _mapMoveAnimationController = AnimationController(duration: MapWidget._MAP_MOVE_ANIMATION_DURATION, vsync: this);
     _mapMoveAnimationController.addListener(() {
       _controller.position = _mapMoveAnimation.value;
-      if (_mapMoveAnimationController.isCompleted) {
+      if (_mapMoveAnimationController.isCompleted && _calculateIndicatorCoordinates(_mapMoveTargetArea)) {
         setState(() {
           _activeArea = _mapMoveTargetArea;
         });
@@ -109,12 +111,13 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 
         final text = area.title.get(locale);
         if (text.isNotEmpty) {
+          final titleFontSize = area.titleFontSize ?? theme.textTheme.headline1.fontSize;
           areaWidgets.add(Text(
-            area.title.get(locale),
+            text,
             textAlign: TextAlign.center,
-            style: theme.textTheme.body1.copyWith(
+            style: theme.textTheme.bodyText2.copyWith(
               fontFamily: 'CaDansa',
-              fontSize: scale * area.titleFontSize,
+              fontSize: scale * titleFontSize,
             ),
           ));
         }
@@ -131,33 +134,65 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
           ),
         ));
       });
+
+      widget._data.text.forEach((text) {
+        final location = _areaCoordinatesToMap(text.location);
+        stackChildren.add(Positioned(
+          left: location.dx,
+          top: location.dy,
+          child: Transform.rotate(
+            angle: (2.0 * math.pi) * text.angle / 360.0,
+            child: Text(
+              text.text.get(locale),
+              textAlign: text.textAlign,
+              textScaleFactor: scale,
+              style: theme.textTheme.caption.copyWith(
+                fontFeatures: [FontFeature.enable('smcp')], // small caps
+                fontSize: text.fontSize ?? theme.textTheme.headline2.fontSize,
+              ),
+            ),
+          ),
+        ));
+      });
     }
 
     if (_activeArea != null && _indicatorPosition != null && _indicatorAlignment != null) {
       final title = _activeArea.actionTitle.get(locale);
+      final alignment = _indicatorAlignment.resolve(Directionality.of(context));
       if (title.isNotEmpty) {
-        final hasAction = _activeArea.action?.isNotEmpty ?? false;
+        final String action = _activeArea.action?.get(locale);
+        final hasAction = action?.isNotEmpty ?? false;
         stackChildren.add(Positioned.fromRect(
           rect: Rect.fromCenter(
-            center: _indicatorPosition.translate(0, -_indicatorAlignment.y * (MapWidget._POPUP_HEIGHT / 2.0 + MapWidget._INDICATOR_LENGTH)),
+            center: _indicatorPosition.translate(0, -alignment.y * (MapWidget._POPUP_HEIGHT / 2.0 + MapWidget._INDICATOR_LENGTH)),
             width: MapWidget._POPUP_WIDTH,
             height: MapWidget._POPUP_HEIGHT,
           ),
           child: IndicatorCard(
             indicator: Indicator(
-                MapWidget._INDICATOR_WIDTH, MapWidget._INDICATOR_LENGTH, _indicatorAlignment),
+              width: MapWidget._INDICATOR_WIDTH,
+              length: MapWidget._INDICATOR_LENGTH,
+              alignment: _indicatorAlignment,
+            ),
             child: FlatButton(
-              onPressed: hasAction ? _onAreaPopupPressed : null,
+              onPressed: hasAction ? () => _onAreaPopupPressed(action) : null,
               child: Text(
                 _activeArea.actionTitle.get(locale),
-                style: theme.textTheme.display1.copyWith(
-                    color: hasAction ? theme.primaryColor : null, fontFamily: 'CaDansa'),
+                style: theme.textTheme.headline4.copyWith(
+                  color: hasAction ? theme.primaryColor : null, fontFamily: 'CaDansa',
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
         ));
       }
+    }
+
+    if (kDebugMode && _lastKnownSize != null) {
+      stackChildren.add(CustomPaint(
+          painter: _AreaPainter(widget._data.areas, _areaCoordinatesToMap, theme),
+      ));
     }
 
     return Container(
@@ -181,7 +216,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   void _onMapControllerEvent(final PhotoViewControllerValue value) {
     _lastKnownSize = context.findRenderObject().paintBounds.size;
 
-    if (_activeArea != null && !_calculateAreaCenter(_activeArea)) {
+    if (_activeArea != null && !_calculateIndicatorCoordinates(_activeArea)) {
       _deselectArea();
     }
     setState(() {});
@@ -200,7 +235,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 
   void _selectArea(final FloorArea area) {
     if (area != null && area != _activeArea) {
-      final isInView = _calculateAreaCenter(area);
+      final isInView = _calculateIndicatorCoordinates(area);
       if (isInView) {
         setState(() {
           _activeArea = area;
@@ -229,12 +264,13 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     final position = _mapCoordinatesToArea(tapPosition, controllerValue);
 
     return widget._data.areas.firstWhere(
-      (area) => area.contains(position, controllerValue.scale),
+      (area) => area.contains(position),
       orElse: () => null,
     );
   }
 
-  bool _calculateAreaCenter(final FloorArea area) {
+  bool _calculateIndicatorCoordinates(final FloorArea area) {
+    // TODO calculate the required scale and zoom to that scale if necessary
     final areaCenter = _areaCoordinatesToMap(area.center);
     final verticalTranslation = (areaCenter.dy - MapWidget._INDICATOR_LENGTH - MapWidget._POPUP_PADDING.top) - MapWidget._POPUP_HEIGHT;
     if (verticalTranslation < -(MapWidget._POPUP_HEIGHT + MapWidget._INDICATOR_LENGTH) || verticalTranslation > (_lastKnownSize.height - MapWidget._POPUP_HEIGHT - MapWidget._INDICATOR_LENGTH)) {
@@ -251,8 +287,8 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 
     final horizontalTranslation = leftTranslation > 0 ? -leftTranslation : (rightTranslation > 0 ? rightTranslation : 0.0);
 
-    _indicatorAlignment = Alignment(horizontalTranslation, doHorizontalFlip ? -1.0 : 1.0);
-    _indicatorPosition = areaCenter.translate(-_indicatorAlignment.x * MapWidget._POPUP_WIDTH / 2.0, 0.0);
+    _indicatorAlignment = AlignmentDirectional(horizontalTranslation, doHorizontalFlip ? -1.0 : 1.0);;
+    _indicatorPosition = areaCenter.translate(-horizontalTranslation * MapWidget._POPUP_WIDTH / 2.0, 0.0);
     return true;
   }
   
@@ -268,7 +304,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     return controllerPosition + localPosition;
   }
 
-  void _onAreaPopupPressed() => widget._actionHandler(_activeArea.action);
+  void _onAreaPopupPressed(final String action) => widget._actionHandler(action);
 
   void _deselectArea() {
     _activeArea = null;
@@ -283,4 +319,53 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     _mapMoveAnimationController?.dispose();
     super.dispose();
   }
+}
+
+class _AreaPainter extends CustomPainter {
+  final Set<FloorArea> _areas;
+  final Offset Function(Offset) _transformation;
+  final ThemeData _theme;
+  final Paint _strokePaint, _fillPaint;
+  final _paintText = false;
+
+  static const _TEXT_WIDTH = 500.0;
+
+  _AreaPainter(final Iterable<FloorArea> areas, this._transformation, this._theme)
+      : _areas = Set.of(areas),
+        _strokePaint = Paint()
+          ..color = _theme.primaryColor
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.0,
+        _fillPaint = Paint()
+          ..color = _theme.primaryColorLight.withOpacity(0.5)
+          ..style = PaintingStyle.fill
+          ..strokeWidth = 0.0;
+
+  @override
+  void paint(final Canvas canvas, final Size size) {
+    _areas.forEach((area) {
+      final path = area.getTransformedPath(_transformation);
+      canvas.drawPath(path, _fillPaint);
+      canvas.drawPath(path, _strokePaint);
+
+      if (_paintText) {
+        final span = TextSpan(text: 'TITLE',
+            style: _theme.textTheme.headline4.copyWith(
+                fontFamily: 'CaDansa', fontWeight: FontWeight.bold));
+        final painter = TextPainter(text: span,
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1);
+        painter.layout(minWidth: _TEXT_WIDTH);
+        painter.paint(canvas,
+            _transformation(area.center).translate(-_TEXT_WIDTH / 2, 0));
+      }
+    });
+  }
+
+  @override
+  bool shouldRepaint(final CustomPainter oldDelegate) {
+    return !(oldDelegate is _AreaPainter && oldDelegate._areas == _areas);
+  }
+
 }

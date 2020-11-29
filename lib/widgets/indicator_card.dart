@@ -30,6 +30,7 @@ class IndicatorCard extends StatelessWidget {
         color ?? cardTheme.color ?? Theme.of(context).cardColor,
         elevation ?? cardTheme.elevation ?? _defaultElevation,
         _defaultBorderRadius,
+        Directionality.of(context),
       ),
       child: Padding(
         padding: indicator.padding,
@@ -41,40 +42,38 @@ class IndicatorCard extends StatelessWidget {
 
 class Indicator {
   final double width, length;
-  // TODO convert to AlignmentGeometry
-  final Alignment _alignment;
+  final AlignmentDirectional alignment;
 
-  static const _defaultAlignment = Alignment.bottomCenter;
+  static const _defaultAlignment = AlignmentDirectional.bottomCenter;
 
-  const Indicator(this.width, this.length, this._alignment)
+  const Indicator({this.width, this.length, this.alignment = _defaultAlignment})
       : assert(width == null || width >= 0.0),
-        assert(length == null || length >= 0.0);
+        assert(length == null || length >= 0.0),
+        assert(alignment != null);
 
-  Alignment get alignment => _alignment ?? _defaultAlignment;
+  bool get hasStart => alignment.start == -1.0;
 
-  bool get hasLeft => alignment.x == -1.0;
-
-  bool get hasRight => alignment.x == 1.0;
+  bool get hasEnd => alignment.start == 1.0;
 
   bool get hasTop => alignment.y == -1.0;
 
   bool get hasBottom => alignment.y == 1.0;
 
-  EdgeInsets get padding => EdgeInsets.fromLTRB(
-    hasLeft ? length : 0,
+  EdgeInsetsDirectional get padding => EdgeInsetsDirectional.fromSTEB(
+    hasStart ? length : 0,
     hasTop ? length : 0,
-    hasRight ? length : 0,
+    hasEnd ? length : 0,
     hasBottom ? length : 0,
   );
 
   @override
-  int get hashCode => hashValues(width, length, _alignment);
+  int get hashCode => hashValues(width, length, alignment);
 
   @override
   bool operator ==(final other) => other is Indicator
       && width == other.width
       && length == other.length
-      && _alignment == other._alignment;
+      && alignment == other.alignment;
 }
 
 class _IndicatorRectanglePainter extends CustomPainter {
@@ -82,20 +81,22 @@ class _IndicatorRectanglePainter extends CustomPainter {
   final Color _color;
   final double _elevation;
   final double _borderRadius;
+  final TextDirection _textDirection;
 
-  _IndicatorRectanglePainter(this._indicator, this._color, this._elevation, this._borderRadius);
+  _IndicatorRectanglePainter(this._indicator, this._color, this._elevation,
+      this._borderRadius, this._textDirection);
 
   @override
   void paint(final Canvas canvas, final Size size) {
-    final alignment = _indicator.alignment;
+    final alignment = _indicator.alignment.resolve(_textDirection);
 
-    final innerRect = _indicator.padding.deflateRect(Offset.zero & size);
+    final innerRect = _indicator.padding.resolve(_textDirection).deflateRect(Offset.zero & size);
 
     final indicatorCenter = alignment.withinRect(innerRect);
     Offset indicatorStart, apex, indicatorEnd;
-    if (_indicator.hasLeft || _indicator.hasRight) {
+    if (_indicator.hasStart || _indicator.hasEnd) {
       indicatorStart = Offset(indicatorCenter.dx, indicatorCenter.dy - _indicator.width / 2.0);
-      apex = Offset(indicatorCenter.dx + (_indicator.hasLeft ? -1.0 : 1.0) * _indicator.length, indicatorCenter.dy);
+      apex = Offset(indicatorCenter.dx + (_indicator.hasStart ? -1.0 : 1.0) * _indicator.length, indicatorCenter.dy);
       indicatorEnd = Offset(indicatorCenter.dx, indicatorCenter.dy + _indicator.width / 2.0);
     } else {
       indicatorStart = Offset(indicatorCenter.dx - _indicator.width / 2.0, indicatorCenter.dy);
