@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,14 +7,14 @@ import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const Duration _LOAD_TIMEOUT = const Duration(seconds: 5);
@@ -37,6 +38,7 @@ const _DEFAULT_EVENT_INDEX = 0;
 const _PRIMARY_SWATCH_INDEX_KEY = 'primarySwatchIndex';
 const _ACCENT_COLOR_KEY = 'accentColor';
 const _EVENT_INDEX_KEY = 'eventIndex';
+const _LOCALE_KEY = 'locale';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,14 +49,25 @@ void main() async {
   final accentColorValue = sharedPrefs.getInt(_ACCENT_COLOR_KEY);
   final accentColor = accentColorValue != null ? Color(accentColorValue) : null;
 
-  runApp(CaDansaApp(primarySwatch, accentColor));
+  final localeList = sharedPrefs.getStringList(_LOCALE_KEY);
+  Locale locale;
+  if (localeList != null && localeList.length == 3) {
+    locale = Locale.fromSubtags(languageCode: localeList[0],
+        scriptCode: localeList[1],
+        countryCode: localeList[2]);
+  } else {
+    sharedPrefs.remove(_LOCALE_KEY);
+  }
+
+  runApp(CaDansaApp(locale, primarySwatch, accentColor));
 }
 
 class CaDansaApp extends StatefulWidget {
+  final Locale _initialLocale;
   final MaterialColor _initialPrimarySwatch;
   final Color _initialAccentColor;
 
-  CaDansaApp(this._initialPrimarySwatch, this._initialAccentColor);
+  CaDansaApp(this._initialLocale, this._initialPrimarySwatch, this._initialAccentColor);
 
   @override
   _CaDansaAppState createState() => _CaDansaAppState();
@@ -70,14 +83,16 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   GlobalConfig _config;
   DateTime _lastConfigLoad;
 
+  StreamController<Locale> _localeStreamController;
+
   int _currentEventIndex;
   dynamic _currentEventConfig;
   int _initialPageIndex;
 
   static const _DEFAULT_LOCALES = [
-    Locale('en'),
-    Locale('nl'),
-    Locale('fr'),
+    Locale('en', 'GB'),
+    Locale('nl', 'NL'),
+    Locale('fr', 'FR'),
   ];
 
   @override
@@ -86,6 +101,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _mode = _CaDansaAppStateMode.loading;
     _configCacheManager = _JsonCacheManager();
+    _localeStreamController = StreamController();
     _loadConfig();
   }
 
@@ -96,16 +112,16 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
   }
 
-  void _resetConfig() {
+  void _resetConfig({final bool force = false}) {
     setState(() {
       _mode = _CaDansaAppStateMode.loading;
     });
 
-    _loadConfig();
+    _loadConfig(force: force);
   }
 
-  void _loadConfig() async {
-    if (_config != null && _lastConfigLoad != null
+  void _loadConfig({final bool force = false}) async {
+    if (!force && _config != null && _lastConfigLoad != null
         && _lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
       // Config still valid, use the existing one rather than reloading
       if (_mode != _CaDansaAppStateMode.done) {
@@ -168,18 +184,26 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final primarySwatch = _currentGlobalEvent?.primarySwatch ?? widget._initialPrimarySwatch ?? _DEFAULT_PRIMARY_SWATCH;
     final accentColor = _currentGlobalEvent?.accentColor ?? widget._initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
 
-    return MaterialApp(
-      onGenerateTitle: (context) => title.get(Localizations.localeOf(context)),
-      theme: ThemeData(
-        primarySwatch: primarySwatch,
-        accentColor: accentColor,
-      ),
-      home: _homePage,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: _currentGlobalEvent?.supportedLocales ?? _DEFAULT_LOCALES,
+    return StreamBuilder<Locale>(
+      stream: _localeStreamController.stream,
+      initialData: widget._initialLocale,
+      builder: (_, localeSnapshot) {
+        final locale = localeSnapshot.hasData ? localeSnapshot.data : Localizations.localeOf(context, nullOk: true);
+        return MaterialApp(
+          onGenerateTitle: (context) => title.get(locale ?? Localizations.localeOf(context)),
+          theme: ThemeData(
+            primarySwatch: primarySwatch,
+            accentColor: accentColor,
+          ),
+          home: _homePage,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: _supportedLocales,
+          locale: locale,
+        );
+      },
     );
   }
 
@@ -234,7 +258,28 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       );
     }));
 
-    final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.display3);
+    final bottomWidgets = <Widget>[Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: List<Widget>.unmodifiable(_supportedLocales.map((locale) => FlatButton(
+        onPressed: () async {
+          await _setLocale(locale);
+          Navigator.pop(context);
+        },
+        child: Text(stringToUnicodeFlag(locale.countryCode)),
+      ))),
+    )];
+    if (kDebugMode) {
+      bottomWidgets.add(RaisedButton.icon(
+        onPressed: () async {
+          await _reloadConfig();
+          Navigator.pop(context);
+        },
+        icon: const Icon(MdiIcons.refresh),
+        label: const Text('Reload config'),
+      ));
+    }
+
+    final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.headline2);
     final header = _config.logoUri != null
         ? CachedNetworkImage(
             imageUrl: _config.logoUri,
@@ -244,11 +289,19 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         : headerPlaceholder;
 
     return Drawer(
-      child: ListView(children: <Widget>[
-        DrawerHeader(
-          child: Align(alignment: AlignmentDirectional.centerStart, child: header),
-        )
-      ] + eventWidgets),
+        child: Column(children: <Widget>[
+          DrawerHeader(
+            child: Align(alignment: AlignmentDirectional.centerStart, child: header),
+          ),
+          Expanded(
+            child: ListView(children: eventWidgets),
+          ),
+          const Divider(),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: bottomWidgets,
+          ),
+        ])
     );
   }
 
@@ -264,10 +317,27 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     sharedPrefs.setInt(_ACCENT_COLOR_KEY, currentEvent.accentColor.value);
   }
 
-  GlobalEvent get _currentGlobalEvent => _config?.events?.elementAt(_currentEventIndex);
+  Future<void> _setLocale(final Locale locale) async {
+    _localeStreamController.add(locale);
+
+    final sharedPrefs = await SharedPreferences.getInstance();
+    sharedPrefs.setStringList(_LOCALE_KEY, [locale.languageCode, locale.scriptCode, locale.countryCode]);
+  }
+
+  Future<void> _reloadConfig() async {
+    await _configCacheManager.emptyCache();
+    _resetConfig(force: true);
+  }
+
+  GlobalEvent get _currentGlobalEvent =>
+      _config?.events?.elementAt(_currentEventIndex);
+
+  Iterable<Locale> get _supportedLocales =>
+      _currentGlobalEvent?.supportedLocales ?? _DEFAULT_LOCALES;
 
   @override
   void dispose() {
+    _localeStreamController.close();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

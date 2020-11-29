@@ -26,7 +26,9 @@ class GlobalEvent {
         configUri = json['config'],
         primarySwatchIndex = json['primarySwatchIndex'],
         _accentColorIndex = json['accentColorIndex'],
-        supportedLocales = List.unmodifiable(json['locales'].map((l) => Locale(l)));
+        supportedLocales = json['locales'] != null
+            ? List.unmodifiable(json['locales'].map((l) => Locale(l[0], l[1])))
+            : null;
 
   MaterialColor get primarySwatch => Colors.primaries[primarySwatchIndex];
 
