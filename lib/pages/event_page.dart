@@ -52,6 +52,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   @override
   Widget build(final BuildContext context) {
     final key = Key('page$_currentIndex');
+    _currentIndex = _currentIndex.clamp(0, widget._event.pages.length - 1);
     final pageData = widget._event.pages[_currentIndex];
     if (pageData is MapPageData) {
       return MapPage(widget._event.title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
