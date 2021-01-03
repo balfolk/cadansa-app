@@ -45,7 +45,7 @@ class _MapLText implements LText {
 
   @override
   String get(final Locale locale) => _strings[locale]
-      ?? _strings.entries.where((s) => s.key.languageCode == locale.languageCode).map((entry) => entry.value).firstWhere((_) => true, orElse: () => '')
+      ?? _strings.entries.where((s) => s.key.languageCode == locale.languageCode).map((entry) => entry.value).firstWhere((_) => true, orElse: () => null)
       ?? _strings.values.firstWhere((_) => true, orElse: () => '');
 }
 

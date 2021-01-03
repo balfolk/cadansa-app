@@ -10,9 +10,9 @@ class MapPage extends StatefulWidget {
   final Widget Function(BuildContext) _buildDrawer;
   final Widget Function() _buildBottomBar;
   final ActionHandler _actionHandler;
-  final int _initialFloorIndex, _highligtAreaIndex;
+  final int _initialFloorIndex, _highlightAreaIndex;
 
-  MapPage(this._title, this._mapData, this._buildDrawer, this._buildBottomBar, this._actionHandler, this._initialFloorIndex, this._highligtAreaIndex, {final Key key})
+  MapPage(this._title, this._mapData, this._buildDrawer, this._buildBottomBar, this._actionHandler, this._initialFloorIndex, this._highlightAreaIndex, {final Key key})
       : super(key: key);
 
   @override
@@ -54,7 +54,8 @@ class _MapPageState extends State<MapPage> {
         .map((floor) => MapWidget(
           floor.value,
           widget._actionHandler,
-          floor.key == widget._initialFloorIndex ? widget._highligtAreaIndex : null,
+          floor.key == widget._initialFloorIndex ? widget._highlightAreaIndex : null,
+          key: ValueKey(floor.key),
         ))
         .toList(growable: false);
   }

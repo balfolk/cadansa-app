@@ -30,7 +30,12 @@ class MapWidget extends StatefulWidget {
   static const _MAX_INDICATOR_ALIGNMENT = 0.85;
   static const _MAP_MOVE_ANIMATION_DURATION = Duration(milliseconds: 500);
 
-  MapWidget(this._data, this._actionHandler, this._highlightAreaIndex);
+  MapWidget(
+    this._data,
+    this._actionHandler,
+    this._highlightAreaIndex, {
+    final Key key,
+  }) : super(key: key);
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
@@ -78,7 +83,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     ImageProvider imageProvider;
     if (path.startsWith('http')) {
       final url = Uri.parse(widget._data.url.get(locale)).replace(
-        queryParameters: {'version': widget._data.version},
+        queryParameters: {'version': widget._data.version.toString()},
       );
       imageProvider = CachedNetworkImageProvider(url.toString());
     } else {

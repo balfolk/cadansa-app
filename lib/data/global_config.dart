@@ -3,13 +3,26 @@ import 'package:flutter/material.dart';
 
 class GlobalConfig {
   final LText title;
-  final String logoUri;
-  final List<GlobalEvent> events;
+  final LText logoUri;
+  final List<EventsSection> sections;
 
   GlobalConfig(final dynamic json)
       : title = LText(json['title']),
-        logoUri = json['logo'],
-        events = List.unmodifiable(json['events'].map((e) => GlobalEvent(e)));
+        logoUri = LText(json['logo']),
+        sections = List.unmodifiable(json['eventSections']?.map((s) => EventsSection(s)) ?? []);
+
+  List<GlobalEvent> get allEvents => sections
+      .fold(const Iterable<GlobalEvent>.empty(), (l, section) => l.followedBy(section.events))
+      .toList();
+}
+
+class EventsSection {
+  final LText title;
+  final List<GlobalEvent> events;
+
+  EventsSection(final dynamic json)
+      : title = LText(json['title']),
+        events = List.unmodifiable(json['events']?.map((e) => GlobalEvent(e)) ?? []);
 }
 
 class GlobalEvent {
