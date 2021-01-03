@@ -41,11 +41,8 @@ flutter_icons:
 flutter:
   assets:
     - .env
-    - config.json
-    - cadansa2020.json
-    - cadansa2019.json
-    - cadansa_map_0.png
-    - cadansa_map_1.png
+    - config/config.json
+    - config/cadansa2019.json
 
   fonts:
     - family: MapFontFamily

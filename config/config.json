@@ -1,0 +1,32 @@
+{
+  "version": "2",
+  "logo": "https://www.cadansa.nl/wp-content/uploads/2018/04/logo.png",
+  "eventSections": [
+    {
+      "title": {
+        "en": "Previous events",
+        "nl": "Voorgaande evenementen",
+        "fr": "Événements précédents"
+      },
+      "events": [
+        {
+          "title": "CaDansa 2019",
+          "subtitle": {
+            "en": "24 – 27 October 2019",
+            "nl": "24 – 27 Oktober 2019",
+            "fr": "24 – 27 Octobre 2019"
+          },
+          "avatar": "https://www.cadansa.nl/wp-content/uploads/avatar2019.png",
+          "config": "config/cadansa2019.json",
+          "primarySwatchIndex": 8,
+          "accentColorIndex": 8,
+          "locales": [
+            ["en", "GB"],
+            ["nl", "NL"],
+            ["fr", "FR"]
+          ]
+        }
+      ]
+    }
+  ]
+}
