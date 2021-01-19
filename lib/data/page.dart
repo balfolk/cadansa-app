@@ -19,6 +19,8 @@ abstract class PageData {
       return ProgrammePageData._(title, icon, json, eventConstants);
     } else if (json['type'] == 'INFO') {
       return InfoPageData._(title, icon, json);
+    } else if (json['type'] == 'FEED') {
+      return FeedPageData._(title, icon, json);
     }
 
     throw ArgumentError.value(json, 'json', "Page doesn't contain a type");
@@ -59,3 +61,12 @@ class InfoPageData extends PageData {
   LText get content => _content;
 }
 
+class FeedPageData extends PageData {
+  final LText _feedUrl;
+
+  FeedPageData._(final LText title, final String icon, final dynamic json)
+      : _feedUrl = LText(json['feedUrl']),
+        super._(title, icon);
+
+  LText get feedUrl => _feedUrl;
+}

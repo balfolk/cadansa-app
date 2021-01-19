@@ -8,6 +8,7 @@ import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
+import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,16 +20,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shared_preferences/shared_preferences.dart';
 
 const Duration _LOAD_TIMEOUT = Duration(seconds: 5);
-final LText _TIMEOUT_MESSAGE = LText(const {
-  'en': "Could not connect to the server. Please make sure you're connected to the Internet.",
-  'nl': 'Het is niet gelukt verbinding te maken met de server. Controleer of je internetverbinding aanstaat.',
-  'fr': 'Échec du téléchargement du fichier. Assurez-vous que votre connexion Internet fonctionne.'
-});
-final LText _REFRESH = LText(const {
-  'en': 'Refresh',
-  'nl': 'Probeer opnieuw',
-  'fr': 'Réessayer',
-});
 
 const _CONFIG_LIFETIME = Duration(hours: 5);
 
@@ -384,13 +375,13 @@ class TimeoutPage extends StatelessWidget {
         child: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             Text(
-              _TIMEOUT_MESSAGE.get(Localizations.localeOf(context)),
+              Localization.TIMEOUT_MESSAGE.get(Localizations.localeOf(context)),
               textAlign: TextAlign.center,
             ),
             OutlineButton.icon(
               onPressed: _onRefresh,
               icon: Icon(MdiIcons.refresh, color: Theme.of(context).primaryColor,),
-              label: Text(_REFRESH.get(Localizations.localeOf(context))),
+              label: Text(Localization.REFRESH.get(Localizations.localeOf(context))),
               color: Theme.of(context).primaryColor,
             )],
           ),

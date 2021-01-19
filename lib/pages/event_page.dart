@@ -1,6 +1,7 @@
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/global.dart';
+import 'package:cadansa_app/pages/feed_page.dart';
 import 'package:cadansa_app/pages/info_page.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
@@ -60,6 +61,8 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
       return ProgrammePage(widget._event.title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
     } else if (pageData is InfoPageData) {
       return InfoPage(widget._event.title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
+    } else if (pageData is FeedPageData) {
+      return FeedPage(widget._event.title, pageData.feedUrl, widget._buildDrawer, _buildBottomNavigationBar, key: key);
     }
     return null;
   }

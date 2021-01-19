@@ -1,6 +1,7 @@
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 void _setClipboardText(final String text) =>
     Clipboard.setData(ClipboardData(text: text));
@@ -34,4 +35,17 @@ String stringToUnicodeFlag(final String s) {
   if (s == null || s.isEmpty) return '';
   return String.fromCharCodes(s.toUpperCase().codeUnits
       .map((cu) => cu + _DIFF_FLAG_LETTER));
+}
+
+Future<void> openInAppBrowser(final String url) async {
+  return ChromeSafariBrowser(bFallback: InAppBrowser()).open(
+    url: url,
+    options: ChromeSafariBrowserClassOptions(
+      android: AndroidChromeCustomTabsOptions(),
+      ios: IOSSafariOptions(
+        barCollapsingEnabled: true,
+        dismissButtonStyle: IOSSafariDismissButtonStyle.CLOSE,
+      ),
+    ),
+  );
 }
