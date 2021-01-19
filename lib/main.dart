@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -96,6 +96,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     Locale('nl', 'NL'),
     Locale('fr', 'FR'),
   ];
+  static const _CONFIG_URL_KEY = 'CONFIG_URL';
 
   @override
   void initState() {
@@ -135,8 +136,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
 
     if (_configUrl == null) {
-      await DotEnv().load();
-      _configUrl = DotEnv().env['CONFIG_URL'];
+      await dot_env.load();
+      if (!dot_env.isEveryDefined({_CONFIG_URL_KEY})) {
+        setState(() {
+          _mode = _CaDansaAppStateMode.done;
+        });
+        return;
+      }
+      _configUrl = dot_env.env[_CONFIG_URL_KEY];
     }
 
     final sharedPrefs = await SharedPreferences.getInstance();
