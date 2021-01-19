@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
+import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/util/refresher.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,11 +13,9 @@ import 'package:webfeed/webfeed.dart';
 class FeedPage extends StatefulWidget {
   final LText _title;
   final LText _feedUrl;
-  final Widget Function(BuildContext) _buildDrawer;
-  final Widget Function() _buildBottomBar;
+  final PageHooks _pageHooks;
 
-  FeedPage(this._title, this._feedUrl, this._buildDrawer, this._buildBottomBar,
-      {final Key key})
+  FeedPage(this._title, this._feedUrl, this._pageHooks, {final Key key})
       : super(key: key);
 
   @override
@@ -74,8 +73,8 @@ class _FeedPageState extends State<FeedPage> {
         title: Text(widget._title.get(locale)),
       ),
       body: _buildBody(context),
-      drawer: widget._buildDrawer(context),
-      bottomNavigationBar: widget._buildBottomBar(),
+      drawer: widget._pageHooks.buildDrawer(context),
+      bottomNavigationBar: widget._pageHooks.buildBottomBar(),
     );
   }
 

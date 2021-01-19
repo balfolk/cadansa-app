@@ -1,4 +1,5 @@
 import 'package:cadansa_app/data/parse_utils.dart';
+import 'package:cadansa_app/util/page_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,11 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 class InfoPage extends StatefulWidget {
   final LText _title;
   final LText _content;
-  final Widget Function(BuildContext) _buildDrawer;
-  final Widget Function() _buildBottomBar;
+  final PageHooks _pageHooks;
 
-  InfoPage(this._title, this._content, this._buildDrawer, this._buildBottomBar,
-      {final Key key})
+  InfoPage(this._title, this._content, this._pageHooks, {final Key key})
       : super(key: key);
 
   @override
@@ -34,8 +33,8 @@ class _InfoPageState extends State<InfoPage> {
           ),
         ),
       ),
-      drawer: widget._buildDrawer(context),
-      bottomNavigationBar: widget._buildBottomBar(),
+      drawer: widget._pageHooks.buildDrawer(context),
+      bottomNavigationBar: widget._pageHooks.buildBottomBar(),
     );
   }
 }

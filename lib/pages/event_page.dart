@@ -5,6 +5,7 @@ import 'package:cadansa_app/pages/feed_page.dart';
 import 'package:cadansa_app/pages/info_page.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
+import 'package:cadansa_app/util/page_util.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,7 +27,21 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
 
   int _highlightAreaFloorIndex, _highlightAreaIndex;
 
+  PageHooks _pageHooks;
+  IndexedPageController _programmePageController;
+
   static const _DEFAULT_PAGE_INDEX = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageHooks = PageHooks(
+      buildDrawer: (context) => widget._buildDrawer(context),
+      buildBottomBar: _buildBottomNavigationBar,
+      actionHandler: _handleAction,
+    );
+    _programmePageController = IndexedPageController();
+  }
 
   @override
   void didChangeDependencies() {
@@ -56,13 +71,13 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     _currentIndex = _currentIndex.clamp(0, widget._event.pages.length - 1);
     final pageData = widget._event.pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(widget._event.title, pageData.mapData, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
+      return MapPage(widget._event.title, pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(widget._event.title, pageData.programme, widget._buildDrawer, _buildBottomNavigationBar, _handleAction, key: key);
+      return ProgrammePage(widget._event.title, pageData.programme, _pageHooks, _programmePageController, key: key);
     } else if (pageData is InfoPageData) {
-      return InfoPage(widget._event.title, pageData.content, widget._buildDrawer, _buildBottomNavigationBar, key: key);
+      return InfoPage(widget._event.title, pageData.content, _pageHooks, key: key);
     } else if (pageData is FeedPageData) {
-      return FeedPage(widget._event.title, pageData.feedUrl, widget._buildDrawer, _buildBottomNavigationBar, key: key);
+      return FeedPage(widget._event.title, pageData.feedUrl, _pageHooks, key: key);
     }
     return null;
   }

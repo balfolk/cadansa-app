@@ -1,18 +1,16 @@
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
-import 'package:cadansa_app/global.dart';
+import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/widgets/map.dart';
 import 'package:flutter/material.dart';
 
 class MapPage extends StatefulWidget {
   final LText _title;
   final MapData _mapData;
-  final Widget Function(BuildContext) _buildDrawer;
-  final Widget Function() _buildBottomBar;
-  final ActionHandler _actionHandler;
+  final PageHooks _pageHooks;
   final int _initialFloorIndex, _highlightAreaIndex;
 
-  MapPage(this._title, this._mapData, this._buildDrawer, this._buildBottomBar, this._actionHandler, this._initialFloorIndex, this._highlightAreaIndex, {final Key key})
+  MapPage(this._title, this._mapData, this._pageHooks, this._initialFloorIndex, this._highlightAreaIndex, {final Key key})
       : super(key: key);
 
   @override
@@ -35,8 +33,8 @@ class _MapPageState extends State<MapPage> {
           physics: const NeverScrollableScrollPhysics(),
           children: tabChildren,
         ),
-        drawer: widget._buildDrawer(context),
-        bottomNavigationBar: widget._buildBottomBar(),
+        drawer: widget._pageHooks.buildDrawer(context),
+        bottomNavigationBar: widget._pageHooks.buildBottomBar(),
       ),
     );
   }
@@ -53,7 +51,7 @@ class _MapPageState extends State<MapPage> {
         .asMap().entries
         .map((floor) => MapWidget(
           floor.value,
-          widget._actionHandler,
+          widget._pageHooks.actionHandler,
           floor.key == widget._initialFloorIndex ? widget._highlightAreaIndex : null,
           key: ValueKey(floor.key),
         ))

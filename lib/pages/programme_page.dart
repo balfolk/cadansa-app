@@ -2,8 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
-import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
+import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -13,48 +13,64 @@ import 'package:shimmer/shimmer.dart';
 class ProgrammePage extends StatefulWidget {
   final LText _title;
   final Programme _programme;
-  final Widget Function(BuildContext) _buildDrawer;
-  final Widget Function() _buildBottomBar;
-  final ActionHandler _actionHandler;
+  final PageHooks _pageHooks;
+  final IndexedPageController _pageController;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
   );
 
-  ProgrammePage(this._title, this._programme, this._buildDrawer,
-      this._buildBottomBar, this._actionHandler, {final Key key})
+  ProgrammePage(this._title, this._programme, this._pageHooks, this._pageController, {final Key key})
       : super(key: key);
 
   @override
   _ProgrammePageState createState() => _ProgrammePageState();
 }
 
-class _ProgrammePageState extends State<ProgrammePage> {
+class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      initialIndex: _initialIndex,
+      length: widget._programme.days.length,
+      vsync: this,
+    );
+    _tabController.addListener(() {
+      widget._pageController.index = _tabController.index;
+    });
+  }
+
   @override
   Widget build(final BuildContext context) {
     final locale = Localizations.localeOf(context);
     return ExpandableTheme(
       data: ProgrammePage._EXPANDABLE_THEME,
-      child: DefaultTabController(
-        initialIndex: _initialIndex,
-        length: widget._programme.days.length,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(widget._title.get(locale)),
-            bottom: TabBar(tabs: tabs),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget._title.get(locale)),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: tabs,
           ),
-          body: TabBarView(children: tabChildren),
-          drawer: widget._buildDrawer(context),
-          bottomNavigationBar: widget._buildBottomBar(),
         ),
+        body: TabBarView(
+          controller: _tabController,
+          children: tabChildren,
+        ),
+        drawer: widget._pageHooks.buildDrawer(context),
+        bottomNavigationBar: widget._pageHooks.buildBottomBar(),
       ),
     );
   }
 
   int get _initialIndex {
+    if (widget._pageController.index != null) return widget._pageController.index.clamp(0, widget._programme.days.length - 1);
     final now = DateTime.now();
-    return widget._programme.days
-        .lastIndexWhere((day) => day.startsOn.isBefore(now))
+    return widget._pageController.index = widget._programme.days
+        .indexWhere((day) => now.difference(day.startsOn).inDays < 1)
         .clamp(0, widget._programme.days.length - 1);
   }
 
@@ -109,7 +125,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
               child: ScrollOnExpand(
                 child: ExpandablePanel(
                   header: header,
-                  expanded: ProgrammeItemBody(item, widget._actionHandler),
+                  expanded: ProgrammeItemBody(item, widget._pageHooks.actionHandler),
                 ),
               ),
             );
@@ -191,6 +207,12 @@ class _ProgrammePageState extends State<ProgrammePage> {
     } else {
       return icon;
     }
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
   }
 }
 
