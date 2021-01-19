@@ -21,6 +21,7 @@ dependencies:
   flutter_dotenv: ^3.1.0
   flutter_html: ^1.2.0
   flutter_inappwebview: ^4.0.0+4
+  http: ^0.12.2
   intl: ^0.16.1
   material_design_icons_flutter: ^4.0.5855
   photo_view: ^0.10.3
