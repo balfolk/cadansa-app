@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
+import 'package:cadansa_app/util/refresher.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -44,22 +45,25 @@ class _FeedPageState extends State<FeedPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _fetchFeed();
+    _refreshFeed();
   }
 
-  void _fetchFeed() async {
-    final url = widget._feedUrl.get(Localizations.localeOf(context));
-    String feed;
-    try {
-      feed = await http.read(url).timeout(_FETCH_TIMEOUT);
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-      feed = null;
-    }
+  Future<void> _refreshFeed() async {
+    final feed = await _fetchFeed();
     setState(() {
       _feed = feed;
       _status = _feed != null ? _FeedPageStatus.DONE : _FeedPageStatus.ERROR;
     });
+  }
+
+  Future<String> _fetchFeed() async {
+    final url = widget._feedUrl.get(Localizations.localeOf(context));
+    try {
+      return http.read(url).timeout(_FETCH_TIMEOUT);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
   }
 
   @override
@@ -108,10 +112,13 @@ class _FeedPageState extends State<FeedPage> {
       return _buildEmptyFeed(context);
     }
 
-    return ListView.separated(
-      itemBuilder: (context, index) => FeedItem(feed.items[index]),
-      separatorBuilder: (context, _) => const Divider(),
-      itemCount: feed.items.length,
+    return Refresher(
+      onRefresh: _fetchFeed,
+      child: ListView.separated(
+        itemBuilder: (context, index) => FeedItem(feed.items[index]),
+        separatorBuilder: (context, _) => const Divider(),
+        itemCount: feed.items.length,
+      ),
     );
   }
 

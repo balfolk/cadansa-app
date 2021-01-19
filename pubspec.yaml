@@ -15,6 +15,7 @@ dependencies:
 
   auto_size_text: ^2.1.0
   cached_network_image: ^2.5.0
+  custom_refresh_indicator: ^0.9.0
   expandable: ^4.1.4
   flutter_cache_manager: ^2.1.1
   flutter_dotenv: ^3.1.0
