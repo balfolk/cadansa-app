@@ -73,7 +73,7 @@ class _FeedPageState extends State<FeedPage> {
         title: Text(widget._title.get(locale)),
       ),
       body: _buildBody(context),
-      drawer: widget._pageHooks.buildDrawer(context),
+      drawer: widget._pageHooks.buildDrawer(() => this.context),
       bottomNavigationBar: widget._pageHooks.buildBottomBar(),
     );
   }
@@ -157,7 +157,7 @@ class FeedItem extends StatelessWidget {
     final date = _item.pubDate != null ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).format(_item.pubDate) : '';
     final time = _item.pubDate != null ? DateFormat.jm(locale.toLanguageTag()).format(_item.pubDate) : '';
     final dateTime = '$date $time'.trim();
-    final parts = [_item.author, dateTime].where((s) => s.isNotEmpty);
+    final parts = [_item.author ?? '', dateTime].where((s) => s.isNotEmpty);
     return parts.join(' • ');
   }
 

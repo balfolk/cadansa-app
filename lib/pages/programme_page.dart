@@ -60,7 +60,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
           controller: _tabController,
           children: tabChildren,
         ),
-        drawer: widget._pageHooks.buildDrawer(context),
+        drawer: widget._pageHooks.buildDrawer(() => this.context),
         bottomNavigationBar: widget._pageHooks.buildBottomBar(),
       ),
     );

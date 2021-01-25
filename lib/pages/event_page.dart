@@ -1,5 +1,6 @@
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/page.dart';
+import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/feed_page.dart';
 import 'package:cadansa_app/pages/info_page.dart';
@@ -14,9 +15,11 @@ import 'package:url_launcher/url_launcher.dart';
 class CaDansaEventPage extends StatefulWidget {
   final Event _event;
   final int _initialIndex;
-  final Widget Function(BuildContext) _buildDrawer;
+  final Widget Function(BuildContext Function()) _buildDrawer;
 
-  CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer);
+  CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer,
+      {final Key key})
+      : super(key: key);
 
   @override
   _CaDansaEventPageState createState() => _CaDansaEventPageState();
@@ -31,12 +34,16 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   IndexedPageController _programmePageController;
 
   static const _DEFAULT_PAGE_INDEX = 0;
+  static const _ACTION_SEPARATOR = ':',
+      _ACTION_PAGE = 'page',
+      _ACTION_URL = 'url',
+      _ACTION_AREA = 'area';
 
   @override
   void initState() {
     super.initState();
     _pageHooks = PageHooks(
-      buildDrawer: (context) => widget._buildDrawer(context),
+      buildDrawer: (contextGetter) => widget._buildDrawer(contextGetter),
       buildBottomBar: _buildBottomNavigationBar,
       actionHandler: _handleAction,
     );
@@ -98,17 +105,24 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _handleAction(final String action) {
-    switch (action.split(':').first) {
-      case 'page':
-        final index = int.tryParse(action.substring('page:'.length));
+    final split = action.split(_ACTION_SEPARATOR);
+    if (split.isEmpty) {
+      debugPrint('Illegal action: $action');
+      return;
+    }
+
+    switch (split.first) {
+      case _ACTION_PAGE:
+        final index = int.tryParse(action.substring('$_ACTION_PAGE$_ACTION_SEPARATOR'.length));
         _selectPage(index);
         break;
-      case 'url':
-        final url = action.substring('url:'.length);
-        launch(url);
+      case _ACTION_URL:
+        final url = action.substring('$_ACTION_URL$_ACTION_SEPARATOR'.length);
+        final locale = Localizations.localeOf(context);
+        _launchUrl(LText(url).get(locale));
         break;
-      case 'area':
-        final areaId = action.substring('area:'.length);
+      case _ACTION_AREA:
+        final areaId = action.substring('$_ACTION_AREA$_ACTION_SEPARATOR'.length);
         _selectArea(areaId);
         break;
     }
@@ -120,6 +134,12 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     setState(() {
       _currentIndex = pageIndex;
     });
+  }
+
+  void _launchUrl(final String url) {
+    if (url != null && url.isNotEmpty) {
+      launch(url);
+    }
   }
 
   void _selectArea(final String areaId) {

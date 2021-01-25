@@ -33,7 +33,7 @@ class _InfoPageState extends State<InfoPage> {
           ),
         ),
       ),
-      drawer: widget._pageHooks.buildDrawer(context),
+      drawer: widget._pageHooks.buildDrawer(() => this.context),
       bottomNavigationBar: widget._pageHooks.buildBottomBar(),
     );
   }

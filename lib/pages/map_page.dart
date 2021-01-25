@@ -33,7 +33,7 @@ class _MapPageState extends State<MapPage> {
           physics: const NeverScrollableScrollPhysics(),
           children: tabChildren,
         ),
-        drawer: widget._pageHooks.buildDrawer(context),
+        drawer: widget._pageHooks.buildDrawer(() => this.context),
         bottomNavigationBar: widget._pageHooks.buildBottomBar(),
       ),
     );

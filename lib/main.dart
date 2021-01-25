@@ -10,6 +10,7 @@ import 'package:cadansa_app/pages/event_page.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
+import 'package:cadansa_app/widgets/locale_widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,11 +20,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const Duration _LOAD_TIMEOUT = Duration(seconds: 5);
+const _LOAD_TIMEOUT = Duration(seconds: 5);
 
 const _CONFIG_LIFETIME = Duration(hours: 5);
 
-const _DEFAULT_PRIMARY_SWATCH = Colors.teal;
 const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
@@ -37,7 +37,7 @@ void main() async {
   final sharedPrefs = await SharedPreferences.getInstance();
 
   final primarySwatchIndex = sharedPrefs.getInt(_PRIMARY_SWATCH_INDEX_KEY);
-  final primarySwatch = primarySwatchIndex != null ? Colors.primaries[primarySwatchIndex] : null;
+  final primarySwatch = getPrimarySwatch(primarySwatchIndex);
   final accentColorValue = sharedPrefs.getInt(_ACCENT_COLOR_KEY);
   final accentColor = accentColorValue != null ? Color(accentColorValue) : null;
 
@@ -78,6 +78,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   StreamController<Locale> _localeStreamController;
 
+  int _currentEventIndex;
   GlobalEvent _currentEvent;
   dynamic _currentEventConfig;
   int _initialPageIndex;
@@ -186,16 +187,18 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   @override
   Widget build(final BuildContext context) {
     final title = _currentEvent?.title ?? _config?.title ?? LText(APP_TITLE);
-    final primarySwatch = _currentEvent?.primarySwatch ?? widget._initialPrimarySwatch ?? _DEFAULT_PRIMARY_SWATCH;
+    final primarySwatch = _currentEvent?.primarySwatch ?? widget._initialPrimarySwatch;
     final accentColor = _currentEvent?.accentColor ?? widget._initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
 
     return StreamBuilder<Locale>(
       stream: _localeStreamController.stream,
       initialData: widget._initialLocale,
       builder: (_, localeSnapshot) {
-        final locale = localeSnapshot.hasData ? localeSnapshot.data : Localizations.localeOf(context, nullOk: true);
+        final locale = localeSnapshot.hasData
+            ? localeSnapshot.data
+            : Localizations.localeOf(context, nullOk: true);
         return MaterialApp(
-          onGenerateTitle: (context) => title.get(locale ?? Localizations.localeOf(context)),
+          onGenerateTitle: (context) => title.get(locale ?? Localizations.localeOf(context, nullOk: true)),
           theme: ThemeData(
             primarySwatch: primarySwatch,
             accentColor: accentColor,
@@ -218,6 +221,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         Event(_currentEvent.title, _currentEventConfig),
         _initialPageIndex,
         _buildDrawer,
+        key: ValueKey(_currentEventIndex),
       );
     } else if (_mode == _CaDansaAppStateMode.loading) {
       return LoadingPage();
@@ -226,7 +230,8 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
   }
 
-  Widget _buildDrawer(final BuildContext context) {
+  Widget _buildDrawer(final BuildContext Function() contextGetter) {
+    final context = contextGetter();
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
@@ -247,28 +252,25 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           onTap: () async {
             await _switchToEvent(event, index);
             setState(() {});
-            Navigator.pop(context);
+            Navigator.pop(contextGetter());
           },
         );
       }),
     ]).toList();
 
-    final bottomWidgets = <Widget>[Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: List<Widget>.unmodifiable(_supportedLocales.map((locale) => FlatButton(
-        onPressed: () async {
+    final bottomWidgets = <Widget>[
+      LocaleWidgets(
+        locales: _supportedLocales,
+        activeLocale: locale,
+        setLocale: (final Locale locale) async {
           await _setLocale(locale);
-          Navigator.pop(context);
+          await Navigator.maybePop(context);
         },
-        child: Text(stringToUnicodeFlag(locale.countryCode)),
-      ))),
-    )];
+      ),
+    ];
     if (kDebugMode) {
       bottomWidgets.add(RaisedButton.icon(
-        onPressed: () async {
-          await _reloadConfig();
-          Navigator.pop(context);
-        },
+        onPressed: _reloadConfig,
         icon: const Icon(MdiIcons.refresh),
         label: const Text('Reload config'),
       ));
@@ -311,6 +313,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   Future<void> _switchToEvent(final GlobalEvent event, final int index) async {
+    _currentEventIndex = index;
     _currentEvent = event;
     _currentEventConfig = await _loadJson(event.configUri);
     _initialPageIndex = 0;

@@ -2,7 +2,7 @@ import 'package:cadansa_app/global.dart';
 import 'package:flutter/material.dart';
 
 class PageHooks {
-  final Widget Function(BuildContext) buildDrawer;
+  final Widget Function(BuildContext Function()) buildDrawer;
   final Widget Function() buildBottomBar;
   final ActionHandler actionHandler;
 

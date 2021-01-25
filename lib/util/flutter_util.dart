@@ -37,6 +37,15 @@ String stringToUnicodeFlag(final String s) {
       .map((cu) => cu + _DIFF_FLAG_LETTER));
 }
 
+const _DEFAULT_PRIMARY_SWATCH = Colors.teal;
+
+MaterialColor getPrimarySwatch(final int index) {
+  if (index != null && index >= 0 && index < Colors.primaries.length) {
+    return Colors.primaries[index];
+  }
+  return _DEFAULT_PRIMARY_SWATCH;
+}
+
 Future<void> openInAppBrowser(final String url) async {
   return ChromeSafariBrowser(bFallback: InAppBrowser()).open(
     url: url,
