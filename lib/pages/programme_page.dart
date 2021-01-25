@@ -184,7 +184,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   Widget _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
     final iconData = MdiIcons.fromString(item.kind.icon);
     if (iconData?.codePoint == null) {
-      print('Invalid icon ${item.kind.icon}');
+      debugPrint('Invalid icon ${item.kind.icon}');
       return null;
     }
 

@@ -15,5 +15,6 @@ class Localization {
   });
   static final FEED_EMPTY = LText(const {
     'en': 'There is no news at the moment. Check again later!',
+    'nl': 'Er is nu even geen nieuws. Kijk later nog eens!'
   });
 }

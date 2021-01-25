@@ -38,6 +38,7 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 *  Run `flutter upgrade` followed by `flutter update-packages` to update Flutter and its internal packages.
 *  Accept the Android licenses using `flutter doctor --android-licenses`.
 *  Open Android Studio and create a new project from this repository.
+    * On an Apple Silicon (ARM) machine, _do not_ attempt to set Android Studio to full screen - use Windows -> Zoom instead. For an unknown reason full screen breaks the application.
     *  You need to have an SSH key set up in order to do so.
     *  Make sure to add it as a Flutter project. If you can't do that, first ensure you have gone through the entire set-up process of Flutter.
 *  Head to Android Studio Settings -> Languages & Frameworks -> Dart and enable Dart support for this project. Set the Dart SDK location to `bin/cache/dart-sdk` relative your Flutter installation directory.
