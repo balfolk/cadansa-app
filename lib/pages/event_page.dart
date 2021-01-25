@@ -41,24 +41,21 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
       actionHandler: _handleAction,
     );
     _programmePageController = IndexedPageController();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _validateIndex();
+    _setIndex(widget._initialIndex);
   }
 
   @override
   void didUpdateWidget(final CaDansaEventPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget._initialIndex != widget._initialIndex) {
-      _validateIndex();
-    }
+    _validateIndex();
   }
 
   void _validateIndex() {
-    final newIndex = widget._initialIndex?.clamp(0, widget._event.pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
+    _setIndex(_currentIndex);
+  }
+
+  void _setIndex(int newIndex) {
+    newIndex = newIndex?.clamp(0, widget._event.pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
     if (newIndex != _currentIndex) {
       _currentIndex = newIndex;
       _storePageIndex(newIndex);
@@ -118,7 +115,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _selectPage(final int pageIndex) {
-    if (pageIndex == null) return;
+    if (pageIndex == null || pageIndex < 0 || pageIndex >= widget._event.pages.length) return;
 
     setState(() {
       _currentIndex = pageIndex;
