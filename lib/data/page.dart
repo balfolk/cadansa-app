@@ -35,7 +35,7 @@ class MapPageData extends PageData {
   final MapData _mapData;
 
   MapPageData._(final LText title, final String icon, final dynamic json)
-      : _mapData = MapData.parse(json['content']),
+      : _mapData = MapData.parse(json),
         super._(title, icon);
 
   MapData get mapData => _mapData;
@@ -45,7 +45,7 @@ class ProgrammePageData extends PageData {
   final Programme _programme;
 
   ProgrammePageData._(final LText title, final String icon, final dynamic json, final EventConstants eventConstants)
-      : _programme = Programme.parse(json['content'], eventConstants),
+      : _programme = Programme.parse(json, eventConstants),
         super._(title, icon);
 
   Programme get programme => _programme;

@@ -8,9 +8,9 @@ class MapData {
   MapData._(this._floors);
 
   MapData.parse(final dynamic json)
-    : this._((json as List)
+    : this._((json['floors'] ?? [])
         .map((d) => Floor.parse(d))
-        .toList(growable: false));
+        .cast<Floor>().toList(growable: false));
 
   List<Floor> get floors => List.unmodifiable(_floors);
 }

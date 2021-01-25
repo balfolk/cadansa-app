@@ -8,9 +8,9 @@ class Programme {
   Programme._(this._days);
 
   Programme.parse(final dynamic json, final EventConstants constants)
-      : this._((json as List)
+      : this._((json['days'] ?? [])
             .map((d) => ProgrammeDay.parse(d, constants))
-            .toList(growable: false));
+            .cast<ProgrammeDay>().toList(growable: false));
 
   List<ProgrammeDay> get days => List.unmodifiable(_days);
 }
@@ -93,7 +93,7 @@ class Location {
   Location._(this.title, this.action);
 
   factory Location.parse(final dynamic json) => json != null ? Location._(
-    LText(json['title'] ?? json),
+    LText(json['title']),
     json['action'],
   ) : null;
 }
