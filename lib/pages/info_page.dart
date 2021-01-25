@@ -2,6 +2,7 @@ import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:sanitize_html/sanitize_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(final BuildContext context) {
     final locale = Localizations.localeOf(context);
+    final content = sanitizeHtml(widget._content.get(locale));
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title.get(locale)),
@@ -28,7 +30,7 @@ class _InfoPageState extends State<InfoPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           child: Html(
-            data: widget._content.get(locale),
+            data: content,
             onLinkTap: launch,
           ),
         ),
