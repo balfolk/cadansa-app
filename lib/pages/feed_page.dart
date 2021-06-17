@@ -15,7 +15,7 @@ class FeedPage extends StatefulWidget {
   final LText _feedUrl;
   final PageHooks _pageHooks;
 
-  FeedPage(this._title, this._feedUrl, this._pageHooks, {final Key key})
+  const FeedPage(this._title, this._feedUrl, this._pageHooks, {final Key? key})
       : super(key: key);
 
   @override
@@ -29,17 +29,10 @@ enum _FeedPageStatus {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  _FeedPageStatus _status;
-  String _feed;
+  _FeedPageStatus _status = _FeedPageStatus.LOADING;
+  String? _feed;
 
   static const _FETCH_TIMEOUT = Duration(seconds: 5);
-
-  @override
-  void initState() {
-    super.initState();
-    _status = _FeedPageStatus.LOADING;
-    _feed = null;
-  }
 
   @override
   void didChangeDependencies() {
@@ -55,8 +48,10 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
-  Future<String> _fetchFeed() async {
-    final url = widget._feedUrl.get(Localizations.localeOf(context));
+  Future<String?> _fetchFeed() async {
+    final url = Uri.tryParse(widget._feedUrl.get(Localizations.localeOf(context)));
+    if (url == null) return null;
+
     try {
       return http.read(url).timeout(_FETCH_TIMEOUT);
     } on Exception catch (e) {
@@ -91,7 +86,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Widget _buildLoading(final BuildContext context) =>
-      Center(child: const CircularProgressIndicator());
+      const Center(child: CircularProgressIndicator());
 
   Widget _buildError(final BuildContext context) => Center(
     child: AutoSizeText(
@@ -100,23 +95,28 @@ class _FeedPageState extends State<FeedPage> {
   );
 
   Widget _buildFeed(final BuildContext context) {
-    RssFeed feed;
+    RssFeed? feed;
     try {
-      feed = RssFeed.parse(_feed);
+      final feedString = _feed;
+      if (feedString != null) {
+        feed = RssFeed.parse(feedString);
+      }
     // ignore: avoid_catching_errors
     } on ArgumentError {
-      // Do nothing, feed will be null
+      feed = null;
     }
-    if (feed?.items == null || feed.items.isEmpty) {
+
+    final feedItems = feed?.items;
+    if (feedItems == null || feedItems.isEmpty) {
       return _buildEmptyFeed(context);
     }
 
     return Refresher(
       onRefresh: _fetchFeed,
       child: ListView.separated(
-        itemBuilder: (context, index) => FeedItem(feed.items[index]),
+        itemBuilder: (context, index) => FeedItem(feedItems[index]),
         separatorBuilder: (context, _) => const Divider(),
-        itemCount: feed.items.length,
+        itemCount: feedItems.length,
       ),
     );
   }
@@ -131,9 +131,7 @@ class _FeedPageState extends State<FeedPage> {
 class FeedItem extends StatelessWidget {
   final RssItem _item;
 
-  FeedItem(this._item, {final Key key})
-      : assert(_item != null),
-        super(key: key);
+  const FeedItem(this._item, {final Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -154,16 +152,18 @@ class FeedItem extends StatelessWidget {
 
   String _subtitle(final BuildContext context) {
     final locale = Localizations.localeOf(context);
-    final date = _item.pubDate != null ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).format(_item.pubDate) : '';
-    final time = _item.pubDate != null ? DateFormat.jm(locale.toLanguageTag()).format(_item.pubDate) : '';
+    final pubDate = _item.pubDate;
+    final date = pubDate != null ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).format(pubDate) : '';
+    final time = pubDate != null ? DateFormat.jm(locale.toLanguageTag()).format(pubDate) : '';
     final dateTime = '$date $time'.trim();
     final parts = [_item.author ?? '', dateTime].where((s) => s.isNotEmpty);
     return parts.join(' • ');
   }
 
   void _open() {
-    if (_item.link?.trim()?.isNotEmpty ?? false) {
-      openInAppBrowser(_item.link);
+    final link = _item.link?.trim();
+    if (link != null && link.isNotEmpty) {
+      openInAppBrowser(link);
     }
   }
 }

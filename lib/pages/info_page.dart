@@ -10,7 +10,7 @@ class InfoPage extends StatefulWidget {
   final LText _content;
   final PageHooks _pageHooks;
 
-  InfoPage(this._title, this._content, this._pageHooks, {final Key key})
+  const InfoPage(this._title, this._content, this._pageHooks, {final Key? key})
       : super(key: key);
 
   @override
@@ -31,12 +31,23 @@ class _InfoPageState extends State<InfoPage> {
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           child: Html(
             data: content,
-            onLinkTap: launch,
+            onLinkTap: _onLinkTap,
           ),
         ),
       ),
       drawer: widget._pageHooks.buildDrawer(() => this.context),
       bottomNavigationBar: widget._pageHooks.buildBottomBar(),
     );
+  }
+
+  void _onLinkTap(
+    String? url,
+    RenderContext context,
+    Map<String, String> attributes,
+    Object? element,
+  ) {
+    if (url != null) {
+      launch(url);
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
+import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -20,7 +21,9 @@ class ProgrammePage extends StatefulWidget {
     tapBodyToCollapse: true,
   );
 
-  ProgrammePage(this._title, this._programme, this._pageHooks, this._pageController, {final Key key})
+  const ProgrammePage(
+      this._title, this._programme, this._pageHooks, this._pageController,
+      {final Key? key})
       : super(key: key);
 
   @override
@@ -28,20 +31,13 @@ class ProgrammePage extends StatefulWidget {
 }
 
 class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateMixin {
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      initialIndex: _initialIndex,
-      length: widget._programme.days.length,
-      vsync: this,
-    );
-    _tabController.addListener(() {
-      widget._pageController.index = _tabController.index;
-    });
-  }
+  late final TabController _tabController = TabController(
+    initialIndex: _initialIndex,
+    length: widget._programme.days.length,
+    vsync: this,
+  )..addListener(() {
+    widget._pageController.index = _tabController.index;
+  });
 
   @override
   Widget build(final BuildContext context) {
@@ -67,10 +63,16 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   }
 
   int get _initialIndex {
-    if (widget._pageController.index != null) return widget._pageController.index.clamp(0, widget._programme.days.length - 1);
+    final index = widget._pageController.index;
+    if (index != null) {
+      return index.clamp(0, widget._programme.days.length - 1);
+    }
+
     final now = DateTime.now();
     return widget._pageController.index = widget._programme.days
-        .indexWhere((day) => now.difference(day.startsOn).inDays < 1)
+        .map((day) => day.startsOn)
+        .whereNotNull().toList(growable: false)
+        .indexWhere((startsOn) => now.difference(startsOn).inDays < 1)
         .clamp(0, widget._programme.days.length - 1);
   }
 
@@ -90,6 +92,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   }
 
   List<Widget> get tabChildren {
+    final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
     return widget._programme.days.asMap().entries.map((entry) {
       final day = entry.value;
@@ -97,14 +100,16 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
         itemCount: day.items.length,
         itemBuilder: (context, index) {
           final item = day.items[index];
+          final startTime = item.startTime;
+          final endTime = item.endTime;
 
-          Widget subtitle;
-          if (item.startTime != null || item.endTime != null) {
+          Widget? subtitle;
+          if (startTime != null || endTime != null) {
             String text;
-            if (item.startTime != null && item.endTime != null) {
-              text = '${item.startTime.format(context)} – ${item.endTime.format(context)}';
+            if (startTime != null && endTime != null) {
+              text = '${startTime.format(context)} – ${endTime.format(context)}';
             } else {
-              text = (item.startTime ?? item.endTime).format(context);
+              text = (startTime ?? endTime)!.format(context);
             }
             subtitle = Text(text);
           }
@@ -120,11 +125,12 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
             subtitle: subtitle,
           );
 
-          if (item.description != null) {
+          if (item.description.get(locale).isNotEmpty) {
             return ExpandableNotifier(
               child: ScrollOnExpand(
                 child: ExpandablePanel(
                   header: header,
+                  collapsed: const SizedBox.shrink(),
                   expanded: ProgrammeItemBody(item, widget._pageHooks.actionHandler),
                 ),
               ),
@@ -157,20 +163,27 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     }
   }
 
-  static _PlayingStatus _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
+  static _PlayingStatus? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
     const HOUR_NIGHT_CUTOFF = 6;
 
+    final dayStartsOn = day.startsOn;
+    final itemStartTime = item.startTime;
+    if (dayStartsOn == null || itemStartTime == null) {
+      return null;
+    }
+
     final startDay =
-        DateTime(day.startsOn.year, day.startsOn.month, day.startsOn.day);
+        DateTime(dayStartsOn.year, dayStartsOn.month, dayStartsOn.day);
     final startMoment = startDay.add(Duration(
-        days: item.startTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: item.startTime.hour,
-        minutes: item.startTime.minute));
-    final endMoment = item.endTime != null ? startDay.add(Duration(
-        days: item.endTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: item.endTime.hour,
-        minutes: item.endTime.minute)) : null;
+        days: itemStartTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: itemStartTime.hour,
+        minutes: itemStartTime.minute));
+    final itemEndTime = item.endTime;
+    final endMoment = itemEndTime != null ? startDay.add(Duration(
+        days: itemEndTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: itemEndTime.hour,
+        minutes: itemEndTime.minute)) : null;
     final now = DateTime.now();
     if (now.isBefore(startMoment)) return _PlayingStatus.before;
     if (endMoment != null) {
@@ -181,15 +194,18 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     }
   }
 
-  Widget _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
-    final iconData = MdiIcons.fromString(item.kind.icon);
+  Widget? _getIcon(final ProgrammeDay day, final ProgrammeItem item) {
+    final itemKindIcon = item.kind.icon;
+    if (itemKindIcon == null) return null;
+
+    final iconData = MdiIcons.fromString(itemKindIcon);
     if (iconData?.codePoint == null) {
-      debugPrint('Invalid icon ${item.kind.icon}');
+      debugPrint('Invalid icon $itemKindIcon');
       return null;
     }
 
     final status = _getPlayingStatus(day, item);
-    final color = status == _PlayingStatus.after
+    final color = status == null || status == _PlayingStatus.after
         ? Colors.grey
         : Theme.of(context).primaryColor;
 
@@ -211,7 +227,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
 
   @override
   void dispose() {
-    _tabController?.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 }

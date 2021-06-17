@@ -8,10 +8,16 @@ class MapPage extends StatefulWidget {
   final LText _title;
   final MapData _mapData;
   final PageHooks _pageHooks;
-  final int _initialFloorIndex, _highlightAreaIndex;
+  final int? _initialFloorIndex, _highlightAreaIndex;
 
-  MapPage(this._title, this._mapData, this._pageHooks, this._initialFloorIndex, this._highlightAreaIndex, {final Key key})
-      : super(key: key);
+  const MapPage(
+    this._title,
+    this._mapData,
+    this._pageHooks,
+    this._initialFloorIndex,
+    this._highlightAreaIndex, {
+    final Key? key,
+  }) : super(key: key);
 
   @override
   _MapPageState createState() => _MapPageState();

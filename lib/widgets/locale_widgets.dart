@@ -6,17 +6,17 @@ class LocaleWidgets extends StatelessWidget {
   final Locale activeLocale;
   final void Function(Locale) setLocale;
 
-  LocaleWidgets({
-    @required this.locales,
-    @required this.activeLocale,
-    @required this.setLocale,
+  const LocaleWidgets({
+    required this.locales,
+    required this.activeLocale,
+    required this.setLocale,
   });
 
   @override
   Widget build(final BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: List<Widget>.unmodifiable(locales.map((locale) => _LocaleWidget(
+      children: List.unmodifiable(locales.map<Widget>((locale) => _LocaleWidget(
         locale: locale,
         isActive: locale == activeLocale,
         onPressed: locale == activeLocale ? null : () => setLocale(locale),
@@ -28,26 +28,30 @@ class LocaleWidgets extends StatelessWidget {
 class _LocaleWidget extends StatelessWidget {
   final Locale locale;
   final bool isActive;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   const _LocaleWidget({
-    @required this.locale,
-    @required this.isActive,
-    @required this.onPressed,
+    required this.locale,
+    required this.isActive,
+    required this.onPressed,
   });
 
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
-    Widget widget = FlatButton(
+    Widget widget = TextButton(
       onPressed: onPressed,
-      disabledTextColor: theme.textTheme.button.color,
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color?>(
+          theme.textTheme.button?.color,
+        ),
+      ),
       child: Text(stringToUnicodeFlag(locale.countryCode)),
     );
 
     if (isActive) {
       widget = Container(
-        margin: EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
           border: Border.all(

@@ -6,17 +6,11 @@ import 'package:test/test.dart';
 
 void main() {
 
-  Locale _und, _enUs;
+  late Locale _und, _enUs;
 
   setUp(() {
-    _und = Locale('UND');
-    _enUs = Locale('en', 'US');
-  });
-
-  test('LText.nullable', () {
-    expect(LText.nullable(null), isNull);
-    expect(LText.nullable('bla').get(_und), 'bla');
-    expect(LText.nullable({'foo': 'bar'}).get(_und), 'bar');
+    _und = const Locale('UND');
+    _enUs = const Locale('en', 'US');
   });
 
   test('LText(string)', () {
@@ -27,57 +21,63 @@ void main() {
   });
 
   test('LText(map)', () {
-    expect(LText({'und': 'foo', 'en': 'bar'}).get(_und), 'foo');
-    expect(LText({'fr': 'foo', 'en': 'bar'}).get(_enUs), 'bar');
-    expect(LText({'fr': 'foo', 'en_GB': 'bar'}).get(_enUs), 'bar');
-    expect(LText({'en_US': 'foo', 'en_GB': 'bar'}).get(_enUs), 'foo');
-    expect(LText({'en': 'foo', 'en_GB': 'bar'}).get(_enUs), 'foo');
-    expect(LText({'en': 'foo', 'en_GB': 'bar'}).get(_und), 'foo');
-    expect(LText(<String, dynamic>{}).get(_und), '');
-    expect(LText(<String, String>{}).get(_und), '');
-    expect(LText(<String, int>{}).get(_und), '');
-    expect(LText(<dynamic, dynamic>{}).get(_und), '');
+    expect(LText(const {'und': 'foo', 'en': 'bar'}).get(_und), 'foo');
+    expect(LText(const {'fr': 'foo', 'en': 'bar'}).get(_enUs), 'bar');
+    expect(LText(const {'fr': 'foo', 'en_GB': 'bar'}).get(_enUs), 'bar');
+    expect(LText(const {'en_US': 'foo', 'en_GB': 'bar'}).get(_enUs), 'foo');
+    expect(LText(const {'en': 'foo', 'en_GB': 'bar'}).get(_enUs), 'foo');
+    expect(LText(const {'en': 'foo', 'en_GB': 'bar'}).get(_und), 'foo');
+    expect(LText(const <String, dynamic>{}).get(_und), '');
+    expect(LText(const <String, String>{}).get(_und), '');
+    expect(LText(const <String, int>{}).get(_und), '');
+    expect(LText(const <dynamic, dynamic>{}).get(_und), '');
   });
 
   test('LText(other)', () {
     expect(LText(42).get(_und), '42');
     expect(LText(3.14).get(_und), '3.14');
-    expect(LText(['foo', 83]).get(_und), '[foo, 83]');
-    expect(LText(<dynamic>[]).get(_und), '[]');
-    expect(LText(<dynamic>{}).get(_und), '{}');
+    expect(LText(const ['foo', 83]).get(_und), '[foo, 83]');
+    expect(LText(const <dynamic>[]).get(_und), '');
+    expect(LText(const <dynamic>{}).get(_und), '');
+    expect(LText(const Iterable<dynamic>.empty()).get(_und), '');
     expect(LText(null).get(_und), '');
   });
 
-  test('toDateTime', () {
-    expect(toDateTime('42'), DateTime.fromMillisecondsSinceEpoch(42));
-    expect(toDateTime('83.1 \t'), DateTime.fromMillisecondsSinceEpoch(83));
-    expect(toDateTime(42.1), DateTime.fromMillisecondsSinceEpoch(42));
-    expect(toDateTime(83.9), DateTime.fromMillisecondsSinceEpoch(83));
+  test('LText.empty()', () {
+    expect(const LText.empty().get(_enUs), '');
+    expect(const LText.empty().get(_und), '');
+  });
 
-    expect(toDateTime(''), isNull);
-    expect(toDateTime(null), isNull);
-    expect(() => toDateTime({}), throwsArgumentError);
-    expect(() => toDateTime('bla'), throwsArgumentError);
+  test('toDateTime', () {
+    expect(parseDateTime('42'), DateTime.fromMillisecondsSinceEpoch(42));
+    expect(parseDateTime('83.1 \t'), DateTime.fromMillisecondsSinceEpoch(83));
+    expect(parseDateTime(42.1), DateTime.fromMillisecondsSinceEpoch(42));
+    expect(parseDateTime(83.9), DateTime.fromMillisecondsSinceEpoch(83));
+
+    expect(parseDateTime(''), isNull);
+    expect(parseDateTime(null), isNull);
+    expect(() => parseDateTime(<dynamic, dynamic>{}), throwsArgumentError);
+    expect(() => parseDateTime('bla'), throwsArgumentError);
   });
 
   test('toTimeOfDay', () {
-    expect(toTimeOfDay('13:37'), TimeOfDay(hour: 13, minute: 37));
-    expect(toTimeOfDay('\t23  : 59'), TimeOfDay(hour: 23, minute: 59));
-    expect(toTimeOfDay('14.42: 12.'), TimeOfDay(hour: 14, minute: 12));
+    expect(parseTimeOfDay('13:37'), const TimeOfDay(hour: 13, minute: 37));
+    expect(parseTimeOfDay('\t23  : 59'), const TimeOfDay(hour: 23, minute: 59));
+    expect(parseTimeOfDay('14.42: 12.'), const TimeOfDay(hour: 14, minute: 12));
 
-    expect(toTimeOfDay(''), isNull);
-    expect(toTimeOfDay(null), isNull);
+    expect(parseTimeOfDay(''), isNull);
+    expect(parseTimeOfDay(null), isNull);
 
-    expect(() => toTimeOfDay('42:12'), throwsArgumentError);
-    expect(() => toTimeOfDay('-1:12'), throwsArgumentError);
-    expect(() => toTimeOfDay('13:60'), throwsArgumentError);
-    expect(() => toTimeOfDay('13:-1'), throwsArgumentError);
+    expect(() => parseTimeOfDay('42:12'), throwsArgumentError);
+    expect(() => parseTimeOfDay('-1:12'), throwsArgumentError);
+    expect(() => parseTimeOfDay('13:60'), throwsArgumentError);
+    expect(() => parseTimeOfDay('13:-1'), throwsArgumentError);
 
-    expect(() => toTimeOfDay({}), throwsArgumentError);
-    expect(() => toTimeOfDay('bla'), throwsArgumentError);
-    expect(() => toTimeOfDay('12:32:12'), throwsArgumentError);
-    expect(() => toTimeOfDay('12'), throwsArgumentError);
-    expect(() => toTimeOfDay(15), throwsArgumentError);
-    expect(() => toTimeOfDay(15.12), throwsArgumentError);
+    expect(() => parseTimeOfDay(<dynamic, dynamic>{}), throwsArgumentError);
+    expect(() => parseTimeOfDay('bla'), throwsArgumentError);
+    expect(() => parseTimeOfDay('12:32:12'), throwsArgumentError);
+    expect(() => parseTimeOfDay('12'), throwsArgumentError);
+    expect(() => parseTimeOfDay(15), throwsArgumentError);
+    expect(() => parseTimeOfDay(15.12), throwsArgumentError);
   });
 }

@@ -6,7 +6,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/widgets/indicator_card.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -16,7 +18,7 @@ import 'package:photo_view/photo_view.dart';
 class MapWidget extends StatefulWidget {
   final Floor _data;
   final ActionHandler _actionHandler;
-  final int _highlightAreaIndex;
+  final int? _highlightAreaIndex;
 
   static final LText _MAP_LOAD_FAIL_TEXT = LText(const {
     'en': "Could not load the festival map. Please make sure you're connected to the Internet.",
@@ -30,11 +32,11 @@ class MapWidget extends StatefulWidget {
   static const _MAX_INDICATOR_ALIGNMENT = 0.85;
   static const _MAP_MOVE_ANIMATION_DURATION = Duration(milliseconds: 500);
 
-  MapWidget(
+  const MapWidget(
     this._data,
     this._actionHandler,
     this._highlightAreaIndex, {
-    final Key key,
+    final Key? key,
   }) : super(key: key);
 
   @override
@@ -42,35 +44,48 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixin {
-  PhotoViewController _controller;
-  StreamSubscription _controllerOutputStreamSubscription;
-  FloorArea _activeArea;
-  Offset _indicatorPosition;
-  AlignmentDirectional _indicatorAlignment;
-  Size _lastKnownSize;
+  final PhotoViewController _controller = PhotoViewController();
+  late final StreamSubscription<Object?>? _controllerOutputStreamSubscription;
+  FloorArea? _activeArea;
+  Offset? _indicatorPosition;
+  AlignmentDirectional? _indicatorAlignment;
+  Size? _lastKnownSize;
 
-  AnimationController _mapMoveAnimationController;
-  Animation<Offset> _mapMoveAnimation;
-  FloorArea _mapMoveTargetArea;
+  late final AnimationController _mapMoveAnimationController = AnimationController(
+    duration: MapWidget._MAP_MOVE_ANIMATION_DURATION,
+    vsync: this,
+  )..addListener(() {
+    final mapMoveTargetArea = _mapMoveTargetArea;
+    final mapMoveAnimation = _mapMoveAnimation;
+    if (mapMoveTargetArea == null || mapMoveAnimation == null) return;
+
+    _controller.position = mapMoveAnimation.value;
+    if (_mapMoveAnimationController.isCompleted &&
+        _calculateIndicatorCoordinates(mapMoveTargetArea)) {
+      setState(() {
+        _activeArea = _mapMoveTargetArea;
+        _mapMoveTargetArea = null;
+        _mapMoveAnimation = null;
+      });
+    }
+  });
+
+  Animation<Offset>? _mapMoveAnimation;
+  FloorArea? _mapMoveTargetArea;
 
   @override
   void initState() {
     super.initState();
-    _controller = PhotoViewController();
-    _controllerOutputStreamSubscription = _controller.outputStateStream.listen(_onMapControllerEvent);
+    _controllerOutputStreamSubscription =
+        _controller.outputStateStream.listen(_onMapControllerEvent);
+  }
 
-    _mapMoveAnimationController = AnimationController(duration: MapWidget._MAP_MOVE_ANIMATION_DURATION, vsync: this);
-    _mapMoveAnimationController.addListener(() {
-      _controller.position = _mapMoveAnimation.value;
-      if (_mapMoveAnimationController.isCompleted && _calculateIndicatorCoordinates(_mapMoveTargetArea)) {
-        setState(() {
-          _activeArea = _mapMoveTargetArea;
-        });
-      }
-    });
-
-    if (widget._highlightAreaIndex != null) {
-      _activeArea = widget._data.areas[widget._highlightAreaIndex];
+  @override
+  void didUpdateWidget(final MapWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final highlightAreaIndex = widget._highlightAreaIndex;
+    if (highlightAreaIndex != null && highlightAreaIndex != oldWidget._highlightAreaIndex) {
+      _activeArea = widget._data.areas[highlightAreaIndex];
     }
   }
 
@@ -83,7 +98,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     ImageProvider imageProvider;
     if (path.startsWith('http')) {
       final url = Uri.parse(widget._data.url.get(locale)).replace(
-        queryParameters: {'version': widget._data.version.toString()},
+        queryParameters: <String, String>{'version': '${widget._data.version}'},
       );
       imageProvider = CachedNetworkImageProvider(url.toString());
     } else {
@@ -97,18 +112,25 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
         initialScale: widget._data.initialScale ?? PhotoViewComputedScale.contained,
         minScale: PhotoViewComputedScale.contained,
         maxScale: widget._data.maxScale ?? 1.0,
-        backgroundDecoration: BoxDecoration(color: Colors.white),
+        backgroundDecoration: const BoxDecoration(color: Colors.white),
         filterQuality: FilterQuality.medium,
-        loadFailedChild: _buildLoadFailedChild(),
+        errorBuilder: _buildLoadFailedChild,
         onTapUp: _onTapUp,
       ),
     ];
 
-    final scale = _controller.value?.scale;
+    final scale = _controller.value.scale;
     if (scale != null) {
+      if (kDebugMode && _lastKnownSize != null) {
+        stackChildren.add(CustomPaint(
+          painter: _AreaPainter(widget._data.areas, _areaCoordinatesToMap, theme),
+        ));
+      }
+
       for (final area in widget._data.areas) {
         final size = scale * area.buttonSize;
-        final location = _areaCoordinatesToMap(area.center).translate(-2 * size, -size / 2);
+        final location = _areaCoordinatesToMap(area.center)
+            ?.translate(-2 * size, -size / 2);
 
         final areaWidgets = <Widget>[
           SizedBox.fromSize(
@@ -126,66 +148,67 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 
         final text = area.title.get(locale);
         if (text.isNotEmpty) {
-          final titleFontSize = area.titleFontSize ?? theme.textTheme.headline1.fontSize;
+          final titleFontSize = area.titleFontSize ?? theme.textTheme.headline1?.fontSize;
           areaWidgets.add(Text(
             text,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyText2.copyWith(
+            style: theme.textTheme.bodyText2?.copyWith(
               fontFamily: MAP_FONT_FAMILY,
-              fontSize: scale * titleFontSize,
+              fontSize: titleFontSize != null ? scale * titleFontSize : null,
             ),
           ));
         }
 
-        stackChildren.add(Positioned(
-          left: location.dx,
-          top: location.dy,
-          width: 4 * size,
-          child: IgnorePointer(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: areaWidgets,
+        if (location != null) {
+          stackChildren.add(Positioned(
+            left: location.dx,
+            top: location.dy,
+            width: 4 * size,
+            child: IgnorePointer(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: areaWidgets,
+              ),
             ),
-          ),
-        ));
-      };
+          ));
+        }
+      }
 
       for (final text in widget._data.text) {
         final location = _areaCoordinatesToMap(text.location);
-        stackChildren.add(Positioned(
-          left: location.dx,
-          top: location.dy,
-          child: Transform.rotate(
-            angle: (2.0 * math.pi) * text.angle / 360.0,
-            child: Text(
-              text.text.get(locale),
-              textAlign: text.textAlign,
-              textScaleFactor: scale,
-              style: theme.textTheme.caption.copyWith(
-                fontFeatures: [FontFeature.enable('smcp')], // small caps
-                fontSize: text.fontSize ?? theme.textTheme.headline2.fontSize,
+        if (location != null) {
+          stackChildren.add(Positioned(
+            left: location.dx,
+            top: location.dy,
+            child: Transform.rotate(
+              angle: (2.0 * math.pi) * text.angle / 360.0,
+              child: Text(
+                text.text.get(locale),
+                textAlign: text.textAlign,
+                textScaleFactor: scale,
+                style: theme.textTheme.caption?.copyWith(
+                  fontFeatures: const [FONT_FEATURE_SMALL_CAPS],
+                  fontSize: text.fontSize ?? theme.textTheme.headline2?.fontSize,
+                ),
               ),
             ),
-          ),
-        ));
-      };
+          ));
+        }
+      }
     }
 
-    if (kDebugMode && _lastKnownSize != null) {
-      stackChildren.add(CustomPaint(
-        painter: _AreaPainter(widget._data.areas, _areaCoordinatesToMap, theme),
-      ));
-    }
-
-    if (_activeArea != null && _indicatorPosition != null && _indicatorAlignment != null) {
-      final title = _activeArea.actionTitle.get(locale);
-      final alignment = _indicatorAlignment.resolve(Directionality.of(context));
+    final activeArea = _activeArea;
+    final indicatorPosition = _indicatorPosition;
+    final indicatorAlignment = _indicatorAlignment;
+    if (activeArea != null && indicatorPosition != null && indicatorAlignment != null) {
+      final title = activeArea.actionTitle.get(locale);
+      final alignment = indicatorAlignment.resolve(Directionality.of(context));
       if (title.isNotEmpty) {
-        final action = _activeArea.action?.get(locale);
-        final hasAction = action?.isNotEmpty ?? false;
+        final action = activeArea.action.get(locale);
+        final hasAction = action.isNotEmpty;
         stackChildren.add(Positioned.fromRect(
           rect: Rect.fromCenter(
-            center: _indicatorPosition.translate(0, -alignment.y * (MapWidget._POPUP_HEIGHT / 2.0 + MapWidget._INDICATOR_LENGTH)),
+            center: indicatorPosition.translate(0, -alignment.y * (MapWidget._POPUP_HEIGHT / 2.0 + MapWidget._INDICATOR_LENGTH)),
             width: MapWidget._POPUP_WIDTH,
             height: MapWidget._POPUP_HEIGHT,
           ),
@@ -193,14 +216,15 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
             indicator: Indicator(
               width: MapWidget._INDICATOR_WIDTH,
               length: MapWidget._INDICATOR_LENGTH,
-              alignment: _indicatorAlignment,
+              alignment: indicatorAlignment,
             ),
-            child: FlatButton(
+            child: TextButton(
               onPressed: hasAction ? () => _onAreaPopupPressed(action) : null,
               child: Text(
-                _activeArea.actionTitle.get(locale),
-                style: theme.textTheme.headline4.copyWith(
-                  color: hasAction ? theme.primaryColor : null, fontFamily: MAP_FONT_FAMILY,
+                title,
+                style: theme.textTheme.headline4?.copyWith(
+                  color: hasAction ? theme.primaryColor : null,
+                  fontFamily: MAP_FONT_FAMILY,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -215,28 +239,29 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildLoadFailedChild() => Builder(builder: (context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Text(
-        MapWidget._MAP_LOAD_FAIL_TEXT.get(Localizations.localeOf(context)),
-        textAlign: TextAlign.center,
-      ),
-    );
-  });
+  Widget _buildLoadFailedChild(final BuildContext context, final Object error,
+          final StackTrace? stackTrace) =>
+      Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Text(
+          MapWidget._MAP_LOAD_FAIL_TEXT.get(Localizations.localeOf(context)),
+          textAlign: TextAlign.center,
+        ),
+      );
 
   void _onMapControllerEvent(final PhotoViewControllerValue value) {
-    _lastKnownSize = context.findRenderObject().paintBounds.size;
+    _lastKnownSize = context.findRenderObject()?.paintBounds.size;
 
-    if (_activeArea != null && !_calculateIndicatorCoordinates(_activeArea)) {
+    final activeArea = _activeArea;
+    if (activeArea != null && !_calculateIndicatorCoordinates(activeArea)) {
       _deselectArea();
     }
     setState(() {});
   }
 
   void _onTapUp(final BuildContext context, final TapUpDetails tapUpDetails, final PhotoViewControllerValue controllerValue) {
-    _lastKnownSize = context.findRenderObject().paintBounds.size;
+    _lastKnownSize = context.findRenderObject()?.paintBounds.size;
 
     if (_mapMoveAnimationController.isAnimating) {
       return;
@@ -246,7 +271,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     _selectArea(area);
   }
 
-  void _selectArea(final FloorArea area) {
+  void _selectArea(final FloorArea? area) {
     if (area != null && area != _activeArea) {
       final isInView = _calculateIndicatorCoordinates(area);
       if (isInView) {
@@ -265,53 +290,80 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   }
 
   void _animateAreaMapMove(final FloorArea targetArea) {
-    final moveTo = -targetArea.center * _controller.scale;
+    final scale = _controller.scale;
+    if (scale == null) return;
+
+    final moveTo = -targetArea.center * scale;
     _mapMoveAnimation = Tween(begin: _controller.position, end: moveTo).animate(_mapMoveAnimationController);
     _mapMoveAnimationController.forward(from: _mapMoveAnimationController.lowerBound);
     _mapMoveTargetArea = targetArea;
   }
 
-  FloorArea _determinePressedArea(final Offset tapPosition, final PhotoViewControllerValue controllerValue) {
+  FloorArea? _determinePressedArea(final Offset tapPosition, final PhotoViewControllerValue controllerValue) {
     final position = _mapCoordinatesToArea(tapPosition, controllerValue);
+    if (position == null) return null;
 
-    return widget._data.areas.firstWhere(
+    return widget._data.areas.firstWhereOrNull(
       (area) => area.contains(position),
-      orElse: () => null,
     );
   }
 
+  /// Calculate the indicator coordinates for a [FloorArea] and stores them in
+  /// [_indicatorAlignment] and [_indicatorPosition]. Returns `true` iff the
+  /// given area is currently in view.
   bool _calculateIndicatorCoordinates(final FloorArea area) {
+    final lastKnownSize = _lastKnownSize;
+    if (lastKnownSize == null) return false;
+
     // TODO calculate the required scale and zoom to that scale if necessary
     final areaCenter = _areaCoordinatesToMap(area.center);
+    if (areaCenter == null) {
+      return false;
+    }
+
     final verticalTranslation = (areaCenter.dy - MapWidget._INDICATOR_LENGTH - MapWidget._POPUP_PADDING.top) - MapWidget._POPUP_HEIGHT;
-    if (verticalTranslation < -(MapWidget._POPUP_HEIGHT + MapWidget._INDICATOR_LENGTH) || verticalTranslation > (_lastKnownSize.height - MapWidget._POPUP_HEIGHT - MapWidget._INDICATOR_LENGTH)) {
+    if (verticalTranslation < -(MapWidget._POPUP_HEIGHT + MapWidget._INDICATOR_LENGTH) || verticalTranslation > (lastKnownSize.height - MapWidget._POPUP_HEIGHT - MapWidget._INDICATOR_LENGTH)) {
       return false;
     }
 
     final doHorizontalFlip = verticalTranslation < 0.0;
 
     final leftTranslation = (MapWidget._POPUP_WIDTH / 2.0 - (areaCenter.dx - MapWidget._POPUP_PADDING.left)) / (MapWidget._POPUP_WIDTH / 2.0);
-    final rightTranslation = (MapWidget._POPUP_WIDTH / 2.0 - (_lastKnownSize.width - areaCenter.dx - MapWidget._POPUP_PADDING.right)) / (MapWidget._POPUP_WIDTH / 2.0);
+    final rightTranslation = (MapWidget._POPUP_WIDTH / 2.0 - (lastKnownSize.width - areaCenter.dx - MapWidget._POPUP_PADDING.right)) / (MapWidget._POPUP_WIDTH / 2.0);
     if (leftTranslation > MapWidget._MAX_INDICATOR_ALIGNMENT || rightTranslation > MapWidget._MAX_INDICATOR_ALIGNMENT) {
       return false;
     }
 
     final horizontalTranslation = leftTranslation > 0 ? -leftTranslation : (rightTranslation > 0 ? rightTranslation : 0.0);
 
-    _indicatorAlignment = AlignmentDirectional(horizontalTranslation, doHorizontalFlip ? -1.0 : 1.0);;
+    _indicatorAlignment = AlignmentDirectional(horizontalTranslation, doHorizontalFlip ? -1.0 : 1.0);
     _indicatorPosition = areaCenter.translate(-horizontalTranslation * MapWidget._POPUP_WIDTH / 2.0, 0.0);
     return true;
   }
   
-  Offset _areaCoordinatesToMap(final Offset c) {
-    final controllerValue = _controller.value ?? _controller.initial;
-    return (c * controllerValue.scale).translate(_lastKnownSize.width / 2.0, _lastKnownSize.height / 2.0) + controllerValue.position;
+  Offset? _areaCoordinatesToMap(final Offset c) {
+    final controllerValue = _controller.value;
+    final scale = controllerValue.scale;
+    final lastKnownSize = _lastKnownSize;
+    if (scale == null || lastKnownSize == null) {
+      return null;
+    }
+
+    return (c * scale)
+        .translate(lastKnownSize.width / 2.0, lastKnownSize.height / 2.0)
+        + controllerValue.position;
   }
 
-  Offset _mapCoordinatesToArea(final Offset c, [final PhotoViewControllerValue value]) {
-    final controllerValue = value ?? _controller.value ?? _controller.initial;
-    final controllerPosition = -controllerValue.position / controllerValue.scale;
-    final localPosition = c.translate(-_lastKnownSize.width / 2.0, -_lastKnownSize.height / 2.0) / controllerValue.scale;
+  Offset? _mapCoordinatesToArea(final Offset c, [final PhotoViewControllerValue? value]) {
+    final controllerValue = value ?? _controller.value;
+    final scale = controllerValue.scale;
+    final lastKnownSize = _lastKnownSize;
+    if (scale == null || lastKnownSize == null) {
+      return null;
+    }
+
+    final controllerPosition = -controllerValue.position / scale;
+    final localPosition = c.translate(-lastKnownSize.width / 2.0, -lastKnownSize.height / 2.0) / scale;
     return controllerPosition + localPosition;
   }
 
@@ -326,15 +378,15 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   @override
   void dispose() {
     _controllerOutputStreamSubscription?.cancel();
-    _controller?.dispose();
-    _mapMoveAnimationController?.dispose();
+    _controller.dispose();
+    _mapMoveAnimationController.dispose();
     super.dispose();
   }
 }
 
 class _AreaPainter extends CustomPainter {
   final List<FloorArea> _areas;
-  final Offset Function(Offset) _transformation;
+  final Offset? Function(Offset) _transformation;
   final Paint _strokePaint, _fillPaint;
 
   _AreaPainter(final Iterable<FloorArea> areas, this._transformation, final ThemeData theme)
@@ -352,9 +404,11 @@ class _AreaPainter extends CustomPainter {
   void paint(final Canvas canvas, final Size size) {
     for (final area in _areas) {
       final path = area.getTransformedPath(_transformation);
-      canvas.drawPath(path, _fillPaint);
-      canvas.drawPath(path, _strokePaint);
-    };
+      if (path != null) {
+        canvas.drawPath(path, _fillPaint);
+        canvas.drawPath(path, _strokePaint);
+      }
+    }
   }
 
   @override

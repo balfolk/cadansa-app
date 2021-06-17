@@ -2,12 +2,14 @@ import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 abstract class PageData {
   final LText _title;
   final String _icon;
 
-  PageData._(this._title, this._icon);
+  const PageData._(this._title, this._icon);
 
   factory PageData.parse(final dynamic json, final EventConstants eventConstants) {
     final title = LText(json['title']);
@@ -31,6 +33,7 @@ abstract class PageData {
   String get icon => _icon;
 }
 
+@immutable
 class MapPageData extends PageData {
   final MapData _mapData;
 
@@ -41,6 +44,7 @@ class MapPageData extends PageData {
   MapData get mapData => _mapData;
 }
 
+@immutable
 class ProgrammePageData extends PageData {
   final Programme _programme;
 
@@ -51,6 +55,7 @@ class ProgrammePageData extends PageData {
   Programme get programme => _programme;
 }
 
+@immutable
 class InfoPageData extends PageData {
   final LText _content;
 
@@ -61,6 +66,7 @@ class InfoPageData extends PageData {
   LText get content => _content;
 }
 
+@immutable
 class FeedPageData extends PageData {
   final LText _feedUrl;
 

@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 const _offsetToArmed = 100.0;
 
 class Refresher extends StatelessWidget {
-  final Future<void> Function() onRefresh;
+  final Future<void> Function()? onRefresh;
   final Widget child;
 
-  Refresher({
-    @required this.onRefresh,
-    @required this.child,
+  const Refresher({
+    required this.onRefresh,
+    required this.child,
   });
 
   @override
@@ -26,7 +26,7 @@ class Refresher extends StatelessWidget {
 
   Future<void> _onRefresh() async {
     _hapticResponse();
-    await onRefresh();
+    await onRefresh?.call();
   }
 
   void _hapticResponse() {
@@ -38,7 +38,7 @@ class _MyRefreshIndicator extends StatelessWidget {
   final IndicatorController controller;
   final Widget child;
 
-  _MyRefreshIndicator({@required this.controller, @required this.child});
+  const _MyRefreshIndicator({required this.controller, required this.child});
 
   @override
   Widget build(final BuildContext context) {
@@ -47,7 +47,7 @@ class _MyRefreshIndicator extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        double progress;
+        double? progress;
         if (controller.isDragging || controller.isHiding) {
           progress = (controller.value - startDrawingPosition) / startDrawingPosition;
         } else if (controller.isArmed) {

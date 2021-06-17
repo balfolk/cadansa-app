@@ -1,50 +1,54 @@
 import 'package:cadansa_app/data/parse_utils.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 
+@immutable
 class GlobalConfig {
   final LText title;
-  final LText logoUri;
+  final LText? logoUri;
   final List<EventsSection> sections;
 
   GlobalConfig(final dynamic json)
       : title = LText(json['title']),
         logoUri = LText(json['logo']),
-        sections = List.unmodifiable(json['eventSections']?.map((s) => EventsSection(s)) ?? []);
+        sections = parseList(json['eventSections'], (dynamic s) => EventsSection(s));
 
-  List<GlobalEvent> get allEvents => sections
-      .fold(const Iterable<GlobalEvent>.empty(), (l, section) => l.followedBy(section.events))
-      .toList();
+  List<GlobalEvent> get allEvents => List.unmodifiable(
+      sections.map((s) => s.events).expand<GlobalEvent>((events) => events));
 }
 
+@immutable
 class EventsSection {
   final LText title;
   final List<GlobalEvent> events;
 
   EventsSection(final dynamic json)
       : title = LText(json['title']),
-        events = List.unmodifiable(json['events']?.map((e) => GlobalEvent(e)) ?? []);
+        events = parseList(json['events'], (dynamic e) => GlobalEvent(e));
 }
 
+@immutable
 class GlobalEvent {
   final LText title, subtitle;
-  final String avatarUri;
+  final String? avatarUri;
   final String configUri;
-  final int primarySwatchIndex, _accentColorIndex;
-  final List<Locale> supportedLocales;
+  final int? primarySwatchIndex, _accentColorIndex;
+  final List<Locale>? supportedLocales;
 
   GlobalEvent(final dynamic json)
       : title = LText(json['title']),
         subtitle = LText(json['subtitle']),
-        avatarUri = json['avatar'],
-        configUri = json['config'],
-        primarySwatchIndex = json['primarySwatchIndex'],
-        _accentColorIndex = json['accentColorIndex'],
+        avatarUri = json['avatar'] as String?,
+        configUri = json['config'] as String,
+        primarySwatchIndex = json['primarySwatchIndex'] as int?,
+        _accentColorIndex = json['accentColorIndex'] as int?,
         supportedLocales = json['locales'] != null
-            ? List.unmodifiable(json['locales'].map((l) => Locale(l[0], l[1])))
+            ? parseList(json['locales'], parseLocale)
             : null;
 
-  MaterialColor get primarySwatch => Colors.primaries[primarySwatchIndex];
+  MaterialColor? get primarySwatch =>
+      getPrimarySwatch(primarySwatchIndex);
 
-  Color get accentColor => Colors.accents[_accentColorIndex];
-
+  Color? get accentColor =>
+      getAccentColor(_accentColorIndex);
 }

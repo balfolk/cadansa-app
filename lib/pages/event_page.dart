@@ -14,11 +14,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CaDansaEventPage extends StatefulWidget {
   final Event _event;
-  final int _initialIndex;
-  final Widget Function(BuildContext Function()) _buildDrawer;
+  final int? _initialIndex;
+  final Widget? Function(BuildContext Function()) _buildDrawer;
 
-  CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer,
-      {final Key key})
+  const CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer,
+      {final Key? key})
       : super(key: key);
 
   @override
@@ -26,30 +26,22 @@ class CaDansaEventPage extends StatefulWidget {
 }
 
 class _CaDansaEventPageState extends State<CaDansaEventPage> {
-  int _currentIndex;
+  int _currentIndex = _DEFAULT_PAGE_INDEX;
 
-  int _highlightAreaFloorIndex, _highlightAreaIndex;
+  int? _highlightAreaFloorIndex, _highlightAreaIndex;
 
-  PageHooks _pageHooks;
-  IndexedPageController _programmePageController;
+  late final PageHooks _pageHooks = PageHooks(
+    buildDrawer: (contextGetter) => widget._buildDrawer(contextGetter),
+    buildBottomBar: _buildBottomNavigationBar,
+    actionHandler: _handleAction,
+  );
+  late final IndexedPageController _programmePageController = IndexedPageController(widget._initialIndex);
 
   static const _DEFAULT_PAGE_INDEX = 0;
   static const _ACTION_SEPARATOR = ':',
       _ACTION_PAGE = 'page',
       _ACTION_URL = 'url',
       _ACTION_AREA = 'area';
-
-  @override
-  void initState() {
-    super.initState();
-    _pageHooks = PageHooks(
-      buildDrawer: (contextGetter) => widget._buildDrawer(contextGetter),
-      buildBottomBar: _buildBottomNavigationBar,
-      actionHandler: _handleAction,
-    );
-    _programmePageController = IndexedPageController();
-    _setIndex(widget._initialIndex);
-  }
 
   @override
   void didUpdateWidget(final CaDansaEventPage oldWidget) {
@@ -61,7 +53,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     _setIndex(_currentIndex);
   }
 
-  void _setIndex(int newIndex) {
+  void _setIndex(int? newIndex) {
     newIndex = newIndex?.clamp(0, widget._event.pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
     if (newIndex != _currentIndex) {
       _currentIndex = newIndex;
@@ -83,7 +75,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     } else if (pageData is FeedPageData) {
       return FeedPage(widget._event.title, pageData.feedUrl, _pageHooks, key: key);
     }
-    return null;
+    throw StateError('Unknown page data object $pageData');
   }
 
   Widget _buildBottomNavigationBar() {
@@ -104,9 +96,9 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     );
   }
 
-  void _handleAction(final String action) {
-    final split = action.split(_ACTION_SEPARATOR);
-    if (split.isEmpty) {
+  void _handleAction(final String? action) {
+    final split = action?.split(_ACTION_SEPARATOR);
+    if (action == null || split == null || split.isEmpty) {
       debugPrint('Illegal action: $action');
       return;
     }
@@ -128,7 +120,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     }
   }
 
-  void _selectPage(final int pageIndex) {
+  void _selectPage(final int? pageIndex) {
     if (pageIndex == null || pageIndex < 0 || pageIndex >= widget._event.pages.length) return;
 
     setState(() {
@@ -136,16 +128,16 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     });
   }
 
-  void _launchUrl(final String url) {
+  void _launchUrl(final String? url) {
     if (url != null && url.isNotEmpty) {
       launch(url);
     }
   }
 
-  void _selectArea(final String areaId) {
+  void _selectArea(final String? areaId) {
     if (areaId == null) return;
 
-    int pageIndex, floorIndex, areaIndex;
+    int? pageIndex, floorIndex, areaIndex;
     for (final page in widget._event.pages.asMap().entries) {
       if (page.value is MapPageData) {
         for (final floor in (page.value as MapPageData).mapData.floors.asMap().entries) {
@@ -162,7 +154,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
 
     if (pageIndex != null && floorIndex != null && areaIndex != null) {
       setState(() {
-        _currentIndex = pageIndex;
+        _currentIndex = pageIndex!;
         _highlightAreaFloorIndex = floorIndex;
         _highlightAreaIndex = areaIndex;
       });

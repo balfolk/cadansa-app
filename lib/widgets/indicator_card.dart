@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class IndicatorCard extends StatelessWidget {
-  final Color color;
-  final double elevation;
+  final Color? color;
+  final double? elevation;
   final Widget child;
   final Indicator indicator;
 
   static const double _defaultElevation = 1.0;
   static const double _defaultBorderRadius = 4.0;
 
-  IndicatorCard({
-    final Key key,
+  const IndicatorCard({
+    final Key? key,
     this.color,
     this.elevation,
-    @required this.child,
-    @required this.indicator
-  })
-      : assert(elevation == null || elevation >= 0.0),
+    required this.child,
+    required this.indicator,
+  })  : assert(elevation == null || elevation >= 0.0),
         super(key: key);
 
   @override
@@ -47,10 +46,12 @@ class Indicator {
 
   static const _defaultAlignment = AlignmentDirectional.bottomCenter;
 
-  const Indicator({this.width, this.length, this.alignment = _defaultAlignment})
-      : assert(width == null || width >= 0.0),
-        assert(length == null || length >= 0.0),
-        assert(alignment != null);
+  const Indicator({
+    required this.width,
+    required this.length,
+    this.alignment = _defaultAlignment,
+  })  : assert(width >= 0.0),
+        assert(length >= 0.0);
 
   bool get hasStart => alignment.start == -1.0;
 
