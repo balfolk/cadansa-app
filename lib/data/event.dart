@@ -6,12 +6,12 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Event {
-  final GlobalEvent _globalEvent;
-  final BuiltList<PageData> pages;
-
   Event(this._globalEvent, final dynamic json)
       : pages = parseList(json['pages'],
           (dynamic p) => PageData.parse(p, EventConstants(json)));
+
+  final GlobalEvent _globalEvent;
+  final BuiltList<PageData> pages;
 
   LText get title => _globalEvent.title;
   DateTime get startDate => _globalEvent.startDate;
@@ -20,14 +20,14 @@ class Event {
 
 @immutable
 class EventConstants {
-  final BuiltMap<String, WorkshopLevel> _levels;
-  final BuiltMap<String, ProgrammeItemKind> _kinds;
-
   EventConstants(final dynamic json)
       : _levels = parseMap(json['workshopLevels'],
             (dynamic value) => WorkshopLevel._parse(value)),
         _kinds = parseMap(json['itemKinds'],
             (dynamic value) => ProgrammeItemKind._parse(value));
+
+  final BuiltMap<String, WorkshopLevel> _levels;
+  final BuiltMap<String, ProgrammeItemKind> _kinds;
 
   WorkshopLevel getLevel(final String? number) {
     return _levels[number] ?? const WorkshopLevel._empty();
@@ -40,9 +40,6 @@ class EventConstants {
 
 @immutable
 class WorkshopLevel {
-  final LText _name;
-  final String? _icon;
-
   WorkshopLevel._parse(final dynamic json)
       : _name = LText(json['name']),
         _icon = json['icon'] as String?;
@@ -51,6 +48,9 @@ class WorkshopLevel {
   const WorkshopLevel._empty()
       : _name = const LText.empty(),
         _icon = null;
+
+  final LText _name;
+  final String? _icon;
 
   LText get name => _name;
 
@@ -68,10 +68,6 @@ ProgrammeItemKindShowIcon? _parseKindShown(final String? string) {
 
 @immutable
 class ProgrammeItemKind {
-  final LText _name;
-  final String? _icon;
-  final ProgrammeItemKindShowIcon? _showIcon;
-
   ProgrammeItemKind._parse(final dynamic json)
       : _name = LText(json['name']),
         _icon = json['icon'] as String?,
@@ -82,6 +78,10 @@ class ProgrammeItemKind {
       : _name = const LText.empty(),
         _icon = null,
         _showIcon = null;
+
+  final LText _name;
+  final String? _icon;
+  final ProgrammeItemKindShowIcon? _showIcon;
 
   LText get name => _name;
 

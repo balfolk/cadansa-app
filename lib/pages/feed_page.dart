@@ -11,12 +11,12 @@ import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/webfeed.dart';
 
 class FeedPage extends StatefulWidget {
+  const FeedPage(this._title, this._feedUrl, this._pageHooks, {final Key? key})
+      : super(key: key);
+
   final LText _title;
   final LText _feedUrl;
   final PageHooks _pageHooks;
-
-  const FeedPage(this._title, this._feedUrl, this._pageHooks, {final Key? key})
-      : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -129,9 +129,9 @@ class _FeedPageState extends State<FeedPage> {
 }
 
 class FeedItem extends StatelessWidget {
-  final RssItem _item;
-
   const FeedItem(this._item, {final Key? key}) : super(key: key);
+
+  final RssItem _item;
 
   @override
   Widget build(final BuildContext context) {

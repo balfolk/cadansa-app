@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 @immutable
 class GlobalConfig {
-  final LText title;
-  final LText? logoUri;
-  final BuiltList<EventsSection> sections;
-
   GlobalConfig(final dynamic json)
       : title = LText(json['title']),
         logoUri = LText(json['logo']),
         sections = parseList(json['eventSections'], (dynamic s) => EventsSection(s));
+
+  final LText title;
+  final LText? logoUri;
+  final BuiltList<EventsSection> sections;
 
   late final BuiltList<GlobalEvent> allEvents = BuiltList.of(
       sections.map((s) => s.events).expand<GlobalEvent>((events) => events));
@@ -20,23 +20,16 @@ class GlobalConfig {
 
 @immutable
 class EventsSection {
-  final LText title;
-  final BuiltList<GlobalEvent> events;
-
   EventsSection(final dynamic json)
       : title = LText(json['title']),
         events = parseList(json['events'], (dynamic e) => GlobalEvent(e));
+
+  final LText title;
+  final BuiltList<GlobalEvent> events;
 }
 
 @immutable
 class GlobalEvent {
-  final LText title;
-  final DateTime startDate, endDate;
-  final String? avatarUri;
-  final String configUri;
-  final int? primarySwatchIndex, _accentColorIndex;
-  final BuiltList<Locale>? supportedLocales;
-
   GlobalEvent(final dynamic json)
       : title = LText(json['title']),
         startDate = parseDate(json['startDate']),
@@ -48,6 +41,13 @@ class GlobalEvent {
         supportedLocales = json['locales'] != null
             ? parseList(json['locales'], parseLocale)
             : null;
+
+  final LText title;
+  final DateTime startDate, endDate;
+  final String? avatarUri;
+  final String configUri;
+  final int? primarySwatchIndex, _accentColorIndex;
+  final BuiltList<Locale>? supportedLocales;
 
   MaterialColor? get primarySwatch =>
       getPrimarySwatch(primarySwatchIndex);

@@ -14,6 +14,11 @@ import 'package:shimmer/shimmer.dart';
 enum EventTiming { past, present, future }
 
 class ProgrammePage extends StatefulWidget {
+  const ProgrammePage(this._title, this._programme, this._pageHooks,
+      this._pageController, this._eventTiming,
+      {final Key? key})
+      : super(key: key);
+
   final LText _title;
   final Programme _programme;
   final PageHooks _pageHooks;
@@ -23,11 +28,6 @@ class ProgrammePage extends StatefulWidget {
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
   );
-
-  const ProgrammePage(this._title, this._programme, this._pageHooks,
-      this._pageController, this._eventTiming,
-      {final Key? key})
-      : super(key: key);
 
   @override
   _ProgrammePageState createState() => _ProgrammePageState();

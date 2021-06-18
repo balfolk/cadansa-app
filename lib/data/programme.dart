@@ -6,31 +6,31 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Programme {
-  final BuiltList<ProgrammeDay> _days;
-
   const Programme._(this._days);
 
   Programme.parse(final dynamic json, final EventConstants constants)
       : this._(parseList(json['days'],
           (dynamic d) => ProgrammeDay.parse(d, constants)));
 
+  final BuiltList<ProgrammeDay> _days;
+
   BuiltList<ProgrammeDay> get days => _days;
 }
 
 @immutable
 class ProgrammeDay {
-  final LText _name;
-  final DateTime? _startsOn;
-  final BuiltList<ProgrammeItem> _items;
-
   const ProgrammeDay._(this._name, this._startsOn, this._items);
 
   ProgrammeDay.parse(final dynamic json, final EventConstants constants)
       : this._(
-            LText(json['name']),
-            parseDateTime(json['startsOn']),
-            parseList(json['items'],
-                (dynamic b) => ProgrammeItem.parse(b, constants)));
+      LText(json['name']),
+      parseDateTime(json['startsOn']),
+      parseList(json['items'],
+              (dynamic b) => ProgrammeItem.parse(b, constants)));
+
+  final LText _name;
+  final DateTime? _startsOn;
+  final BuiltList<ProgrammeItem> _items;
 
   LText get name => _name;
 
@@ -41,6 +41,33 @@ class ProgrammeDay {
 
 @immutable
 class ProgrammeItem {
+  const ProgrammeItem._(
+      this._name,
+      this._startTime,
+      this._endTime,
+      this._location,
+      this._countries,
+      this._teacher,
+      this._level,
+      this._kind,
+      this._description,
+      this._website,
+      );
+
+  ProgrammeItem.parse(final dynamic json, final EventConstants constants)
+      : this._(
+    LText(json['name']),
+    parseTimeOfDay(json['startTime']),
+    parseTimeOfDay(json['endTime']),
+    json['location'] != null ? Location._parse(json['location']) : null,
+    parseList(json['countries'], (dynamic c) => c as String),
+    LText(json['teacher']),
+    constants.getLevel(json['level']?.toString()),
+    constants.getKind(json['kind']?.toString()),
+    LText(json['description']),
+    Website._parse(json['website']),
+  );
+
   final LText _name;
   final TimeOfDay? _startTime, _endTime;
   final Location? _location;
@@ -50,33 +77,6 @@ class ProgrammeItem {
   final ProgrammeItemKind _kind;
   final LText _description;
   final Website _website;
-
-  const ProgrammeItem._(
-    this._name,
-    this._startTime,
-    this._endTime,
-    this._location,
-    this._countries,
-    this._teacher,
-    this._level,
-    this._kind,
-    this._description,
-    this._website,
-  );
-
-  ProgrammeItem.parse(final dynamic json, final EventConstants constants)
-      : this._(
-          LText(json['name']),
-          parseTimeOfDay(json['startTime']),
-          parseTimeOfDay(json['endTime']),
-          json['location'] != null ? Location._parse(json['location']) : null,
-          parseList(json['countries'], (dynamic c) => c as String),
-          LText(json['teacher']),
-          constants.getLevel(json['level']?.toString()),
-          constants.getKind(json['kind']?.toString()),
-          LText(json['description']),
-          Website._parse(json['website']),
-        );
 
   LText get name => _name;
 
@@ -101,23 +101,19 @@ class ProgrammeItem {
 
 @immutable
 class Location {
-  final LText title;
-  final String? action;
-
   const Location._(this.title, this.action);
 
   factory Location._parse(final dynamic json) => Location._(
     LText(json['title']),
     json['action'] as String?,
   );
+
+  final LText title;
+  final String? action;
 }
 
 @immutable
 class Website {
-  final LText? _url;
-  final String? _icon;
-  final LText? _text;
-
   factory Website._parse(final dynamic json) {
     if (json == null) return const Website._empty();
     return Website._parseObject(json);
@@ -133,6 +129,10 @@ class Website {
       : _url = null,
         _icon = null,
         _text = null;
+
+  final LText? _url;
+  final String? _icon;
+  final LText? _text;
 
   LText? get text => _text;
 

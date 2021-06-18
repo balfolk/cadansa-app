@@ -39,10 +39,10 @@ class _EmptyLText implements LText {
 
 @immutable
 class _StringLText implements LText {
-  final String _string;
-
   @literal
   const _StringLText(this._string);
+
+  final String _string;
 
   @override
   String get(final Locale locale) =>
@@ -51,14 +51,14 @@ class _StringLText implements LText {
 
 @immutable
 class _MapLText implements LText {
-  final BuiltMap<Locale, String> _strings;
-
   _MapLText(final Map<dynamic, dynamic> map)
       : _strings = BuiltMap.build((builder) => map.forEach((dynamic l, dynamic str) {
     final localeParts = (l?.toString() ?? '').split('_');
     builder[Locale(localeParts[0], localeParts.elementAtOrNull(1))] =
         str?.toString() ?? '';
   }));
+
+  final BuiltMap<Locale, String> _strings;
 
   @override
   String get(final Locale locale) => _strings[locale]

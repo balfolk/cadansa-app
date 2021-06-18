@@ -2,15 +2,15 @@ import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 
 class LocaleWidgets extends StatelessWidget {
-  final Iterable<Locale> locales;
-  final Locale activeLocale;
-  final void Function(Locale) setLocale;
-
   const LocaleWidgets({
     required this.locales,
     required this.activeLocale,
     required this.setLocale,
   });
+
+  final Iterable<Locale> locales;
+  final Locale activeLocale;
+  final void Function(Locale) setLocale;
 
   @override
   Widget build(final BuildContext context) {
@@ -26,15 +26,15 @@ class LocaleWidgets extends StatelessWidget {
 }
 
 class _LocaleWidget extends StatelessWidget {
-  final Locale locale;
-  final bool isActive;
-  final void Function()? onPressed;
-
   const _LocaleWidget({
     required this.locale,
     required this.isActive,
     required this.onPressed,
   });
+
+  final Locale locale;
+  final bool isActive;
+  final void Function()? onPressed;
 
   @override
   Widget build(final BuildContext context) {

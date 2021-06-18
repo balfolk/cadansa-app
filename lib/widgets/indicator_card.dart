@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class IndicatorCard extends StatelessWidget {
-  final Color? color;
-  final double? elevation;
-  final Widget child;
-  final Indicator indicator;
-
-  static const double _defaultElevation = 1.0;
-  static const double _defaultBorderRadius = 4.0;
-
   const IndicatorCard({
     final Key? key,
     this.color,
@@ -18,6 +10,14 @@ class IndicatorCard extends StatelessWidget {
     required this.indicator,
   })  : assert(elevation == null || elevation >= 0.0),
         super(key: key);
+
+  final Color? color;
+  final double? elevation;
+  final Widget child;
+  final Indicator indicator;
+
+  static const double _defaultElevation = 1.0;
+  static const double _defaultBorderRadius = 4.0;
 
   @override
   Widget build(final BuildContext context) {
@@ -41,17 +41,17 @@ class IndicatorCard extends StatelessWidget {
 
 @immutable
 class Indicator {
-  final double width, length;
-  final AlignmentDirectional alignment;
-
-  static const _defaultAlignment = AlignmentDirectional.bottomCenter;
-
   const Indicator({
     required this.width,
     required this.length,
     this.alignment = _defaultAlignment,
   })  : assert(width >= 0.0),
         assert(length >= 0.0);
+
+  final double width, length;
+  final AlignmentDirectional alignment;
+
+  static const _defaultAlignment = AlignmentDirectional.bottomCenter;
 
   bool get hasStart => alignment.start == -1.0;
 
@@ -80,14 +80,14 @@ class Indicator {
 
 @immutable
 class _IndicatorRectanglePainter extends CustomPainter {
+  const _IndicatorRectanglePainter(this._indicator, this._color,
+      this._elevation, this._borderRadius, this._textDirection);
+
   final Indicator _indicator;
   final Color _color;
   final double _elevation;
   final double _borderRadius;
   final TextDirection _textDirection;
-
-  const _IndicatorRectanglePainter(this._indicator, this._color,
-      this._elevation, this._borderRadius, this._textDirection);
 
   @override
   void paint(final Canvas canvas, final Size size) {

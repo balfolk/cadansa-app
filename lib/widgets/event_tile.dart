@@ -4,16 +4,16 @@ import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 
 class EventTile extends StatelessWidget {
-  final GlobalEvent event;
-  final VoidCallback onTap;
-  final bool isSelected;
-
   const EventTile({
     Key? key,
     required this.event,
     required this.isSelected,
     required this.onTap,
   }) : super(key: key);
+
+  final GlobalEvent event;
+  final VoidCallback onTap;
+  final bool isSelected;
 
   @override
   Widget build(final BuildContext context) {

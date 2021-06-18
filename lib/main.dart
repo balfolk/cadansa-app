@@ -56,15 +56,15 @@ void main() async {
 }
 
 class CaDansaApp extends StatefulWidget {
+  const CaDansaApp(
+      this._initialLocale,
+      this._initialPrimarySwatch,
+      this._initialAccentColor,
+      );
+
   final Locale? _initialLocale;
   final MaterialColor _initialPrimarySwatch;
   final Color? _initialAccentColor;
-
-  const CaDansaApp(
-    this._initialLocale,
-    this._initialPrimarySwatch,
-    this._initialAccentColor,
-  );
 
   @override
   _CaDansaAppState createState() => _CaDansaAppState();
@@ -402,9 +402,9 @@ class LoadingPage extends StatelessWidget {
 }
 
 class TimeoutPage extends StatelessWidget {
-  final VoidCallback _onRefresh;
-
   const TimeoutPage(this._onRefresh);
+
+  final VoidCallback _onRefresh;
 
   @override
   Widget build(final BuildContext context) {
@@ -434,10 +434,6 @@ class TimeoutPage extends StatelessWidget {
 }
 
 class _JsonCacheManager extends CacheManager {
-  static const key = 'jcm';
-
-  static late final _JsonCacheManager _instance = _JsonCacheManager._();
-
   factory _JsonCacheManager() {
     return _instance;
   }
@@ -447,4 +443,8 @@ class _JsonCacheManager extends CacheManager {
           key,
           stalePeriod: _CONFIG_LIFETIME,
         ));
+
+  static const key = 'jcm';
+
+  static late final _JsonCacheManager _instance = _JsonCacheManager._();
 }

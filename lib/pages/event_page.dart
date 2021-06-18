@@ -13,13 +13,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CaDansaEventPage extends StatefulWidget {
-  final Event _event;
-  final int? _initialIndex;
-  final Widget? Function(BuildContext Function()) _buildDrawer;
-
   const CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer,
       {final Key? key})
       : super(key: key);
+
+  final Event _event;
+  final int? _initialIndex;
+  final Widget? Function(BuildContext Function()) _buildDrawer;
 
   @override
   _CaDansaEventPageState createState() => _CaDansaEventPageState();
@@ -36,7 +36,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     actionHandler: _handleAction,
   );
   late final IndexedPageController _programmePageController =
-      IndexedPageController(widget._initialIndex);
+      IndexedPageController(index: widget._initialIndex);
   late EventTiming _eventTiming = _calculateEventTiming();
 
   static const _DEFAULT_PAGE_INDEX = 0;

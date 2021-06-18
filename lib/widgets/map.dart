@@ -16,6 +16,13 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:photo_view/photo_view.dart';
 
 class MapWidget extends StatefulWidget {
+  const MapWidget(
+      this._data,
+      this._actionHandler,
+      this._highlightAreaIndex, {
+        final Key? key,
+      }) : super(key: key);
+
   final Floor _data;
   final ActionHandler _actionHandler;
   final int? _highlightAreaIndex;
@@ -31,13 +38,6 @@ class MapWidget extends StatefulWidget {
   static const _POPUP_PADDING = EdgeInsets.all(5.0);
   static const _MAX_INDICATOR_ALIGNMENT = 0.85;
   static const _MAP_MOVE_ANIMATION_DURATION = Duration(milliseconds: 500);
-
-  const MapWidget(
-    this._data,
-    this._actionHandler,
-    this._highlightAreaIndex, {
-    final Key? key,
-  }) : super(key: key);
 
   @override
   _MapWidgetState createState() => _MapWidgetState();
@@ -384,11 +384,8 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   }
 }
 
+@immutable
 class _AreaPainter extends CustomPainter {
-  final List<FloorArea> _areas;
-  final Offset? Function(Offset) _transformation;
-  final Paint _strokePaint, _fillPaint;
-
   _AreaPainter(final Iterable<FloorArea> areas, this._transformation, final ThemeData theme)
       : _areas = List.of(areas),
         _strokePaint = Paint()
@@ -399,6 +396,10 @@ class _AreaPainter extends CustomPainter {
           ..color = theme.primaryColorLight.withOpacity(0.5)
           ..style = PaintingStyle.fill
           ..strokeWidth = 0.0;
+
+  final List<FloorArea> _areas;
+  final Offset? Function(Offset) _transformation;
+  final Paint _strokePaint, _fillPaint;
 
   @override
   void paint(final Canvas canvas, final Size size) {

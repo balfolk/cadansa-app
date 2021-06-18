@@ -5,19 +5,19 @@ import 'package:cadansa_app/widgets/map.dart';
 import 'package:flutter/material.dart';
 
 class MapPage extends StatefulWidget {
+  const MapPage(
+      this._title,
+      this._mapData,
+      this._pageHooks,
+      this._initialFloorIndex,
+      this._highlightAreaIndex, {
+        final Key? key,
+      }) : super(key: key);
+
   final LText _title;
   final MapData _mapData;
   final PageHooks _pageHooks;
   final int? _initialFloorIndex, _highlightAreaIndex;
-
-  const MapPage(
-    this._title,
-    this._mapData,
-    this._pageHooks,
-    this._initialFloorIndex,
-    this._highlightAreaIndex, {
-    final Key? key,
-  }) : super(key: key);
 
   @override
   _MapPageState createState() => _MapPageState();

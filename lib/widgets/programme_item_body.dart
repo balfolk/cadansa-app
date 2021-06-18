@@ -8,10 +8,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammeItemBody extends StatelessWidget {
+  const ProgrammeItemBody(this._item, this._actionHandler);
+
   final ProgrammeItem _item;
   final ActionHandler _actionHandler;
-
-  const ProgrammeItemBody(this._item, this._actionHandler);
 
   @override
   Widget build(final BuildContext context) {
@@ -69,10 +69,6 @@ class ProgrammeItemBody extends StatelessWidget {
 }
 
 class ProgrammeItemPropertyWidget extends StatelessWidget {
-  final IconData? _icon;
-  final String _text;
-  final VoidCallback? _onTap;
-
   const ProgrammeItemPropertyWidget({
     required final IconData? icon,
     required final String? text,
@@ -80,6 +76,10 @@ class ProgrammeItemPropertyWidget extends StatelessWidget {
   })  : _icon = icon,
         _text = text ?? '',
         _onTap = onTap;
+
+  final IconData? _icon;
+  final String _text;
+  final VoidCallback? _onTap;
 
   @override
   Widget build(final BuildContext context) {

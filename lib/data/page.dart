@@ -6,9 +6,6 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class PageData {
-  final LText _title;
-  final String _icon;
-
   const PageData._(this._title, this._icon);
 
   factory PageData.parse(final dynamic json, final EventConstants eventConstants) {
@@ -28,6 +25,9 @@ abstract class PageData {
     throw ArgumentError.value(json, 'json', "Page doesn't contain a type");
   }
 
+  final LText _title;
+  final String _icon;
+
   LText get title => _title;
 
   String get icon => _icon;
@@ -35,44 +35,44 @@ abstract class PageData {
 
 @immutable
 class MapPageData extends PageData {
-  final MapData _mapData;
-
   MapPageData._(final LText title, final String icon, final dynamic json)
       : _mapData = MapData.parse(json),
         super._(title, icon);
+
+  final MapData _mapData;
 
   MapData get mapData => _mapData;
 }
 
 @immutable
 class ProgrammePageData extends PageData {
-  final Programme _programme;
-
   ProgrammePageData._(final LText title, final String icon, final dynamic json, final EventConstants eventConstants)
       : _programme = Programme.parse(json, eventConstants),
         super._(title, icon);
+
+  final Programme _programme;
 
   Programme get programme => _programme;
 }
 
 @immutable
 class InfoPageData extends PageData {
-  final LText _content;
-
   InfoPageData._(final LText title, final String icon, final dynamic json)
       : _content = LText(json['content']),
         super._(title, icon);
+
+  final LText _content;
 
   LText get content => _content;
 }
 
 @immutable
 class FeedPageData extends PageData {
-  final LText _feedUrl;
-
   FeedPageData._(final LText title, final String icon, final dynamic json)
       : _feedUrl = LText(json['feedUrl']),
         super._(title, icon);
+
+  final LText _feedUrl;
 
   LText get feedUrl => _feedUrl;
 }

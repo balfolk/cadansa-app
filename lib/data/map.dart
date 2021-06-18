@@ -7,35 +7,28 @@ import 'package:meta/meta.dart';
 
 @immutable
 class MapData {
-  final BuiltList<Floor> _floors;
-
   const MapData._(this._floors);
 
   MapData.parse(final dynamic json)
-    : this._(parseList(json['floors'], (dynamic floor) => Floor.parse(floor)));
+      : this._(parseList(json['floors'], (dynamic floor) => Floor.parse(floor)));
+
+  final BuiltList<Floor> _floors;
 
   BuiltList<Floor> get floors => _floors;
 }
 
 @immutable
 class Floor {
-  final LText _title;
-  final LText _url;
-  final num? _version;
-  final double? _initialScale, _minScale, _maxScale;
-  final BuiltList<FloorArea> _areas;
-  final BuiltList<FloorText> _text;
-
   const Floor._(
-    this._title,
-    this._url,
-    this._version,
-    this._initialScale,
-    this._minScale,
-    this._maxScale,
-    this._areas,
-    this._text,
-  );
+      this._title,
+      this._url,
+      this._version,
+      this._initialScale,
+      this._minScale,
+      this._maxScale,
+      this._areas,
+      this._text,
+      );
 
   Floor.parse(final dynamic json) : this._(
       LText(json['title']),
@@ -46,6 +39,13 @@ class Floor {
       (json['maxScale'] as num?)?.toDouble(),
       parseList(json['areas'], (dynamic area) => FloorArea.parse(area)),
       parseList(json['text'], (dynamic area) => FloorText.parse(area)));
+
+  final LText _title;
+  final LText _url;
+  final num? _version;
+  final double? _initialScale, _minScale, _maxScale;
+  final BuiltList<FloorArea> _areas;
+  final BuiltList<FloorText> _text;
 
   LText get title => _title;
 
@@ -66,27 +66,17 @@ class Floor {
 
 @immutable
 class FloorArea {
-  final String? _id;
-  final BuiltList<Offset> _points;
-  final LText _title;
-  final double? _titleFontSize;
-  final String? _buttonIcon;
-  final double _buttonSize;
-  final LText _actionTitle;
-  final LText _action;
-  final Offset _center;
-
   const FloorArea._(
-    this._id,
-    this._points,
-    this._title,
-    this._titleFontSize,
-    this._buttonIcon,
-    this._buttonSize,
-    this._actionTitle,
-    this._action,
-    this._center,
-  );
+      this._id,
+      this._points,
+      this._title,
+      this._titleFontSize,
+      this._buttonIcon,
+      this._buttonSize,
+      this._actionTitle,
+      this._action,
+      this._center,
+      );
 
   FloorArea.parse(final dynamic json) : this._(
     json['id'] as String?,
@@ -99,6 +89,16 @@ class FloorArea {
     LText(json['action']),
     parseOffset(json['center']),
   );
+
+  final String? _id;
+  final BuiltList<Offset> _points;
+  final LText _title;
+  final double? _titleFontSize;
+  final String? _buttonIcon;
+  final double _buttonSize;
+  final LText _actionTitle;
+  final LText _action;
+  final Offset _center;
 
   String? get id => _id;
 
@@ -137,19 +137,13 @@ class FloorArea {
 
 @immutable
 class FloorText {
-  final Offset _location;
-  final double _angle;
-  final int _align;
-  final double? _fontSize;
-  final LText _text;
-
   const FloorText._(
-    this._location,
-    this._angle,
-    this._align,
-    this._fontSize,
-    this._text,
-  );
+      this._location,
+      this._angle,
+      this._align,
+      this._fontSize,
+      this._text,
+      );
 
   FloorText.parse(final dynamic json) : this._(
     parseOffset(json['location']),
@@ -158,6 +152,12 @@ class FloorText {
     (json['fontSize'] as num?)?.toDouble(),
     LText(json['text']),
   );
+
+  final Offset _location;
+  final double _angle;
+  final int _align;
+  final double? _fontSize;
+  final LText _text;
 
   Offset get location => _location;
 

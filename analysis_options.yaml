@@ -122,6 +122,7 @@ linter:
     provide_deprecation_message: true
     require_trailing_commas: true
     sort_child_properties_last: true
+    sort_constructors_first: true
     sort_pub_dependencies: true
     sort_unnamed_constructors_first: true
     throw_in_finally: true

@@ -6,12 +6,12 @@ import 'package:sanitize_html/sanitize_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
+  const InfoPage(this._title, this._content, this._pageHooks, {final Key? key})
+      : super(key: key);
+
   final LText _title;
   final LText _content;
   final PageHooks _pageHooks;
-
-  const InfoPage(this._title, this._content, this._pageHooks, {final Key? key})
-      : super(key: key);
 
   @override
   _InfoPageState createState() => _InfoPageState();
