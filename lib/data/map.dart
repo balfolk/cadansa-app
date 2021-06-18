@@ -1,19 +1,20 @@
 import 'dart:ui';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class MapData {
-  final List<Floor> _floors;
+  final BuiltList<Floor> _floors;
 
   const MapData._(this._floors);
 
   MapData.parse(final dynamic json)
     : this._(parseList(json['floors'], (dynamic floor) => Floor.parse(floor)));
 
-  List<Floor> get floors => _floors;
+  BuiltList<Floor> get floors => _floors;
 }
 
 @immutable
@@ -22,8 +23,8 @@ class Floor {
   final LText _url;
   final num? _version;
   final double? _initialScale, _minScale, _maxScale;
-  final List<FloorArea> _areas;
-  final List<FloorText> _text;
+  final BuiltList<FloorArea> _areas;
+  final BuiltList<FloorText> _text;
 
   const Floor._(
     this._title,
@@ -58,15 +59,15 @@ class Floor {
 
   double? get maxScale => _maxScale;
 
-  List<FloorArea> get areas => _areas;
+  BuiltList<FloorArea> get areas => _areas;
 
-  List<FloorText> get text => _text;
+  BuiltList<FloorText> get text => _text;
 }
 
 @immutable
 class FloorArea {
   final String? _id;
-  final List<Offset> _points;
+  final BuiltList<Offset> _points;
   final LText _title;
   final double? _titleFontSize;
   final String? _buttonIcon;
@@ -101,7 +102,7 @@ class FloorArea {
 
   String? get id => _id;
 
-  Path get path => Path()..addPolygon(_points, true);
+  Path get path => Path()..addPolygon(_points.toList(), true);
 
   Path? getTransformedPath(final Offset? Function(Offset) transformation) {
     final points = List<Offset>.unmodifiable(_points.map(transformation).whereNotNull());

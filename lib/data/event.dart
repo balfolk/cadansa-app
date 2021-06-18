@@ -1,21 +1,27 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class Event {
-  final LText title;
-  final List<PageData> pages;
+  final GlobalEvent _globalEvent;
+  final BuiltList<PageData> pages;
 
-  Event(this.title, final dynamic json)
+  Event(this._globalEvent, final dynamic json)
       : pages = parseList(json['pages'],
           (dynamic p) => PageData.parse(p, EventConstants(json)));
+
+  LText get title => _globalEvent.title;
+  DateTime get startDate => _globalEvent.startDate;
+  DateTime get endDate => _globalEvent.endDate;
 }
 
 @immutable
 class EventConstants {
-  final Map<String, WorkshopLevel> _levels;
-  final Map<String, ProgrammeItemKind> _kinds;
+  final BuiltMap<String, WorkshopLevel> _levels;
+  final BuiltMap<String, ProgrammeItemKind> _kinds;
 
   EventConstants(final dynamic json)
       : _levels = parseMap(json['workshopLevels'],

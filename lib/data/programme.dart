@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Programme {
-  final List<ProgrammeDay> _days;
+  final BuiltList<ProgrammeDay> _days;
 
   const Programme._(this._days);
 
@@ -13,14 +14,14 @@ class Programme {
       : this._(parseList(json['days'],
           (dynamic d) => ProgrammeDay.parse(d, constants)));
 
-  List<ProgrammeDay> get days => _days;
+  BuiltList<ProgrammeDay> get days => _days;
 }
 
 @immutable
 class ProgrammeDay {
   final LText _name;
   final DateTime? _startsOn;
-  final List<ProgrammeItem> _items;
+  final BuiltList<ProgrammeItem> _items;
 
   const ProgrammeDay._(this._name, this._startsOn, this._items);
 
@@ -35,7 +36,7 @@ class ProgrammeDay {
 
   DateTime? get startsOn => _startsOn;
 
-  List<ProgrammeItem> get items => _items;
+  BuiltList<ProgrammeItem> get items => _items;
 }
 
 @immutable
@@ -43,7 +44,7 @@ class ProgrammeItem {
   final LText _name;
   final TimeOfDay? _startTime, _endTime;
   final Location? _location;
-  final List<String> _countries;
+  final BuiltList<String> _countries;
   final LText _teacher;
   final WorkshopLevel _level;
   final ProgrammeItemKind _kind;
@@ -85,7 +86,7 @@ class ProgrammeItem {
 
   Location? get location => _location;
 
-  List<String> get countries => _countries;
+  BuiltList<String> get countries => _countries;
 
   LText get teacher => _teacher;
 

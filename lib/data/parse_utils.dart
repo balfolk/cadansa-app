@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart';
 import 'package:cadansa_app/util/extensions.dart';
 import 'package:flutter/material.dart';
@@ -50,16 +51,14 @@ class _StringLText implements LText {
 
 @immutable
 class _MapLText implements LText {
-  final Map<Locale, String> _strings;
+  final BuiltMap<Locale, String> _strings;
 
   _MapLText(final Map<dynamic, dynamic> map)
-      : _strings = map.map((dynamic l, dynamic str) {
-          final localeParts = (l?.toString() ?? '').split('_');
-          return MapEntry(
-            Locale(localeParts[0], localeParts.elementAtOrNull(1)),
-            str?.toString() ?? '',
-          );
-        });
+      : _strings = BuiltMap.build((builder) => map.forEach((dynamic l, dynamic str) {
+    final localeParts = (l?.toString() ?? '').split('_');
+    builder[Locale(localeParts[0], localeParts.elementAtOrNull(1))] =
+        str?.toString() ?? '';
+  }));
 
   @override
   String get(final Locale locale) => _strings[locale]
@@ -71,14 +70,14 @@ class _MapLText implements LText {
       ?? '';
 }
 
-List<T> parseList<T>(final dynamic json, final T Function(dynamic) parseItem) {
-  return List.unmodifiable(
-      (json as Iterable? ?? const Iterable<dynamic>.empty()).map<T>(parseItem));
+BuiltList<T> parseList<T>(final dynamic json, final T Function(dynamic) parseItem) {
+  return BuiltList.of(
+      (json as Iterable?)?.map<T>(parseItem) ?? const Iterable.empty());
 }
 
-Map<String, T> parseMap<T>(final dynamic json, final T Function(dynamic) parseItem) {
-  return (json as Map<String, dynamic>? ?? const <String, dynamic>{})
-      .map((key, dynamic value) => MapEntry(key, parseItem(value)));
+BuiltMap<String, T> parseMap<T>(final dynamic json, final T Function(dynamic) parseItem) {
+  return BuiltMap.build((builder) => (json as Map<String, dynamic>?)
+      ?.forEach((key, dynamic value) => builder[key] = parseItem(value)));
 }
 
 DateTime? parseDateTime(final dynamic json) {
