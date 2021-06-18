@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Generate dummy resource files
-        run: mkdir -p assets/fonts && touch assets/fonts/map-{bold,light,regular}.otf
+        run: mkdir -p assets/fonts && touch .env assets/fonts/map-{bold,light,regular}.otf
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
