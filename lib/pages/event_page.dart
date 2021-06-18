@@ -35,7 +35,9 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     buildBottomBar: _buildBottomNavigationBar,
     actionHandler: _handleAction,
   );
-  late final IndexedPageController _programmePageController = IndexedPageController(widget._initialIndex);
+  late final IndexedPageController _programmePageController =
+      IndexedPageController(widget._initialIndex);
+  late EventTiming _eventTiming = _calculateEventTiming();
 
   static const _DEFAULT_PAGE_INDEX = 0;
   static const _ACTION_SEPARATOR = ':',
@@ -47,10 +49,24 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   void didUpdateWidget(final CaDansaEventPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     _validateIndex();
+    _eventTiming = _calculateEventTiming();
   }
 
   void _validateIndex() {
     _setIndex(_currentIndex);
+  }
+
+  EventTiming _calculateEventTiming() {
+    final now = DateTime.now();
+    final hasStarted = widget._event.startDate.isAfter(now);
+    final hasEnded = widget._event.endDate.isAfter(now);
+    if (hasEnded) {
+      return EventTiming.past;
+    } else if (hasStarted) {
+      return EventTiming.present;
+    } else {
+      return EventTiming.future;
+    }
   }
 
   void _setIndex(int? newIndex) {
@@ -69,7 +85,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     if (pageData is MapPageData) {
       return MapPage(widget._event.title, pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(widget._event.title, pageData.programme, _pageHooks, _programmePageController, key: key);
+      return ProgrammePage(widget._event.title, pageData.programme, _pageHooks, _programmePageController, _eventTiming, key: key);
     } else if (pageData is InfoPageData) {
       return InfoPage(widget._event.title, pageData.content, _pageHooks, key: key);
     } else if (pageData is FeedPageData) {

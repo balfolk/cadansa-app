@@ -11,18 +11,21 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
+enum EventTiming { past, present, future }
+
 class ProgrammePage extends StatefulWidget {
   final LText _title;
   final Programme _programme;
   final PageHooks _pageHooks;
   final IndexedPageController _pageController;
+  final EventTiming _eventTiming;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
   );
 
-  const ProgrammePage(
-      this._title, this._programme, this._pageHooks, this._pageController,
+  const ProgrammePage(this._title, this._programme, this._pageHooks,
+      this._pageController, this._eventTiming,
       {final Key? key})
       : super(key: key);
 
@@ -115,7 +118,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
           }
 
           final Widget header = ListTile(
-            leading: _showIcon(day, item, false) ? _getIcon(day, item) : null,
+            leading: _getIcon(day, item),
             title: AutoSizeText(
               _formatItemName(item),
               style: theme.textTheme.headline6,
@@ -147,20 +150,6 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   String _formatItemName(final ProgrammeItem item) {
     final locale = Localizations.localeOf(context);
     return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
-  }
-
-  static bool _showIcon(final ProgrammeDay day, final ProgrammeItem item, final bool isExpanded) {
-    switch (item.kind.showIcon) {
-      case ProgrammeItemKindShowIcon.always:
-        return true;
-      case ProgrammeItemKindShowIcon.during:
-        return _getPlayingStatus(day, item) == _PlayingStatus.during;
-      case ProgrammeItemKindShowIcon.unexpanded:
-        return !isExpanded;
-      case ProgrammeItemKindShowIcon.never:
-      default:
-        return false;
-    }
   }
 
   static _PlayingStatus? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
@@ -205,7 +194,15 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     }
 
     final status = _getPlayingStatus(day, item);
-    final color = status == null || status == _PlayingStatus.after
+    if (item.kind.showIcon == ProgrammeItemKindShowIcon.never ||
+        (item.kind.showIcon == ProgrammeItemKindShowIcon.during &&
+            status != _PlayingStatus.during)) {
+      return null;
+    }
+
+    // Icons for the current event may be shown as grey, when they are in the past
+    final color = widget._eventTiming == EventTiming.present &&
+            (status == null || status == _PlayingStatus.after)
         ? Colors.grey
         : Theme.of(context).primaryColor;
 

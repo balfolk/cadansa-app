@@ -5,6 +5,7 @@ import 'package:cadansa_app/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:intl/intl.dart';
 
 void _setClipboardText(final String text) =>
     Clipboard.setData(ClipboardData(text: text));
@@ -43,6 +44,33 @@ String stringToUnicodeFlag(final String? s) {
   if (s == null || s.isEmpty) return '';
   return String.fromCharCodes(s.toUpperCase().codeUnits
       .map((cu) => cu + _DIFF_FLAG_LETTER));
+}
+
+String formatDateRange({
+  required final Locale locale,
+  required final DateTime startDay,
+  final DateTime? endDay,
+}) {
+  final formatLocale = locale.toLanguageTag();
+  final fullFormatter = DateFormat.yMMMMd(formatLocale);
+
+  if (endDay == null) {
+    return fullFormatter.format(startDay);
+  }
+
+  final DateFormat shortFormatter;
+  if (startDay.month == endDay.month) {
+    if (startDay.day == endDay.day) {
+      return fullFormatter.format(startDay);
+    }
+    shortFormatter = DateFormat.d(formatLocale);
+  } else if (startDay.year == endDay.year) {
+    shortFormatter = DateFormat.MMMMd(formatLocale);
+  } else {
+    shortFormatter = fullFormatter;
+  }
+
+  return '${shortFormatter.format(startDay)} – ${fullFormatter.format(endDay)}';
 }
 
 const DEFAULT_PRIMARY_SWATCH = Colors.teal;

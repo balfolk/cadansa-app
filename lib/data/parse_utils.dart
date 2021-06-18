@@ -97,6 +97,14 @@ DateTime? parseDateTime(final dynamic json) {
   return DateTime.fromMillisecondsSinceEpoch(milliseconds.toInt());
 }
 
+DateTime parseDate(final dynamic json) {
+  if (json is String) {
+    return DateTime.parse(json);
+  }
+
+  throw ArgumentError.value(json, 'json', 'does not represent a DateTime');
+}
+
 TimeOfDay? parseTimeOfDay(final dynamic json) {
   if (json == null || (json is String && json.isEmpty)) {
     return null;

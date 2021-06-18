@@ -11,11 +11,8 @@
       "events": [
         {
           "title": "CaDansa 2019",
-          "subtitle": {
-            "en": "24 – 27 October 2019",
-            "nl": "24 – 27 Oktober 2019",
-            "fr": "24 – 27 Octobre 2019"
-          },
+          "startDate": "2019-10-24",
+          "endDate": "2019-10-27",
           "avatar": "https://www.cadansa.nl/wp-content/uploads/avatar2019.png",
           "config": "config/cadansa2019.json",
           "primarySwatchIndex": 8,

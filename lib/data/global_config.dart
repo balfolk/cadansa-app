@@ -30,7 +30,8 @@ class EventsSection {
 
 @immutable
 class GlobalEvent {
-  final LText title, subtitle;
+  final LText title;
+  final DateTime startDate, endDate;
   final String? avatarUri;
   final String configUri;
   final int? primarySwatchIndex, _accentColorIndex;
@@ -38,7 +39,8 @@ class GlobalEvent {
 
   GlobalEvent(final dynamic json)
       : title = LText(json['title']),
-        subtitle = LText(json['subtitle']),
+        startDate = parseDate(json['startDate']),
+        endDate = parseDate(json['endDate']),
         avatarUri = json['avatar'] as String?,
         configUri = json['config'] as String,
         primarySwatchIndex = json['primarySwatchIndex'] as int?,

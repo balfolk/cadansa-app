@@ -57,12 +57,11 @@ class WorkshopLevel {
   String? get icon => _icon;
 }
 
-enum ProgrammeItemKindShowIcon { always, during, unexpanded, never }
+enum ProgrammeItemKindShowIcon { always, during, never }
 ProgrammeItemKindShowIcon? _parseKindShown(final String? string) {
   return const {
     'always': ProgrammeItemKindShowIcon.always,
     'during': ProgrammeItemKindShowIcon.during,
-    'unexpanded': ProgrammeItemKindShowIcon.unexpanded,
     'never': ProgrammeItemKindShowIcon.never
   }[string];
 }
@@ -88,5 +87,5 @@ class ProgrammeItemKind {
 
   String? get icon => _icon;
 
-  ProgrammeItemKindShowIcon get showIcon => _showIcon ?? ProgrammeItemKindShowIcon.never;
+  ProgrammeItemKindShowIcon get showIcon => _showIcon ?? ProgrammeItemKindShowIcon.always;
 }

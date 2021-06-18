@@ -40,7 +40,11 @@ class EventTile extends StatelessWidget {
         event.title.get(locale),
       ),
       subtitle: Text(
-        event.subtitle.get(locale),
+        formatDateRange(
+          locale: locale,
+          startDay: event.startDate,
+          endDay: event.endDate,
+        ),
       ),
       selected: isSelected,
       onTap: onTap,

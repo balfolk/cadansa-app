@@ -38,76 +38,64 @@
   },
   "itemKinds": {
     "BAND_DANCE": {
-      "icon": "shoePrint",
-      "showIcon": "always"
+      "icon": "shoePrint"
     },
     "BAND_MUSIC": {
-      "icon": "earHearing",
-      "showIcon": "always"
+      "icon": "earHearing"
     },
     "CEREMONY": {
-      "icon": "airballoon",
-      "showIcon": "always"
+      "icon": "airballoon"
     },
     "MARKET": {
-      "icon": "shopping",
-      "showIcon": "always"
+      "icon": "shopping"
     },
     "OPEN": {
-      "icon": "doorOpen",
-      "showIcon": "always"
+      "icon": "doorOpen"
     },
     "CLOSED": {
-      "icon": "tent",
-      "showIcon": "always"
+      "icon": "tent"
     },
     "WORKSHOP_DANCE": {
       "name": {
         "en": "Dancing",
         "nl": "Dansworkshop"
       },
-      "icon": "shoePrint",
-      "showIcon": "always"
+      "icon": "shoePrint"
     },
     "WORKSHOP_MUSIC": {
       "name": {
         "en": "Music workshop",
         "nl": "Muziekworkshop"
       },
-      "icon": "music",
-      "showIcon": "always"
+      "icon": "music"
     },
     "WORKSHOP_OTHEREX": {
       "name": {
         "en": "Other",
         "nl": "Overige"
       },
-      "icon": "naturePeople",
-      "showIcon": "always"
+      "icon": "naturePeople"
     },
     "WORKSHOP_OTHERFE": {
       "name": {
         "en": "Other",
         "nl": "Overige"
       },
-      "icon": "humanHandsdown",
-      "showIcon": "always"
+      "icon": "humanHandsdown"
     },
     "WORKSHOP_OTHERMA": {
       "name": {
         "en": "Other",
         "nl": "Overige"
       },
-      "icon": "spaOutline",
-      "showIcon": "always"
+      "icon": "spaOutline"
     },
     "WORKSHOP_OTHERTE": {
       "name": {
         "en": "Other",
         "nl": "Overige"
       },
-      "icon": "teach",
-      "showIcon": "always"
+      "icon": "teach"
     }
   },
   "pages": [
