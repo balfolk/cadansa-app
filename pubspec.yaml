@@ -50,11 +50,6 @@ flutter_icons:
 flutter:
   assets:
     - .env
-    - config/config.json
-    - config/cadansa2019.json
-    - config/cadansa2021.json
-    - cadansa_map_0.png
-    - cadansa_map_1.png
 
   fonts:
     - family: MapFontFamily
