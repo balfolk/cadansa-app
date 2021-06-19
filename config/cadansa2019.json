@@ -358,7 +358,7 @@
           "text": [
             {
               "location": [330, 1270],
-              "angle": -11.85,
+              "angle": 348.15,
               "fontSize": 60,
               "text": {
                 "en": "entrance",
@@ -389,7 +389,7 @@
             },
             {
               "location": [-970, 952],
-              "angle": -11.85,
+              "angle": 348.15,
               "alignment": 1,
               "fontSize": 48,
               "text": {

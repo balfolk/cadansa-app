@@ -1,0 +1,319 @@
+{
+  "$schema": "http://json-schema.org/draft/2020-12/schema#",
+  "type": "object",
+  "properties": {
+    "workshopLevels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "definitions.json#/text"
+          },
+          "icon": {
+            "$ref": "definitions.json#/icon"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "icon"
+        ]
+      }
+    },
+    "itemKinds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "definitions.json#/text"
+          },
+          "icon": {
+            "$ref": "definitions.json#/icon"
+          },
+          "showIcon": {
+            "enum": ["always", "during", "never"]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "icon"
+        ]
+      }
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "definitions.json#/text"
+              },
+              "icon": {
+                "$ref": "definitions.json#/icon"
+              }
+            },
+            "required": [
+              "title",
+              "icon"
+            ]
+          },
+          {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "MAP"
+                  },
+                  "floors": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "$ref": "definitions.json#/text"
+                        },
+                        "path": {
+                          "$ref": "definitions.json#/text"
+                        },
+                        "version": {
+                          "type": "integer"
+                        },
+                        "minScale": {
+                          "$ref": "definitions.json#/scale"
+                        },
+                        "maxScale": {
+                          "$ref": "definitions.json#/scale"
+                        },
+                        "areas": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "path": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "definitions.json#/point"
+                                },
+                                "minimumItems": 3
+                              },
+                              "center": {
+                                "$ref": "definitions.json#/point"
+                              },
+                              "buttonIcon": {
+                                "$ref": "definitions.json#/icon"
+                              },
+                              "buttonSize": {
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                              },
+                              "title": {
+                                "$ref": "definitions.json#/text"
+                              },
+                              "titleFontSize": {
+                                "$ref": "definitions.json#/fontSize"
+                              },
+                              "actionTitle": {
+                                "$ref": "definitions.json#/text"
+                              },
+                              "action": {
+                                "$ref": "definitions.json#/action"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "center",
+                              "buttonIcon",
+                              "buttonSize",
+                              "actionTitle"
+                            ]
+                          }
+                        },
+                        "text": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "location": {
+                                "$ref": "definitions.json#/point"
+                              },
+                              "angle": {
+                                "$ref": "definitions.json#/angle"
+                              },
+                              "fontSize": {
+                                "$ref": "definitions.json#/fontSize"
+                              },
+                              "text": {
+                                "$ref": "definitions.json#/text"
+                              },
+                              "alignment": {
+                                "$ref": "definitions.json#/alignment"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "location",
+                              "text"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "title",
+                        "path"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "PROGRAMME"
+                  },
+                  "days": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "definitions.json#/text"
+                        },
+                        "startsOn": {
+                          "type": "integer"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "$ref": "definitions.json#/text"
+                              },
+                              "startTime": {
+                                "type": "time"
+                              },
+                              "endTime": {
+                                "type": "time"
+                              },
+                              "kind": {
+                                "type": "string",
+                                "minimumLength": 1
+                              },
+                              "countries": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "definitions.json#/country"
+                                }
+                              },
+                              "description": {
+                                "$ref": "definitions.json#/text"
+                              },
+                              "website": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "$ref": "definitions.json#/text"
+                                  },
+                                  "icon": {
+                                    "$ref": "definitions.json#/icon"
+                                  },
+                                  "text": {
+                                    "$ref": "definitions.json#/text"
+                                  },
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "url",
+                                    "text"
+                                  ]
+                                },
+                                "location": {
+                                  "type": "object",
+                                  "properties": {
+                                    "title": {
+                                      "$ref": "definitions.json#/text"
+                                    },
+                                    "action": {
+                                      "$ref": "definitions.json#/action"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "title"
+                                  ]
+                                },
+                                "teacher": {
+                                  "$ref": "definitions.json#/text"
+                                },
+                                "level": {
+                                  "type": "string",
+                                  "minimumLength": 1
+                                }
+                              },
+                              "additionalProperties": false,
+                              "required": [
+                                "name",
+                                "startTime"
+                              ]
+                            },
+                            "additionalItems": false
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "name",
+                          "startsOn",
+                          "items"
+                        ]
+                      },
+                      "additionalItems": false
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "FEED"
+                  },
+                  "feedUrl": {
+                    "type": {
+                      "$ref": "definitions.json#/text"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "INFO"
+                  },
+                  "content": {
+                    "type": {
+                      "$ref": "definitions.json#/text"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "pages"
+  ]
+}

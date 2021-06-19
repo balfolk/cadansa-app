@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft/2020-12/schema#",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "logo": {
+      "type": "uri"
+    },
+    "eventSections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "definitions.json#/text"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "title": {
+                "$ref": "definitions.json#/text"
+              },
+              "startDate": {
+                "type": "date"
+              },
+              "endDate": {
+                "type": "date"
+              },
+              "avatar": {
+                "type": "uri"
+              },
+              "config": {
+                "type": "string",
+                "minLength": 1
+              },
+              "primarySwatchIndex": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18
+              },
+              "accentColorIndex": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 15
+              },
+              "locales": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2
+                  },
+                  "minItems": 1,
+                  "maxItems": 3
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "startDate",
+              "endDate",
+              "config"
+            ]
+          }
+        },
+        "required": [
+          "events"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "logo",
+    "eventSections"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "text": {
+    "type": [
+      "object",
+      "string"
+    ],
+    "additionalProperties": {
+      "type": "string"
+    },
+    "minProperties": 1
+  },
+  "fontSize": {
+    "type": "number",
+    "exclusiveMinimum": 0
+  },
+  "point": {
+    "type": "array",
+    "items": [
+      {
+        "type": "integer"
+      },
+      {
+        "type": "integer"
+      }
+    ],
+    "additionalItems": false
+  },
+  "angle": {
+    "type": "number",
+    "minimum": 0,
+    "maximumExclusive": 360
+  },
+  "scale": {
+    "type": "number",
+    "exclusiveMinimum": 0,
+    "maximum": 1
+  },
+  "alignment": {
+    "type": "integer",
+    "minimum": 0,
+    "maximum": 5
+  },
+  "country": {
+    "type": "string",
+    "pattern": "^[A-Z]{2,}$"
+  },
+  "icon": {
+    "type": "string",
+    "minimumLength": 1
+  },
+  "action": {
+    "type": "string"
+  }
+}
