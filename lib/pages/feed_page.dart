@@ -146,7 +146,7 @@ class FeedItem extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      onTap: _open,
+      onTap: () => _open(context),
     );
   }
 
@@ -160,10 +160,10 @@ class FeedItem extends StatelessWidget {
     return parts.join(' • ');
   }
 
-  void _open() {
+  void _open(final BuildContext context) {
     final link = _item.link?.trim();
     if (link != null && link.isNotEmpty) {
-      openInAppBrowser(link);
+      openInAppBrowser(context: context, url: link);
     }
   }
 }

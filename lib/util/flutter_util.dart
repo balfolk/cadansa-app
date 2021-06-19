@@ -83,17 +83,24 @@ Color? getAccentColor(final int? index) {
   return Colors.accents.elementAtOrNull(index);
 }
 
-Future<void> openInAppBrowser(final String url) async {
+late final _IN_APP_BROWSER = InAppBrowser();
+
+Future<void> openInAppBrowser({
+  required final BuildContext context,
+  required final String url,
+}) async {
   final parsed = Uri.tryParse(url);
   if (parsed == null) return;
 
-  return ChromeSafariBrowser().open(
-    url: parsed,
-    options: ChromeSafariBrowserClassOptions(
-      android: AndroidChromeCustomTabsOptions(),
-      ios: IOSSafariOptions(
-        barCollapsingEnabled: true,
-        dismissButtonStyle: IOSSafariDismissButtonStyle.CLOSE,
+  await _IN_APP_BROWSER.openUrlRequest(
+    urlRequest: URLRequest(url: parsed),
+    options: InAppBrowserClassOptions(
+      crossPlatform: InAppBrowserOptions(
+        hideUrlBar: true,
+        toolbarTopBackgroundColor: Theme.of(context).primaryColor,
+      ),
+      ios: IOSInAppBrowserOptions(
+        presentationStyle: IOSUIModalPresentationStyle.PAGE_SHEET,
       ),
     ),
   );
