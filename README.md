@@ -1,5 +1,7 @@
 # CaDansa app
 
+[![Dart](https://github.com/balfolk/cadansa-app/actions/workflows/dart.yml/badge.svg)](https://github.com/balfolk/cadansa-app/actions/workflows/dart.yml)
+
 This is the [Flutter](https://flutter.dev/)-based mobile app for the [CaDansa festival](https://cadansa.nl). This app is designed to run on Android and iOS.
 
 ## Installation
