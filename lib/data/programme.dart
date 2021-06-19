@@ -57,7 +57,7 @@ class ProgrammeItem {
   ProgrammeItem.parse(final dynamic json, final EventConstants constants)
       : this._(
     LText(json['name']),
-    parseTimeOfDay(json['startTime']),
+    parseTimeOfDay(json['startTime'])!,
     parseTimeOfDay(json['endTime']),
     json['location'] != null ? Location._parse(json['location']) : null,
     parseList(json['countries'], (dynamic c) => c as String),
@@ -69,7 +69,8 @@ class ProgrammeItem {
   );
 
   final LText _name;
-  final TimeOfDay? _startTime, _endTime;
+  final TimeOfDay _startTime;
+  final TimeOfDay? _endTime;
   final Location? _location;
   final BuiltList<String> _countries;
   final LText _teacher;
@@ -80,7 +81,7 @@ class ProgrammeItem {
 
   LText get name => _name;
 
-  TimeOfDay? get startTime => _startTime;
+  TimeOfDay get startTime => _startTime;
 
   TimeOfDay? get endTime => _endTime;
 

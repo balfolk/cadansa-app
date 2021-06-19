@@ -106,16 +106,13 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
           final startTime = item.startTime;
           final endTime = item.endTime;
 
-          Widget? subtitle;
-          if (startTime != null || endTime != null) {
-            String text;
-            if (startTime != null && endTime != null) {
-              text = '${startTime.format(context)} – ${endTime.format(context)}';
-            } else {
-              text = (startTime ?? endTime)!.format(context);
-            }
-            subtitle = Text(text);
+          String text;
+          if (endTime != null) {
+            text = '${startTime.format(context)} – ${endTime.format(context)}';
+          } else {
+            text = startTime.format(context);
           }
+          final subtitle = Text(text);
 
           final Widget header = ListTile(
             leading: _getIcon(day, item),
@@ -158,7 +155,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
 
     final dayStartsOn = day.startsOn;
     final itemStartTime = item.startTime;
-    if (dayStartsOn == null || itemStartTime == null) {
+    if (dayStartsOn == null) {
       return null;
     }
 
