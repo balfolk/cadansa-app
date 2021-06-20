@@ -138,6 +138,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
             child: FloatingActionButton(
               onPressed: () => _selectArea(area),
               backgroundColor: theme.primaryColor,
+              foregroundColor: theme.colorScheme.onPrimary,
               elevation: 10.0,
               child: Icon(
                 MdiIcons.fromString(area.buttonIcon),
