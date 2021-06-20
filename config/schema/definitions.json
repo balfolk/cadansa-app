@@ -50,5 +50,41 @@
   },
   "action": {
     "type": "string"
+  },
+  "color": {
+    "type": "array",
+    "oneOf": [
+      {
+        "items": {
+          "$ref": "#/colorValue"
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      {
+        "items": [
+          {
+            "$ref": "#/colorValue"
+          },
+          {
+            "$ref": "#/colorValue"
+          },
+          {
+            "$ref": "#/colorValue"
+          },
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        ],
+        "additionalItems": false
+      }
+    ]
+  },
+  "colorValue": {
+    "type": "integer",
+    "minimum": 0,
+    "maximum": 255
   }
 }

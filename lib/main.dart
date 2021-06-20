@@ -28,7 +28,7 @@ const _CONFIG_LIFETIME = Duration(hours: 5);
 const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
-const _PRIMARY_SWATCH_INDEX_KEY = 'primarySwatchIndex';
+const _PRIMARY_SWATCH_COLOR_KEY = 'primarySwatchColor';
 const _ACCENT_COLOR_KEY = 'accentColor';
 const _EVENT_INDEX_KEY = 'eventIndex';
 const _LOCALE_KEY = 'locale';
@@ -37,8 +37,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPrefs = await SharedPreferences.getInstance();
 
-  final primarySwatchIndex = sharedPrefs.getInt(_PRIMARY_SWATCH_INDEX_KEY);
-  final primarySwatch = getPrimarySwatch(primarySwatchIndex) ?? DEFAULT_PRIMARY_SWATCH;
+  final primarySwatchColor = sharedPrefs.getInt(_PRIMARY_SWATCH_COLOR_KEY);
+  final primarySwatch = getPrimarySwatch(primarySwatchColor) ?? DEFAULT_PRIMARY_SWATCH;
   final accentColorValue = sharedPrefs.getInt(_ACCENT_COLOR_KEY);
   final accentColor = accentColorValue != null ? Color(accentColorValue) : null;
 
@@ -342,11 +342,11 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     await sharedPrefs.setInt(_EVENT_INDEX_KEY, index);
 
     {
-      final primarySwatchIndex = event.primarySwatchIndex;
-      if (primarySwatchIndex != null) {
-        await sharedPrefs.setInt(_PRIMARY_SWATCH_INDEX_KEY, primarySwatchIndex);
+      final primarySwatch = event.primarySwatch;
+      if (primarySwatch != null) {
+        await sharedPrefs.setInt(_PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
       } else {
-        await sharedPrefs.remove(_PRIMARY_SWATCH_INDEX_KEY);
+        await sharedPrefs.remove(_PRIMARY_SWATCH_COLOR_KEY);
       }
     }
 

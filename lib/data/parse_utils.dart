@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:collection/collection.dart';
 import 'package:cadansa_app/util/extensions.dart';
 import 'package:flutter/material.dart';
@@ -134,4 +135,16 @@ Offset parseOffset(final dynamic json) {
 Locale parseLocale(final dynamic json) {
   return Locale(
       json[0] as String, (json as Iterable).elementAtOrNull(1) as String?);
+}
+
+Color? parseColor(final dynamic json) {
+  if (json == null || (json is Iterable && json.length < 3)) return null;
+  return Color.fromRGBO(json[0] as int, json[1] as int, json[2] as int,
+      ((json as Iterable).elementAtOrNull(3) as num?)?.toDouble() ?? 1.0);
+}
+
+MaterialColor? parseMaterialColor(final dynamic json) {
+  final color = parseColor(json);
+  if (color == null) return null;
+  return createMaterialColor(color);
 }

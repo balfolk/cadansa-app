@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:cadansa_app/data/parse_utils.dart';
-import 'package:cadansa_app/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -75,12 +74,25 @@ String formatDateRange({
 
 const DEFAULT_PRIMARY_SWATCH = Colors.teal;
 
-MaterialColor? getPrimarySwatch(final int? index) {
-  return Colors.primaries.elementAtOrNull(index);
+MaterialColor? getPrimarySwatch(final int? colorValue) {
+  if (colorValue == null) return null;
+  return createMaterialColor(Color(colorValue));
 }
 
-Color? getAccentColor(final int? index) {
-  return Colors.accents.elementAtOrNull(index);
+const _MATERIAL_COLOR_INDICES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+MaterialColor createMaterialColor(final Color color) {
+  final r = color.red, g = color.green, b = color.blue;
+  final swatch = <int, Color>{};
+  for (final index in _MATERIAL_COLOR_INDICES) {
+    final ds = 0.5 - (index / 1000);
+    swatch[index] = Color.fromRGBO(
+      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+      1,
+    );
+  }
+  return MaterialColor(color.value, swatch);
 }
 
 late final _IN_APP_BROWSER = InAppBrowser();

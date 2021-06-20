@@ -1,6 +1,5 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
-import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -36,8 +35,8 @@ class GlobalEvent {
         endDate = parseDate(json['endDate']),
         avatarUri = json['avatar'] as String?,
         configUri = json['config'] as String,
-        primarySwatchIndex = json['primarySwatchIndex'] as int?,
-        _accentColorIndex = json['accentColorIndex'] as int?,
+        primarySwatch = parseMaterialColor(json['primarySwatchColor']),
+        accentColor = parseColor(json['accentColor']),
         supportedLocales = json['locales'] != null
             ? parseList(json['locales'], parseLocale)
             : null;
@@ -46,12 +45,7 @@ class GlobalEvent {
   final DateTime startDate, endDate;
   final String? avatarUri;
   final String configUri;
-  final int? primarySwatchIndex, _accentColorIndex;
+  final MaterialColor? primarySwatch;
+  final Color? accentColor;
   final BuiltList<Locale>? supportedLocales;
-
-  MaterialColor? get primarySwatch =>
-      getPrimarySwatch(primarySwatchIndex);
-
-  Color? get accentColor =>
-      getAccentColor(_accentColorIndex);
 }
