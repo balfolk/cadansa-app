@@ -4,6 +4,7 @@ import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/util/refresher.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -153,11 +154,12 @@ class FeedItem extends StatelessWidget {
   String _subtitle(final BuildContext context) {
     final locale = Localizations.localeOf(context);
     final pubDate = _item.pubDate;
-    final date = pubDate != null ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).format(pubDate) : '';
-    final time = pubDate != null ? DateFormat.jm(locale.toLanguageTag()).format(pubDate) : '';
-    final dateTime = '$date $time'.trim();
-    final parts = [_item.author ?? '', dateTime].where((s) => s.isNotEmpty);
-    return parts.join(' • ');
+    final dateTime = pubDate != null
+        ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).add_jm().format(pubDate)
+        : null;
+
+    final parts = [_item.author, dateTime].whereNotNull();
+    return parts.where((part) => part.isNotEmpty).join(' • ');
   }
 
   void _open(final BuildContext context) {
