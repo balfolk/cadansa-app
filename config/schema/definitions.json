@@ -46,7 +46,8 @@
   },
   "icon": {
     "type": "string",
-    "minimumLength": 1
+    "pattern": "^[a-z][-0-9a-z]*[0-9a-z]$",
+    "$comment": "We're not using the definition in icons.json because of performance issues in Android Studio"
   },
   "action": {
     "type": "string"

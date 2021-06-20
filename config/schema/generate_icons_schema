@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if wget --no-verbose https://raw.githubusercontent.com/Templarian/MaterialDesign/master/meta.json; then
+  jq '{"icon": {"type": "string", "enum": map(.["name"])}}' meta.json > icons.json
+  rm -f meta.json
+fi
