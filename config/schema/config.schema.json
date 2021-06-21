@@ -9,6 +9,21 @@
     "logo": {
       "type": "uri"
     },
+    "locales": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "minItems": 1,
+        "maxItems": 3
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "eventSections": {
       "type": "array",
       "items": {
@@ -41,21 +56,6 @@
               },
               "accentColor": {
                 "$ref": "definitions.json#/color"
-              },
-              "locales": {
-                "type": "array",
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 2,
-                    "maxLength": 2
-                  },
-                  "minItems": 1,
-                  "maxItems": 3
-                },
-                "minItems": 1,
-                "uniqueItems": true
               }
             },
             "additionalProperties": false,
@@ -71,12 +71,46 @@
           "events"
         ]
       }
+    },
+    "legal": {
+      "type": "object",
+      "properties": {
+        "labels": {
+          "type": "object",
+          "properties": {
+            "terms": {
+              "$ref": "definitions.json#/text"
+            },
+            "about": {
+              "$ref": "definitions.json#/text"
+            }
+          },
+          "required": [
+            "terms",
+            "about"
+          ],
+          "additionalProperties": false
+        },
+        "terms": {
+          "$ref": "definitions.json#/text"
+        },
+        "copyright": {
+          "$ref": "definitions.json#/text"
+        }
+      },
+      "required": [
+        "labels",
+        "terms",
+        "copyright"
+      ],
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,
   "required": [
     "version",
     "logo",
-    "eventSections"
+    "eventSections",
+    "legal"
   ]
 }

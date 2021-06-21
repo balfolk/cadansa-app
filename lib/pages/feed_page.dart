@@ -12,11 +12,15 @@ import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/webfeed.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage(this._title, this._feedUrl, this._pageHooks, {final Key? key})
-      : super(key: key);
+  const FeedPage(
+    this._feedUrl,
+    this._feedEmptyText,
+    this._pageHooks, {
+    final Key? key,
+  }) : super(key: key);
 
-  final LText _title;
   final LText _feedUrl;
+  final LText _feedEmptyText;
   final PageHooks _pageHooks;
 
   @override
@@ -62,17 +66,9 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   @override
-  Widget build(final BuildContext context) {
-    final locale = Localizations.localeOf(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget._title.get(locale)),
-      ),
-      body: _buildBody(context),
-      drawer: widget._pageHooks.buildDrawer(() => this.context),
-      bottomNavigationBar: widget._pageHooks.buildBottomBar(),
-    );
-  }
+  Widget build(final BuildContext context) => widget._pageHooks.buildScaffold(
+    body: _buildBody(context),
+  );
 
   Widget _buildBody(final BuildContext context) {
     switch (_status) {
@@ -124,7 +120,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Widget _buildEmptyFeed(final BuildContext context) => Center(
     child: AutoSizeText(
-      Localization.FEED_EMPTY.get(Localizations.localeOf(context)),
+      widget._feedEmptyText.get(Localizations.localeOf(context)),
     ),
   );
 }
@@ -159,7 +155,7 @@ class FeedItem extends StatelessWidget {
         : null;
 
     final parts = [_item.author, dateTime].whereNotNull();
-    return parts.where((part) => part.isNotEmpty).join(' • ');
+    return parts.where((part) => part.isNotEmpty).join(' • ');
   }
 
   void _open(final BuildContext context) {

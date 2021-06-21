@@ -7,6 +7,7 @@ import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
+import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
@@ -17,8 +18,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _LOAD_TIMEOUT = Duration(seconds: 5);
@@ -33,8 +37,11 @@ const _ACCENT_COLOR_KEY = 'accentColor';
 const _EVENT_INDEX_KEY = 'eventIndex';
 const _LOCALE_KEY = 'locale';
 
+late PackageInfo _packageInfo;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  _packageInfo = await PackageInfo.fromPlatform();
   final sharedPrefs = await SharedPreferences.getInstance();
 
   final primarySwatchColor = sharedPrefs.getInt(_PRIMARY_SWATCH_COLOR_KEY);
@@ -57,10 +64,10 @@ void main() async {
 
 class CaDansaApp extends StatefulWidget {
   const CaDansaApp(
-      this._initialLocale,
-      this._initialPrimarySwatch,
-      this._initialAccentColor,
-      );
+    this._initialLocale,
+    this._initialPrimarySwatch,
+    this._initialAccentColor,
+  );
 
   final Locale? _initialLocale;
   final MaterialColor _initialPrimarySwatch;
@@ -239,11 +246,10 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
   }
 
-  Widget? _buildDrawer(final BuildContext Function() contextGetter) {
+  Widget? _buildDrawer({required final BuildContext context}) {
     final config = _config;
     if (config == null) return null;
 
-    final context = contextGetter();
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
@@ -267,7 +273,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
               await _switchToEvent(event, index);
               setState(() {});
               if (mounted) {
-                Navigator.pop(contextGetter());
+                Navigator.pop(context);
               }
             },
           );
@@ -286,7 +292,26 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           }
         },
       ),
+      const Divider(),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+            onPressed: () => _showTerms(context, config.legal),
+            child: Text(config.legal.labelTerms.get(locale)),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3.0),
+            child: Text('•'),
+          ),
+          TextButton(
+            onPressed: () => _showAbout(context, config.legal),
+            child: Text(config.legal.labelAbout.get(locale)),
+          ),
+        ],
+      )
     ];
+
     if (kDebugMode) {
       bottomWidgets.add(ElevatedButton.icon(
         onPressed: _reloadConfig,
@@ -323,7 +348,10 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
             ]),
           ),
         ),
-        const Divider(),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 8.0),
+          child: Divider(height: 0.0),
+        ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: bottomWidgets,
@@ -377,7 +405,39 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   Iterable<Locale> get _supportedLocales =>
-      _currentEvent?.supportedLocales ?? _DEFAULT_LOCALES;
+      _config?.locales ?? _DEFAULT_LOCALES;
+
+  void _showTerms(final BuildContext context, final Legal legal) async {
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
+      final locale = Localizations.localeOf(context);
+      final onPrimaryBrightness = Theme.of(context).onPrimaryBrightness;
+      return Scaffold(
+        appBar: AppBar(
+          // Fix the status bar brightness - hopefully this becomes obsolete soon
+          backwardsCompatibility: false,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: onPrimaryBrightness,
+            statusBarBrightness: onPrimaryBrightness,
+          ),
+          title: Text(legal.labelTerms.get(locale)),
+        ),
+        body: Html(
+          data: '<h1>${_packageInfo.appName}</h1>${legal.terms.get(locale)}',
+        ),
+      );
+    }));
+  }
+
+  void _showAbout(final BuildContext context, final Legal legal) async {
+    final locale = Localizations.localeOf(context);
+    final year = DateFormat.y(locale.toLanguageTag()).format(DateTime.now());
+    showAboutDialog(
+      context: context,
+      applicationName: _packageInfo.appName,
+      applicationLegalese: 'Copyright © $year ${legal.copyright.get(locale)}',
+      applicationVersion: '${_packageInfo.version} (${_packageInfo.buildNumber})',
+    );
+  }
 
   @override
   void dispose() {
@@ -390,8 +450,15 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 class LoadingPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
+    final onPrimaryBrightness = Theme.of(context).onPrimaryBrightness;
     return Scaffold(
       appBar: AppBar(
+        // Fix the status bar brightness - hopefully this becomes obsolete soon
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: onPrimaryBrightness,
+          statusBarBrightness: onPrimaryBrightness,
+        ),
         title: const Text(APP_TITLE),
       ),
       body: const Center(
@@ -408,8 +475,15 @@ class TimeoutPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final onPrimaryBrightness = Theme.of(context).onPrimaryBrightness;
     return Scaffold(
       appBar: AppBar(
+        // Fix the status bar brightness - hopefully this becomes obsolete soon
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: onPrimaryBrightness,
+          statusBarBrightness: onPrimaryBrightness,
+        ),
         title: const Text(APP_TITLE),
       ),
       body: Container(

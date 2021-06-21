@@ -6,8 +6,10 @@ import 'package:cadansa_app/pages/feed_page.dart';
 import 'package:cadansa_app/pages/info_page.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
+import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +21,7 @@ class CaDansaEventPage extends StatefulWidget {
 
   final Event _event;
   final int? _initialIndex;
-  final Widget? Function(BuildContext Function()) _buildDrawer;
+  final Widget? Function({required BuildContext context}) _buildDrawer;
 
   @override
   _CaDansaEventPageState createState() => _CaDansaEventPageState();
@@ -31,9 +33,27 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   int? _highlightAreaFloorIndex, _highlightAreaIndex;
 
   late final PageHooks _pageHooks = PageHooks(
-    buildDrawer: (contextGetter) => widget._buildDrawer(contextGetter),
-    buildBottomBar: _buildBottomNavigationBar,
     actionHandler: _handleAction,
+    buildScaffold: ({appBarBottomWidget, required body}) {
+      final locale = Localizations.localeOf(context);
+      final theme = Theme.of(context);
+      final onPrimaryBrightness = theme.onPrimaryBrightness;
+      return Scaffold(
+        appBar: AppBar(
+          // Fix the status bar brightness - hopefully this becomes obsolete soon
+          backwardsCompatibility: false,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: onPrimaryBrightness,
+            statusBarBrightness: onPrimaryBrightness,
+          ),
+          title: Text(widget._event.title.get(locale)),
+          bottom: appBarBottomWidget,
+        ),
+        body: body,
+        drawer: widget._buildDrawer(context: context),
+        bottomNavigationBar: _buildBottomNavigationBar(),
+      );
+    },
   );
   late final IndexedPageController _programmePageController =
       IndexedPageController(index: widget._initialIndex);
@@ -83,13 +103,13 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     _currentIndex = _currentIndex.clamp(0, widget._event.pages.length - 1);
     final pageData = widget._event.pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(widget._event.title, pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
+      return MapPage(pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(widget._event.title, pageData.programme, _pageHooks, _programmePageController, _eventTiming, key: key);
+      return ProgrammePage(pageData.programme, _pageHooks, _programmePageController, _eventTiming, key: key);
     } else if (pageData is InfoPageData) {
-      return InfoPage(widget._event.title, pageData.content, _pageHooks, key: key);
+      return InfoPage(pageData.content, _pageHooks, key: key);
     } else if (pageData is FeedPageData) {
-      return FeedPage(widget._event.title, pageData.feedUrl, _pageHooks, key: key);
+      return FeedPage(pageData.feedUrl, pageData.feedEmptyText, _pageHooks, key: key);
     }
     throw StateError('Unknown page data object $pageData');
   }

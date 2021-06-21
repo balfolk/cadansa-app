@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 @immutable
 class PageHooks {
   const PageHooks({
-    required this.buildDrawer,
-    required this.buildBottomBar,
     required this.actionHandler,
+    required this.buildScaffold,
   });
 
-  final Widget? Function(BuildContext Function()) buildDrawer;
-  final Widget Function() buildBottomBar;
   final ActionHandler actionHandler;
+  final Widget Function({
+    PreferredSizeWidget? appBarBottomWidget,
+    required Widget body,
+  }) buildScaffold;
 }
 
 class IndexedPageController {

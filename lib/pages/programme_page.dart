@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/event.dart';
-import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/page_util.dart';
@@ -14,12 +13,14 @@ import 'package:shimmer/shimmer.dart';
 enum EventTiming { past, present, future }
 
 class ProgrammePage extends StatefulWidget {
-  const ProgrammePage(this._title, this._programme, this._pageHooks,
-      this._pageController, this._eventTiming,
-      {final Key? key})
-      : super(key: key);
+  const ProgrammePage(
+    this._programme,
+    this._pageHooks,
+    this._pageController,
+    this._eventTiming, {
+    final Key? key,
+  }) : super(key: key);
 
-  final LText _title;
   final Programme _programme;
   final PageHooks _pageHooks;
   final IndexedPageController _pageController;
@@ -43,27 +44,19 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   });
 
   @override
-  Widget build(final BuildContext context) {
-    final locale = Localizations.localeOf(context);
-    return ExpandableTheme(
-      data: ProgrammePage._EXPANDABLE_THEME,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget._title.get(locale)),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: tabs,
-          ),
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: tabChildren,
-        ),
-        drawer: widget._pageHooks.buildDrawer(() => this.context),
-        bottomNavigationBar: widget._pageHooks.buildBottomBar(),
+  Widget build(final BuildContext context) => ExpandableTheme(
+    data: ProgrammePage._EXPANDABLE_THEME,
+    child: widget._pageHooks.buildScaffold(
+      appBarBottomWidget: TabBar(
+        controller: _tabController,
+        tabs: tabs,
       ),
-    );
-  }
+      body: TabBarView(
+        controller: _tabController,
+        children: tabChildren,
+      ),
+    ),
+  );
 
   int get _initialIndex {
     final index = widget._pageController.index;

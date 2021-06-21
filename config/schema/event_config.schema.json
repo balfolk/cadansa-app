@@ -172,7 +172,11 @@
                       ]
                     }
                   }
-                }
+                },
+                "required": [
+                  "type",
+                  "floors"
+                ]
               },
               {
                 "type": "object",
@@ -278,7 +282,11 @@
                       "additionalItems": false
                     }
                   }
-                }
+                },
+                "required": [
+                  "type",
+                  "pages"
+                ]
               },
               {
                 "type": "object",
@@ -290,7 +298,17 @@
                     "type": {
                       "$ref": "definitions.json#/text"
                     }
-                  }
+                  },
+                  "feedEmptyText": {
+                    "type": {
+                      "$ref": "definitions.json#/text"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "feedUrl",
+                    "feedEmptyText"
+                  ]
                 }
               },
               {
@@ -304,7 +322,11 @@
                       "$ref": "definitions.json#/text"
                     }
                   }
-                }
+                },
+                "required": [
+                  "type",
+                  "content"
+                ]
               }
             ]
           }

@@ -70,9 +70,12 @@ class InfoPageData extends PageData {
 class FeedPageData extends PageData {
   FeedPageData._(final LText title, final String icon, final dynamic json)
       : _feedUrl = LText(json['feedUrl']),
+        _feedEmptyText = LText(json['feedEmptyText']),
         super._(title, icon);
 
   final LText _feedUrl;
+  final LText _feedEmptyText;
 
   LText get feedUrl => _feedUrl;
+  LText get feedEmptyText => _feedEmptyText;
 }
