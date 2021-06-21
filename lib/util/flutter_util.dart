@@ -108,8 +108,10 @@ Future<void> openInAppBrowser({
     urlRequest: URLRequest(url: parsed),
     options: InAppBrowserClassOptions(
       crossPlatform: InAppBrowserOptions(
-        hideUrlBar: true,
-        toolbarTopBackgroundColor: Theme.of(context).primaryColor,
+        hideToolbarTop: true
+      ),
+      android: AndroidInAppBrowserOptions(
+        shouldCloseOnBackButtonPressed: true,
       ),
       ios: IOSInAppBrowserOptions(
         presentationStyle: IOSUIModalPresentationStyle.PAGE_SHEET,
