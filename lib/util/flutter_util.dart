@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cadansa_app/data/parse_utils.dart';
@@ -104,17 +105,22 @@ Future<void> openInAppBrowser({
   final parsed = Uri.tryParse(url);
   if (parsed == null) return;
 
+  final toolbarColor = Theme.of(context).primaryColor;
   await _IN_APP_BROWSER.openUrlRequest(
     urlRequest: URLRequest(url: parsed),
     options: InAppBrowserClassOptions(
       crossPlatform: InAppBrowserOptions(
-        hideToolbarTop: true
+        hideToolbarTop: Platform.isAndroid,
+        hideUrlBar: true,
       ),
       android: AndroidInAppBrowserOptions(
         shouldCloseOnBackButtonPressed: true,
       ),
       ios: IOSInAppBrowserOptions(
-        presentationStyle: IOSUIModalPresentationStyle.PAGE_SHEET,
+        presentationStyle: IOSUIModalPresentationStyle.FORM_SHEET,
+        toolbarBottomBackgroundColor: toolbarColor,
+        toolbarBottomTintColor: Theme.of(context).accentColor,
+        toolbarTopTintColor: Theme.of(context).accentColor,
       ),
     ),
   );
