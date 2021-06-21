@@ -9,7 +9,6 @@ import 'package:cadansa_app/pages/programme_page.dart';
 import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,16 +35,11 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     actionHandler: _handleAction,
     buildScaffold: ({appBarBottomWidget, required body}) {
       final locale = Localizations.localeOf(context);
-      final theme = Theme.of(context);
-      final onPrimaryBrightness = theme.onPrimaryBrightness;
       return Scaffold(
         appBar: AppBar(
           // Fix the status bar brightness - hopefully this becomes obsolete soon
           backwardsCompatibility: false,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: onPrimaryBrightness,
-            statusBarBrightness: onPrimaryBrightness,
-          ),
+          systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(widget._event.title.get(locale)),
           bottom: appBarBottomWidget,
         ),

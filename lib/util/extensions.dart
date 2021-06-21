@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 extension MyIterable<T> on Iterable<T> {
   T? elementAtOrNull(final int? index) {
@@ -17,6 +18,8 @@ Brightness _getOtherBrightness(final Brightness brightness) {
 }
 
 extension MyThemeData on ThemeData {
-  Brightness get onPrimaryBrightness =>
-      _getOtherBrightness(primaryColorBrightness);
+  SystemUiOverlayStyle get systemUiOverlayStyle => SystemUiOverlayStyle(
+    statusBarIconBrightness: _getOtherBrightness(primaryColorBrightness),
+    statusBarBrightness: primaryColorBrightness,
+  );
 }

@@ -410,15 +410,11 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   void _showTerms(final BuildContext context, final Legal legal) async {
     await Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
       final locale = Localizations.localeOf(context);
-      final onPrimaryBrightness = Theme.of(context).onPrimaryBrightness;
       return Scaffold(
         appBar: AppBar(
           // Fix the status bar brightness - hopefully this becomes obsolete soon
           backwardsCompatibility: false,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: onPrimaryBrightness,
-            statusBarBrightness: onPrimaryBrightness,
-          ),
+          systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(legal.labelTerms.get(locale)),
         ),
         body: Html(
@@ -450,15 +446,11 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 class LoadingPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
-    final onPrimaryBrightness = Theme.of(context).onPrimaryBrightness;
     return Scaffold(
       appBar: AppBar(
         // Fix the status bar brightness - hopefully this becomes obsolete soon
         backwardsCompatibility: false,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness: onPrimaryBrightness,
-          statusBarBrightness: onPrimaryBrightness,
-        ),
+        systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
         title: const Text(APP_TITLE),
       ),
       body: const Center(
@@ -475,15 +467,11 @@ class TimeoutPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final onPrimaryBrightness = Theme.of(context).onPrimaryBrightness;
     return Scaffold(
       appBar: AppBar(
         // Fix the status bar brightness - hopefully this becomes obsolete soon
         backwardsCompatibility: false,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness: onPrimaryBrightness,
-          statusBarBrightness: onPrimaryBrightness,
-        ),
+        systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
         title: const Text(APP_TITLE),
       ),
       body: Container(
