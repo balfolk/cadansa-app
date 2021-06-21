@@ -39,30 +39,29 @@ class _LocaleWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
-    Widget widget = TextButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color?>(
-          theme.textTheme.button?.color,
-        ),
-      ),
-      child: Text(stringToUnicodeFlag(locale.countryCode)),
-    );
-
+    MaterialStateProperty<BorderSide?>? border;
     if (isActive) {
-      widget = Container(
-        margin: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          border: Border.all(
-            color: theme.primaryColor,
-            width: 2.0,
-          ),
-        ),
-        child: widget,
-      );
+      border = MaterialStateProperty.all(BorderSide(
+        color: theme.primaryColor,
+        width: 2.0,
+      ));
     }
 
-    return widget;
+    return Tooltip(
+      message: locale.languageCode,
+      child: TextButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(
+            theme.textTheme.button?.color,
+          ),
+          side: border,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Text(stringToUnicodeFlag(locale.countryCode)),
+        ),
+      ),
+    );
   }
 }
