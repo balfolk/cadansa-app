@@ -68,6 +68,7 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 * If you're on an Apple Silicon chip, configure XCode to run using Rosetta 2 by navigating to the application, right-clicking it, selecting "Get Info", and ticking "Open using Rosetta".
 * Open the project in XCode by starting XCode, selecting "Open a project or file", and opening the `ios` folder of this project.
 * If you're on an Apple Silicon chip, start the iOS emulator using Rosetta 2. The easiest way to find it is to start it from XCode using XCode -> Open Developer Tool -> Simulator, then right-clicking it in the dock and selecting Options -> Show in Finder. From this executable the setting can be modified similar to how you just did it for XCode.
+    * Make sure your iOS device has iOS 12.0 or greater installed, as that's the minimum supported version for this app.
 * Once a simulated iOS device is running, it should show up in the list of target devices in Android Studio. At this point XCode can safely be closed.
 
 In case of errors on iOS, it is advised to first try cleaning everything before attempting a fresh build:

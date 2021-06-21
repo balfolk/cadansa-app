@@ -1,0 +1,6 @@
+package nl.cadansa.cadansa_app
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
