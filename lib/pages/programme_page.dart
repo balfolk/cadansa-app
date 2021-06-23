@@ -147,7 +147,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
 
   String _formatItemName(final ProgrammeItem item) {
     final locale = Localizations.localeOf(context);
-    return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
+    return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 
   static TemporalState? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
