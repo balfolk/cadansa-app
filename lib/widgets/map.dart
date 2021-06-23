@@ -97,8 +97,9 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     final path = widget._data.url.get(locale);
     ImageProvider imageProvider;
     if (path.startsWith('http')) {
+      final versionEncoded = Uri.encodeQueryComponent('${widget._data.version}');
       final url = Uri.parse(widget._data.url.get(locale)).replace(
-        queryParameters: <String, String>{'version': '${widget._data.version}'},
+        queryParameters: <String, String>{'version': versionEncoded},
       );
       imageProvider = CachedNetworkImageProvider(url.toString());
     } else {
