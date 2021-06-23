@@ -39,7 +39,11 @@ const _LOCALE_KEY = 'locale';
 
 late PackageInfo _packageInfo;
 
-void main() async {
+void main() {
+  _main();
+}
+
+Future<void> _main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _packageInfo = await PackageInfo.fromPlatform();
   final sharedPrefs = await SharedPreferences.getInstance();
@@ -126,7 +130,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     _loadConfig(force: force);
   }
 
-  void _loadConfig({final bool force = false}) async {
+  Future<void> _loadConfig({final bool force = false}) async {
     final lastConfigLoad = _lastConfigLoad;
     if (!force && _config != null && lastConfigLoad != null
         && lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
@@ -415,7 +419,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Iterable<Locale> get _supportedLocales =>
       _config?.locales ?? _DEFAULT_LOCALES;
 
-  void _showTerms(final BuildContext context, final Legal legal) async {
+  Future<void> _showTerms(final BuildContext context, final Legal legal) async {
     await Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
       final locale = Localizations.localeOf(context);
       return Scaffold(
@@ -432,7 +436,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }));
   }
 
-  void _showAbout(final BuildContext context, final Legal legal) async {
+  Future<void> _showAbout(final BuildContext context, final Legal legal) async {
     final locale = Localizations.localeOf(context);
     final year = DateFormat.y(locale.toLanguageTag()).format(DateTime.now());
     showAboutDialog(
