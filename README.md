@@ -47,7 +47,7 @@ Before starting, please ensure your Windows 10 system has all the latest updates
     * Android Studio Settings are located under Android Studio -> Preferences (or  ⌘,) on macOS and under File -> Settings on Linux and Windows.
 *  The banner in Android Studio should change to give you the option to get packages; do so now. Wait for the downloads to complete.
     * If there's no banner, manually execute `flutter pub get`.
-*  Obtain the map font (or use your favourite font), and put it into `assets/fonts/map-{regular,bold,light}.otf`.
+*  Obtain the app & map fonts (or use your favourite fonts), and put them into `assets/fonts/app-font.otf` and `assets/fonts/map-{regular,bold,light}.otf`, respectively.
 
 ### Part 2a: Running the app on an Android Emulator
 

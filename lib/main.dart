@@ -229,6 +229,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           theme: ThemeData(
             primarySwatch: primarySwatch,
             accentColor: accentColor,
+            fontFamily: 'AppFontFamily',
           ),
           home: _homePage,
           localizationsDelegates: const [

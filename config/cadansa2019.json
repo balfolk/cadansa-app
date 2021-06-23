@@ -361,9 +361,9 @@
               "angle": 348.15,
               "fontSize": 60,
               "text": {
-                "en": "entrance",
-                "nl": "ingang",
-                "fr": "entrée"
+                "en": "Entrance",
+                "nl": "Ingang",
+                "fr": "Entrée"
               }
             },
             {
@@ -371,9 +371,9 @@
               "angle": 87.0,
               "fontSize": 60,
               "text": {
-                "en": "showers",
-                "nl": "douches",
-                "fr": "douches"
+                "en": "Showers",
+                "nl": "Douches",
+                "fr": "Douches"
               }
             },
             {
@@ -382,9 +382,9 @@
               "alignment": 1,
               "fontSize": 60,
               "text": {
-                "en": "theatre",
-                "nl": "theater",
-                "fr": "théâtre"
+                "en": "Theatre",
+                "nl": "Theater",
+                "fr": "Théâtre"
               }
             },
             {
@@ -393,9 +393,9 @@
               "alignment": 1,
               "fontSize": 48,
               "text": {
-                "en": "music\nworkshops",
-                "nl": "muziek-\nworkshops",
-                "fr": "ateliers\nde musique"
+                "en": "Music\nworkshops",
+                "nl": "Muziek-\nworkshops",
+                "fr": "Ateliers\nde musique"
               }
             }
           ]
@@ -503,9 +503,9 @@
               "alignment": 1,
               "fontSize": 60,
               "text": {
-                "en": "board games area",
-                "nl": "bordspellen",
-                "fr": "jeux de plateux"
+                "en": "Board games area",
+                "nl": "Bordspellen",
+                "fr": "Jeux de plateux"
               }
             }
           ]

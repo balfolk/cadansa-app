@@ -53,6 +53,9 @@ flutter:
     - .env
 
   fonts:
+    - family: AppFontFamily
+      fonts:
+        - asset: assets/fonts/app-font.otf
     - family: MapFontFamily
       fonts:
         - asset: assets/fonts/map-regular.otf
