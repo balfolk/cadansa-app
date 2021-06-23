@@ -285,7 +285,7 @@
                 },
                 "required": [
                   "type",
-                  "pages"
+                  "days"
                 ]
               },
               {
