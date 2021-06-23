@@ -102,6 +102,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
       },
       currentIndex: _currentIndex,
       type: BottomNavigationBarType.fixed,
+      selectedItemColor: Theme.of(context).primaryColor,
     );
   }
 
