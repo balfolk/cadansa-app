@@ -121,9 +121,18 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
             return ExpandableNotifier(
               child: ScrollOnExpand(
                 child: ExpandablePanel(
+                  theme: const ExpandableThemeData(
+                    headerAlignment: ExpandablePanelHeaderAlignment.center,
+                  ),
                   header: header,
                   collapsed: const SizedBox.shrink(),
-                  expanded: ProgrammeItemBody(item, widget._pageHooks.actionHandler),
+                  expanded: Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0, top: 15.0, bottom: 10.0),
+                    child: ProgrammeItemBody(
+                      item: item,
+                      actionHandler: widget._pageHooks.actionHandler,
+                    ),
+                  ),
                 ),
               ),
             );

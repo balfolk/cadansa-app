@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void _setClipboardText(final String text) =>
     Clipboard.setData(ClipboardData(text: text));
@@ -124,4 +125,8 @@ Future<void> openInAppBrowser({
       ),
     ),
   );
+}
+
+IconData? findIcon(final String? key) {
+  return key != null ? MdiIcons.fromString(key) : null;
 }
