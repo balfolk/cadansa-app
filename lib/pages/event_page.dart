@@ -131,7 +131,10 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _selectPage(final int? pageIndex) {
-    if (pageIndex == null || pageIndex < 0 || pageIndex >= widget._event.pages.length) return;
+    if (!mounted ||
+        pageIndex == null ||
+        pageIndex < 0 ||
+        pageIndex >= widget._event.pages.length) return;
 
     setState(() {
       _currentIndex = pageIndex;
@@ -162,9 +165,10 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
       }
     }
 
-    if (pageIndex != null && floorIndex != null && areaIndex != null) {
+    if (mounted && pageIndex != null && floorIndex != null && areaIndex != null) {
+      final thePageIndex = pageIndex;
       setState(() {
-        _currentIndex = pageIndex!;
+        _currentIndex = thePageIndex;
         _highlightAreaFloorIndex = floorIndex;
         _highlightAreaIndex = areaIndex;
       });

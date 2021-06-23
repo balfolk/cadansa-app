@@ -117,9 +117,11 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   void _resetConfig({final bool force = false}) {
-    setState(() {
-      _mode = _CaDansaAppStateMode.loading;
-    });
+    if (mounted) {
+      setState(() {
+        _mode = _CaDansaAppStateMode.loading;
+      });
+    }
 
     _loadConfig(force: force);
   }
@@ -129,7 +131,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     if (!force && _config != null && lastConfigLoad != null
         && lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
       // Config still valid, use the existing one rather than reloading
-      if (_mode != _CaDansaAppStateMode.done) {
+      if (mounted && _mode != _CaDansaAppStateMode.done) {
         setState(() {
           _mode = _CaDansaAppStateMode.done;
         });
@@ -139,7 +141,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
     if (_configUrl == null) {
       await dotenv.load();
-      if (!dotenv.isEveryDefined({_CONFIG_URL_KEY})) {
+      if (mounted && !dotenv.isEveryDefined({_CONFIG_URL_KEY})) {
         setState(() {
           _mode = _CaDansaAppStateMode.done;
         });
@@ -162,22 +164,28 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           await _switchToEvent(config.allEvents[eventIndex], eventIndex);
         }
 
-        final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
-        setState(() {
-          _mode = _CaDansaAppStateMode.done;
-          _initialPageIndex = pageIndex;
-        });
+        if (mounted) {
+          final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
+          setState(() {
+            _mode = _CaDansaAppStateMode.done;
+            _initialPageIndex = pageIndex;
+          });
+        }
       // ignore: avoid_catches_without_on_clauses
       } catch (e, stackTrace) {
         debugPrint('$e');
         debugPrintStack(stackTrace: stackTrace);
-        setState(() {
-          _mode = _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
-        });
+        if (mounted) {
+          setState(() {
+            _mode =
+            _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
+          });
+        }
       }
-    } else {
+    } else if (mounted) {
       setState(() {
-        _mode = _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
+        _mode =
+        _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
       });
     }
   }
@@ -271,8 +279,8 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
             isSelected: identical(event, _currentEvent),
             onTap: () async {
               await _switchToEvent(event, index);
-              setState(() {});
               if (mounted) {
+                setState(() {});
                 Navigator.pop(context);
               }
             },

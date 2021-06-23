@@ -47,10 +47,12 @@ class _FeedPageState extends State<FeedPage> {
 
   Future<void> _refreshFeed() async {
     final feed = await _fetchFeed();
-    setState(() {
-      _feed = feed;
-      _status = _feed != null ? _FeedPageStatus.DONE : _FeedPageStatus.ERROR;
-    });
+    if (mounted) {
+      setState(() {
+        _feed = feed;
+        _status = _feed != null ? _FeedPageStatus.DONE : _FeedPageStatus.ERROR;
+      });
+    }
   }
 
   Future<String?> _fetchFeed() async {
