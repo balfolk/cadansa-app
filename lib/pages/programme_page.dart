@@ -3,6 +3,7 @@ import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/page_util.dart';
+import 'package:cadansa_app/util/temporal_state.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
@@ -10,21 +11,19 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
-enum EventTiming { past, present, future }
-
 class ProgrammePage extends StatefulWidget {
   const ProgrammePage(
     this._programme,
+    this._event,
     this._pageHooks,
-    this._pageController,
-    this._eventTiming, {
+    this._pageController, {
     final Key? key,
   }) : super(key: key);
 
   final Programme _programme;
+  final Event _event;
   final PageHooks _pageHooks;
   final IndexedPageController _pageController;
-  final EventTiming _eventTiming;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
@@ -142,7 +141,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
   }
 
-  static _PlayingStatus? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
+  static TemporalState? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
     // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
     const HOUR_NIGHT_CUTOFF = 6;
 
@@ -164,12 +163,12 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
         hours: itemEndTime.hour,
         minutes: itemEndTime.minute)) : null;
     final now = DateTime.now();
-    if (now.isBefore(startMoment)) return _PlayingStatus.before;
+    if (now.isBefore(startMoment)) return TemporalState.future;
     if (endMoment != null) {
-      if (now.isAfter(endMoment)) return _PlayingStatus.after;
-      return _PlayingStatus.during;
+      if (now.isAfter(endMoment)) return TemporalState.past;
+      return TemporalState.present;
     } else {
-      return _PlayingStatus.after;
+      return TemporalState.past;
     }
   }
 
@@ -186,13 +185,13 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     final status = _getPlayingStatus(day, item);
     if (item.kind.showIcon == ProgrammeItemKindShowIcon.never ||
         (item.kind.showIcon == ProgrammeItemKindShowIcon.during &&
-            status != _PlayingStatus.during)) {
+            status != TemporalState.present)) {
       return null;
     }
 
     // Icons for the current event may be shown as grey, when they are in the past
-    final color = widget._eventTiming == EventTiming.present &&
-            (status == null || status == _PlayingStatus.after)
+    final color = widget._event.doColorIcons &&
+            (status == null || status == TemporalState.past)
         ? Colors.grey
         : Theme.of(context).primaryColor;
 
@@ -201,7 +200,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
       size: 36,
     );
 
-    if (status == _PlayingStatus.during) {
+    if (status == TemporalState.present) {
       return Shimmer.fromColors(
         baseColor: Theme.of(context).primaryColor,
         highlightColor: Theme.of(context).primaryColorLight,
@@ -218,5 +217,3 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     super.dispose();
   }
 }
-
-enum _PlayingStatus { before, during, after }

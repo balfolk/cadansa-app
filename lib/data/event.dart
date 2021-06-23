@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
+import 'package:cadansa_app/util/temporal_state.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -16,6 +17,22 @@ class Event {
   LText get title => _globalEvent.title;
   DateTime get startDate => _globalEvent.startDate;
   DateTime get endDate => _globalEvent.endDate;
+
+  /// Whether we should color icons on a programme page for this event.
+  bool get doColorIcons => _temporalState == TemporalState.present;
+
+  TemporalState get _temporalState {
+    final now = DateTime.now();
+    final hasStarted = now.isAfter(startDate);
+    final hasEnded = now.isAfter(endDate);
+    if (hasEnded) {
+      return TemporalState.past;
+    } else if (hasStarted) {
+      return TemporalState.present;
+    } else {
+      return TemporalState.future;
+    }
+  }
 }
 
 @immutable

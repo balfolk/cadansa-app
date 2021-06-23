@@ -51,7 +51,6 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   );
   late final IndexedPageController _programmePageController =
       IndexedPageController(index: widget._initialIndex);
-  late EventTiming _eventTiming = _calculateEventTiming();
 
   static const _DEFAULT_PAGE_INDEX = 0;
   static const _ACTION_SEPARATOR = ':',
@@ -63,28 +62,10 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   void didUpdateWidget(final CaDansaEventPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     _validateIndex();
-    _eventTiming = _calculateEventTiming();
   }
 
   void _validateIndex() {
-    _setIndex(_currentIndex);
-  }
-
-  EventTiming _calculateEventTiming() {
-    final now = DateTime.now();
-    final hasStarted = widget._event.startDate.isAfter(now);
-    final hasEnded = widget._event.endDate.isAfter(now);
-    if (hasEnded) {
-      return EventTiming.past;
-    } else if (hasStarted) {
-      return EventTiming.present;
-    } else {
-      return EventTiming.future;
-    }
-  }
-
-  void _setIndex(int? newIndex) {
-    newIndex = newIndex?.clamp(0, widget._event.pages.length - 1) ?? _DEFAULT_PAGE_INDEX;
+    final newIndex = _currentIndex.clamp(0, widget._event.pages.length - 1);
     if (newIndex != _currentIndex) {
       _currentIndex = newIndex;
       _storePageIndex(newIndex);
@@ -99,7 +80,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     if (pageData is MapPageData) {
       return MapPage(pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(pageData.programme, _pageHooks, _programmePageController, _eventTiming, key: key);
+      return ProgrammePage(pageData.programme, widget._event, _pageHooks, _programmePageController, key: key);
     } else if (pageData is InfoPageData) {
       return InfoPage(pageData.content, _pageHooks, key: key);
     } else if (pageData is FeedPageData) {
@@ -115,10 +96,8 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
         icon: Icon(MdiIcons.fromString(pageData.icon)),
         label: pageData.title.get(locale),
       )).toList(growable: false),
-      onTap: (int index) async {
-        setState(() {
-          _currentIndex = index;
-        });
+      onTap: (int index) {
+        _selectPage(index);
         _storePageIndex(index);
       },
       currentIndex: _currentIndex,
