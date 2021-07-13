@@ -22,7 +22,10 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(final BuildContext context) {
+    const htmlAnchor = 'a';
+
     final locale = Localizations.localeOf(context);
+    final theme = Theme.of(context);
     final content = sanitizeHtml(widget._content.get(locale));
     return widget._pageHooks.buildScaffold(
       body: SingleChildScrollView(
@@ -31,6 +34,9 @@ class _InfoPageState extends State<InfoPage> {
           child: Html(
             data: content,
             onLinkTap: _onLinkTap,
+            style: {
+              htmlAnchor: Style(color: theme.accentColor),
+            },
           ),
         ),
       ),
