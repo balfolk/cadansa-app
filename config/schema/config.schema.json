@@ -24,6 +24,30 @@
       "minItems": 1,
       "uniqueItems": true
     },
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "supportsFavorites": {
+          "type": "bool"
+        },
+        "favoriteInnerColor": {
+          "$ref": "definitions.json#/color"
+        },
+        "favoriteOuterColor": {
+          "$ref": "definitions.json#/color"
+        },
+        "favoriteTooltip": {
+          "$ref": "definitions.json#/text"
+        }
+      },
+      "required": [
+        "supportsFavorites",
+        "favoriteOuterColor",
+        "favoriteInnerColor",
+        "favoriteTooltip"
+      ],
+      "additionalProperties": false
+    },
     "eventSections": {
       "type": "array",
       "items": {
@@ -35,6 +59,9 @@
           "events": {
             "type": "array",
             "items": {
+              "id": {
+                "$ref": "definitions.json#/id"
+              },
               "title": {
                 "$ref": "definitions.json#/text"
               },
@@ -60,6 +87,7 @@
             },
             "additionalProperties": false,
             "required": [
+              "id",
               "title",
               "startDate",
               "endDate",
@@ -110,6 +138,7 @@
   "required": [
     "version",
     "logo",
+    "defaults",
     "eventSections",
     "legal"
   ]

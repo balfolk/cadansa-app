@@ -6,15 +6,46 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Programme {
-  const Programme._(this._days);
+  const Programme._(
+    this._days,
+    this._constants,
+    this._supportsFavorites,
+    this._favoriteInnerColor,
+    this._favoriteOuterColor,
+    this._favoriteTooltip,
+  );
 
   Programme.parse(final dynamic json, final EventConstants constants)
-      : this._(parseList(json['days'],
-          (dynamic d) => ProgrammeDay.parse(d, constants)));
+      : this._(
+    parseList(json['days'], (dynamic d) => ProgrammeDay.parse(d, constants)),
+    constants,
+    json['supportsFavorites'] as bool?,
+    parseColor(json['favoriteInnerColor']),
+    parseColor(json['favoriteOuterColor']),
+    LText.maybeParse(json['favoriteTooltip']),
+  );
 
   final BuiltList<ProgrammeDay> _days;
+  final EventConstants _constants;
+  final bool? _supportsFavorites;
+  final Color? _favoriteInnerColor;
+  final Color? _favoriteOuterColor;
+  final LText? _favoriteTooltip;
 
   BuiltList<ProgrammeDay> get days => _days;
+
+  /// Whether we can mark items as favorite on a programme page for this event.
+  bool get supportsFavorites =>
+      _supportsFavorites ?? _constants.supportsFavorites;
+
+  Color get favoriteInnerColor =>
+      _favoriteInnerColor ?? _constants.favoriteInnerColor;
+
+  Color get favoriteOuterColor =>
+      _favoriteOuterColor ?? _constants.favoriteOuterColor;
+
+  LText get favoriteTooltip =>
+      _favoriteTooltip ?? _constants.favoriteTooltip;
 }
 
 @immutable
@@ -42,20 +73,23 @@ class ProgrammeDay {
 @immutable
 class ProgrammeItem {
   const ProgrammeItem._(
-      this._name,
-      this._startTime,
-      this._endTime,
-      this._location,
-      this._countries,
-      this._teacher,
-      this._level,
-      this._kind,
-      this._description,
-      this._website,
-      );
+    this._id,
+    this._name,
+    this._startTime,
+    this._endTime,
+    this._location,
+    this._countries,
+    this._teacher,
+    this._level,
+    this._kind,
+    this._description,
+    this._website,
+    this._canFavorite,
+  );
 
   ProgrammeItem.parse(final dynamic json, final EventConstants constants)
       : this._(
+    json['id'] as String?,
     LText(json['name']),
     parseTimeOfDay(json['startTime'])!,
     parseTimeOfDay(json['endTime']),
@@ -66,8 +100,10 @@ class ProgrammeItem {
     constants.getKind(json['kind']?.toString()),
     LText(json['description']),
     Website._parse(json['website']),
+    json['canFavorite'] as bool? ?? true,
   );
 
+  final String? _id;
   final LText _name;
   final TimeOfDay _startTime;
   final TimeOfDay? _endTime;
@@ -78,6 +114,9 @@ class ProgrammeItem {
   final ProgrammeItemKind _kind;
   final LText _description;
   final Website _website;
+  final bool _canFavorite;
+
+  String? get id => _id;
 
   LText get name => _name;
 
@@ -98,6 +137,8 @@ class ProgrammeItem {
   LText get description => _description;
 
   Website get website => _website;
+
+  bool get canFavorite => _canFavorite && id != null;
 }
 
 @immutable

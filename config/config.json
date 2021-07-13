@@ -6,6 +6,16 @@
     ["nl", "NL"],
     ["fr", "FR"]
   ],
+  "defaults": {
+    "supportsFavorites": true,
+    "favoriteInnerColor": [216, 155, 61],
+    "favoriteOuterColor": [143, 68, 47],
+    "favoriteTooltip": {
+      "en": "Favourite",
+      "nl": "Favoriet",
+      "fr": "Préféré(e)"
+    }
+  },
   "eventSections": [
     {
       "title": {
@@ -15,6 +25,7 @@
       },
       "events": [
         {
+          "id": "cadansa2019",
           "title": "CaDansa 2019",
           "startDate": "2019-10-24",
           "endDate": "2019-10-27",

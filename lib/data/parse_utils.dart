@@ -26,6 +26,12 @@ abstract class LText {
   @literal
   const factory LText.empty() = _EmptyLText;
 
+  @factory
+  static LText? maybeParse(final dynamic json) {
+    if (json == null) return null;
+    return LText(json);
+  }
+
   String get(final Locale locale);
 }
 

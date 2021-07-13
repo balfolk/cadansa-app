@@ -10,6 +10,7 @@ class PageHooks {
 
   final ActionHandler actionHandler;
   final Widget Function({
+    Iterable<Widget>? actions,
     PreferredSizeWidget? appBarBottomWidget,
     required Widget body,
   }) buildScaffold;

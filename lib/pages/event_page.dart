@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
+import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/feed_page.dart';
 import 'package:cadansa_app/pages/info_page.dart';
@@ -14,13 +16,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CaDansaEventPage extends StatefulWidget {
-  const CaDansaEventPage(this._event, this._initialIndex, this._buildDrawer,
-      {final Key? key})
-      : super(key: key);
+  const CaDansaEventPage({
+    required this.event,
+    required this.initialIndex,
+    required this.buildDrawer,
+    required this.sharedPreferences,
+    final Key? key,
+  }) : super(key: key);
 
-  final Event _event;
-  final int? _initialIndex;
-  final Widget? Function({required BuildContext context}) _buildDrawer;
+  final Event event;
+  final int? initialIndex;
+  final Widget? Function({required BuildContext context}) buildDrawer;
+  final SharedPreferences sharedPreferences;
 
   @override
   _CaDansaEventPageState createState() => _CaDansaEventPageState();
@@ -33,24 +40,25 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
 
   late final PageHooks _pageHooks = PageHooks(
     actionHandler: _handleAction,
-    buildScaffold: ({appBarBottomWidget, required body}) {
+    buildScaffold: ({actions, appBarBottomWidget, required body}) {
       final locale = Localizations.localeOf(context);
       return Scaffold(
         appBar: AppBar(
           // Fix the status bar brightness - hopefully this becomes obsolete soon
           backwardsCompatibility: false,
           systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
-          title: Text(widget._event.title.get(locale)),
+          title: Text(widget.event.title.get(locale)),
+          actions: actions?.toList(growable: false),
           bottom: appBarBottomWidget,
         ),
         body: body,
-        drawer: widget._buildDrawer(context: context),
+        drawer: widget.buildDrawer(context: context),
         bottomNavigationBar: _buildBottomNavigationBar(),
       );
     },
   );
   late final IndexedPageController _programmePageController =
-      IndexedPageController(index: widget._initialIndex);
+      IndexedPageController(index: widget.initialIndex);
 
   static const _DEFAULT_PAGE_INDEX = 0;
   static const _ACTION_SEPARATOR = ':',
@@ -65,7 +73,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _validateIndex() {
-    final newIndex = _currentIndex.clamp(0, widget._event.pages.length - 1);
+    final newIndex = _currentIndex.clamp(0, widget.event.pages.length - 1);
     if (newIndex != _currentIndex) {
       _currentIndex = newIndex;
       _storePageIndex(newIndex);
@@ -75,16 +83,30 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   @override
   Widget build(final BuildContext context) {
     final key = Key('page$_currentIndex');
-    _currentIndex = _currentIndex.clamp(0, widget._event.pages.length - 1);
-    final pageData = widget._event.pages[_currentIndex];
+    _currentIndex = _currentIndex.clamp(0, widget.event.pages.length - 1);
+    final pageData = widget.event.pages[_currentIndex];
     if (pageData is MapPageData) {
       return MapPage(pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(pageData.programme, widget._event, _pageHooks, _programmePageController, key: key);
+      return ProgrammePage(
+        programme: pageData.programme,
+        event: widget.event,
+        pageHooks: _pageHooks,
+        pageController: _programmePageController,
+        getFavorites: _getEventFavorites,
+        setFavorite: _setFavorite,
+        key: key,
+      );
     } else if (pageData is InfoPageData) {
       return InfoPage(pageData.content, _pageHooks, key: key);
     } else if (pageData is FeedPageData) {
-      return FeedPage(pageData.feedUrl, pageData.feedEmptyText, _pageHooks, key: key);
+      return FeedPage(
+        data: pageData,
+        pageHooks: _pageHooks,
+        getReadGuids: _getReadFeedGuids,
+        setReadGuid: _setReadFeedGuid,
+        key: key,
+      );
     }
     throw StateError('Unknown page data object $pageData');
   }
@@ -92,7 +114,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   Widget _buildBottomNavigationBar() {
     final locale = Localizations.localeOf(context);
     return BottomNavigationBar(
-      items: widget._event.pages.map((pageData) => BottomNavigationBarItem(
+      items: widget.event.pages.map((pageData) => BottomNavigationBarItem(
         icon: Icon(MdiIcons.fromString(pageData.icon)),
         label: pageData.title.get(locale),
       )).toList(growable: false),
@@ -134,7 +156,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     if (!mounted ||
         pageIndex == null ||
         pageIndex < 0 ||
-        pageIndex >= widget._event.pages.length) return;
+        pageIndex >= widget.event.pages.length) return;
 
     setState(() {
       _currentIndex = pageIndex;
@@ -151,7 +173,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     if (areaId == null) return;
 
     int? pageIndex, floorIndex, areaIndex;
-    for (final page in widget._event.pages.asMap().entries) {
+    for (final page in widget.event.pages.asMap().entries) {
       if (page.value is MapPageData) {
         for (final floor in (page.value as MapPageData).mapData.floors.asMap().entries) {
           final area = floor.value.areas.indexWhere((area) => area.id == areaId);
@@ -175,7 +197,43 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     }
   }
 
-  static void _storePageIndex(final int index) async {
-    await (await SharedPreferences.getInstance()).setInt(PAGE_INDEX_KEY, index);
+  Future<void> _storePageIndex(final int index) async {
+    await widget.sharedPreferences.setInt(PAGE_INDEX_KEY, index);
   }
+
+  Set<String> _getEventFavorites() {
+    return widget.sharedPreferences
+        .getStringList(_favoritesPreferencesKey)?.toSet() ?? {};
+  }
+
+  Future<bool> _setFavorite(final ProgrammeItem item) async {
+    final id = item.id;
+    if (id == null) return false;
+
+    final favorites = _getEventFavorites();
+    if (favorites.contains(id)) {
+      favorites.remove(id);
+    } else {
+      favorites.add(id);
+    }
+
+    return widget.sharedPreferences
+        .setStringList(_favoritesPreferencesKey, favorites.toList());
+  }
+
+  String get _favoritesPreferencesKey => 'favorites_${widget.event.id}';
+
+  Set<String> _getReadFeedGuids() {
+    return widget.sharedPreferences
+        .getStringList(_readGuidsPreferencesKey)?.toSet() ?? {};
+  }
+
+  Future<void> _setReadFeedGuid(final String? guid) async {
+    if (guid != null) {
+      await widget.sharedPreferences.setStringList(_readGuidsPreferencesKey,
+          _getReadFeedGuids().followedBy([guid]).toList());
+    }
+  }
+
+  String get _readGuidsPreferencesKey => 'read_${widget.event.id}';
 }

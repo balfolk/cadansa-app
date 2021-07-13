@@ -71,11 +71,14 @@ class FeedPageData extends PageData {
   FeedPageData._(final LText title, final String icon, final dynamic json)
       : _feedUrl = LText(json['feedUrl']),
         _feedEmptyText = LText(json['feedEmptyText']),
+        _supportsUnread = json['supportsUnread'] as bool,
         super._(title, icon);
 
   final LText _feedUrl;
   final LText _feedEmptyText;
+  final bool _supportsUnread;
 
   LText get feedUrl => _feedUrl;
   LText get feedEmptyText => _feedEmptyText;
+  bool get supportsUnread => _supportsUnread;
 }

@@ -8,12 +8,14 @@ class GlobalConfig {
       : title = LText(json['title']),
         logoUri = LText(json['logo']),
         locales = parseList(json['locales'], parseLocale),
+        defaults = GlobalDefaults(json['defaults']),
         sections = parseList(json['eventSections'], (dynamic s) => EventsSection(s)),
         legal = Legal(json['legal']);
 
   final LText title;
   final LText? logoUri;
   final BuiltList<Locale> locales;
+  final GlobalDefaults defaults;
   final BuiltList<EventsSection> sections;
   final Legal legal;
 
@@ -34,7 +36,8 @@ class EventsSection {
 @immutable
 class GlobalEvent {
   GlobalEvent(final dynamic json)
-      : title = LText(json['title']),
+      : id = json['id'] as String,
+        title = LText(json['title']),
         startDate = parseDate(json['startDate']),
         endDate = parseDate(json['endDate']),
         avatarUri = json['avatar'] as String?,
@@ -42,12 +45,27 @@ class GlobalEvent {
         primarySwatch = parseMaterialColor(json['primarySwatchColor']),
         accentColor = parseColor(json['accentColor']);
 
+  final String id;
   final LText title;
   final DateTime startDate, endDate;
   final String? avatarUri;
   final String configUri;
   final MaterialColor? primarySwatch;
   final Color? accentColor;
+}
+
+@immutable
+class GlobalDefaults {
+  GlobalDefaults(final dynamic json)
+      : supportsFavorites = json['supportsFavorites'] as bool,
+        favoriteInnerColor = parseColor(json['favoriteInnerColor'])!,
+        favoriteOuterColor = parseColor(json['favoriteOuterColor'])!,
+        favoriteTooltip = LText(json['favoriteTooltip']);
+
+  final bool supportsFavorites;
+  final Color favoriteInnerColor;
+  final Color favoriteOuterColor;
+  final LText favoriteTooltip;
 }
 
 @immutable

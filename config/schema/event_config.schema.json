@@ -200,6 +200,9 @@
                           "items": {
                             "type": "object",
                             "properties": {
+                              "id": {
+                                "$ref": "definitions.json#/id"
+                              },
                               "name": {
                                 "$ref": "definitions.json#/text"
                               },
@@ -261,6 +264,9 @@
                                 "level": {
                                   "type": "string",
                                   "minimumLength": 1
+                                },
+                                "canFavorite": {
+                                  "type": "bool"
                                 }
                               },
                               "additionalProperties": false,
@@ -281,6 +287,18 @@
                       },
                       "additionalItems": false
                     }
+                  },
+                  "supportsFavorites": {
+                    "type": "bool"
+                  },
+                  "favoriteInnerColor": {
+                    "$ref": "definitions.json#/color"
+                  },
+                  "favoriteOuterColor": {
+                    "$ref": "definitions.json#/color"
+                  },
+                  "favoriteTooltip": {
+                    "$ref": "definitions.json#/text"
                   }
                 },
                 "required": [
@@ -304,12 +322,16 @@
                       "$ref": "definitions.json#/text"
                     }
                   },
-                  "required": [
-                    "type",
-                    "feedUrl",
-                    "feedEmptyText"
-                  ]
-                }
+                  "supportsUnread": {
+                    "type": "bool"
+                  }
+                },
+                "required": [
+                  "type",
+                  "feedUrl",
+                  "feedEmptyText",
+                  "supportsUnread"
+                ]
               },
               {
                 "type": "object",

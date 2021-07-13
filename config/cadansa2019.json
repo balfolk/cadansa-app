@@ -538,6 +538,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "airboxes",
               "name": "Airboxes",
               "startTime": "19:15",
               "endTime": "20:45",
@@ -560,6 +561,7 @@
               }
             },
             {
+              "id": "dour_pottier_quartet",
               "name": "Dour / Le Pottier Quartet",
               "startTime": "21:00",
               "endTime": "22:45",
@@ -582,6 +584,7 @@
               }
             },
             {
+              "id": "itchy_fingers",
               "name": "Itchy Fingers",
               "startTime": "23:00",
               "endTime": "00:30",
@@ -630,6 +633,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "arasta_bazaar",
               "name": "Arasta Bazaar",
               "startTime": "18:00",
               "endTime": "19:45",
@@ -652,6 +656,7 @@
               }
             },
             {
+              "id": "duo_muller_munnelly",
               "name": "Duo Muller & Munnelly",
               "startTime": "20:00",
               "endTime": "20:45",
@@ -675,6 +680,7 @@
               }
             },
             {
+              "id": "broes",
               "name": "Broes",
               "startTime": "20:15",
               "endTime": "22:00",
@@ -697,6 +703,7 @@
               }
             },
             {
+              "id": "red_herring",
               "name": "Red Herring",
               "startTime": "21:00",
               "endTime": "21:45",
@@ -719,6 +726,7 @@
               }
             },
             {
+              "id": "hamon_martin_quartet",
               "name": "Hamon Martin Quintet",
               "startTime": "22:30",
               "endTime": "00:15",
@@ -741,6 +749,7 @@
               }
             },
             {
+              "id": "la_forcelle",
               "name": "La Forcelle",
               "startTime": "01:00",
               "endTime": "02:30",
@@ -789,6 +798,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "makers_market",
               "name": {
                 "en": "Makers' market",
                 "nl": "Kleedjesmarkt"
@@ -808,6 +818,7 @@
               }
             },
             {
+              "id": "les_folkeux_de_pie",
               "name": "Les Folkeux de Pie",
               "startTime": "16:00",
               "endTime": "17:30",
@@ -830,6 +841,7 @@
               }
             },
             {
+              "id": "trolska_polska",
               "name": "Trolska Polska",
               "startTime": "18:00",
               "endTime": "19:45",
@@ -853,6 +865,7 @@
               }
             },
             {
+              "id": "lo_bal_del_lop",
               "name": "Lo Bal del Lop",
               "startTime": "20:15",
               "endTime": "22:00",
@@ -875,6 +888,7 @@
               }
             },
             {
+              "id": "lausa",
               "name": "Laüsa",
               "startTime": "22:30",
               "endTime": "00:15",
@@ -897,6 +911,7 @@
               }
             },
             {
+              "id": "la_lanterne",
               "name": "La Lanterne",
               "startTime": "00:45",
               "endTime": "02:15",
@@ -945,6 +960,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "duo_theze",
               "name": "Duo Thézé",
               "startTime": "13:00",
               "endTime": "14:30",
@@ -967,6 +983,7 @@
               }
             },
             {
+              "id": "zigo",
               "name": "Zigo",
               "startTime": "14:45",
               "endTime": "16:30",
@@ -989,6 +1006,7 @@
               }
             },
             {
+              "id": "sirus",
               "name": "Sirus",
               "startTime": "16:45",
               "endTime": "18:30",
@@ -1063,6 +1081,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "intro_balfolk_1",
               "name": {
                 "en": "Introduction to balfolk",
                 "nl": "Introductie balfolkdansen"
@@ -1111,6 +1130,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "turkish_dance",
               "name": {
                 "en": "Turkish dance",
                 "nl": "Turkse Dans"
@@ -1133,6 +1153,7 @@
               }
             },
             {
+              "id": "playground_body_mind",
               "name": {
                 "en": "The playground: Body and Mind",
                 "nl": "Lichaamsbewustzijn"
@@ -1164,6 +1185,7 @@
               }
             },
             {
+              "id": "congo_de_captieux",
               "name": {
                 "en": "Congo de Captieux (Capsius)",
                 "nl": "Congo de Captieux (Capsius)"
@@ -1186,6 +1208,7 @@
               }
             },
             {
+              "id": "diatonic_accordeon_intro",
               "name": {
                 "en": "Intro to Diatonic accordion",
                 "nl": "Introductie Trekzak"
@@ -1216,6 +1239,7 @@
               }
             },
             {
+              "id": "hurdy_gurdy_1",
               "name": {
                 "en": "Introduction workshop Hurdy-gurdy",
                 "nl": "Introductieworkshop draailier"
@@ -1246,6 +1270,7 @@
               }
             },
             {
+              "id": "violin_advanced",
               "name": {
                 "en": "Advanced Violin",
                 "nl": "Viool gevorderden"
@@ -1267,6 +1292,7 @@
               }
             },
             {
+              "id": "cirlce_singing",
               "name": {
                 "en": "Circle singing (without dancing)",
                 "nl": "Cirkelzang (zonder dansen)"
@@ -1298,6 +1324,7 @@
               }
             },
             {
+              "id": "feldenkrais_1",
               "name": {
                 "en": "Feldenkrais @ CaDansa",
                 "nl": "Feldenkrais @ CaDansa"
@@ -1329,6 +1356,7 @@
               }
             },
             {
+              "id": "dutch_dances",
               "name": {
                 "en": "The Horlepiep and other Dutch dances",
                 "nl": "De Horlepiep en nog meer Nederlandse dansen"
@@ -1351,6 +1379,7 @@
               }
             },
             {
+              "id": "dance_toolbox",
               "name": {
                 "en": "The Dance Toolbox – generic dance techniques",
                 "nl": "Algemene danstechniek"
@@ -1382,6 +1411,7 @@
               }
             },
             {
+              "id": "breton_dance",
               "name": {
                 "en": "Breton dance",
                 "nl": "Bretonse dansen"
@@ -1404,6 +1434,7 @@
               }
             },
             {
+              "id": "bagpipe_intro_1",
               "name": {
                 "en": "Introduction workshop Bagpipe",
                 "nl": "Introductieworkshop doedelzak"
@@ -1434,6 +1465,7 @@
               }
             },
             {
+              "id": "advanced_accordion",
               "name": {
                 "en": "Advanced accordion (C#/D)",
                 "nl": "Gevorderde accordeon (C#/D)"
@@ -1464,6 +1496,7 @@
               }
             },
             {
+              "id": "celtic_flute",
               "name": {
                 "en": "Celtic Flute",
                 "nl": "Keltische Fluit"
@@ -1494,6 +1527,7 @@
               }
             },
             {
+              "id": "self_massage",
               "name": {
                 "en": "Self massage",
                 "nl": "Zelfmassage"
@@ -1516,6 +1550,7 @@
               }
             },
             {
+              "id": "intro_balfolk_2",
               "name": {
                 "en": "Introduction to balfolk",
                 "nl": "Introductie balfolkdansen"
@@ -1564,6 +1599,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "diving_mazurka",
               "name": {
                 "en": "Diving in Mazurka",
                 "nl": "Duik in de Mazurka!"
@@ -1586,6 +1622,7 @@
               }
             },
             {
+              "id": "danish_quadrille_circle",
               "name": {
                 "en": "Danish Quadrille- and circledances",
                 "nl": "Deense Quadrille- en kringdansen"
@@ -1608,6 +1645,7 @@
               }
             },
             {
+              "id": "occitan_singing",
               "name": {
                 "en": "Occitan singing",
                 "nl": "Occitaanse zang"
@@ -1639,6 +1677,7 @@
               }
             },
             {
+              "id": "scandinavian_ensemble",
               "name": {
                 "en": "Scandinavian ensemble workshop",
                 "nl": "Scandinavische samenspeelworkshop"
@@ -1669,6 +1708,7 @@
               }
             },
             {
+              "id": "feldenkrais_2",
               "name": {
                 "en": "Feldenkrais @ CaDansa",
                 "nl": "Feldenkrais @ CaDansa"
@@ -1700,6 +1740,7 @@
               }
             },
             {
+              "id": "excursion_weerribben_1",
               "name": {
                 "en": "Excursion to national park De Weerribben",
                 "nl": "Excursie naar nationaal park De Weerribben"
@@ -1734,6 +1775,7 @@
               }
             },
             {
+              "id": "makers_market",
               "name": {
                 "en": "Makers' market",
                 "nl": "Kleedjesmarkt"
@@ -1753,6 +1795,7 @@
               }
             },
             {
+              "id": "rondeau_en_couple",
               "name": {
                 "en": "Having fun with Rondeau (en couple)",
                 "nl": "Lol maken met de Rondeau en couple"
@@ -1775,9 +1818,10 @@
               }
             },
             {
+              "id": "bourree_3t",
               "name": {
-                "en": "Bourree 3t: secrets to the blueprint",
-                "nl": "Bourree 3t: geheimen voor de blauwdruk"
+                "en": "Bourrée 3t: secrets to the blueprint",
+                "nl": "Bourrée 3t: geheimen voor de blauwdruk"
               },
               "startTime": "14:30",
               "endTime": "16:30",
@@ -1797,6 +1841,7 @@
               }
             },
             {
+              "id": "hurdy_gurdy_2",
               "name": {
                 "en": "Introduction workshop Hurdy-gurdy",
                 "nl": "Introductieworkshop draailier"
@@ -1827,6 +1872,7 @@
               }
             },
             {
+              "id": "bagpipe_intro_2",
               "name": {
                 "en": "Introduction workshop Bagpipe",
                 "nl": "Introductieworkshop doedelzak"
@@ -1857,6 +1903,7 @@
               }
             },
             {
+              "id": "diatonic_accordeon_advanced",
               "name": {
                 "en": "Diatonic accordion (advanced)",
                 "nl": "Trekzak gevorderden"
@@ -1887,6 +1934,7 @@
               }
             },
             {
+              "id": "cirlce_singing_dancing",
               "name": {
                 "en": "Circle singing & dancing",
                 "nl": "Cirkelzang & dansen"
@@ -1918,6 +1966,7 @@
               }
             },
             {
+              "id": "teach_teacher",
               "name": {
                 "en": "Teach the teacher",
                 "nl": "Workshop workshops geven"
@@ -1966,6 +2015,7 @@
               "kind": "OPEN"
             },
             {
+              "id": "dancing_funfair",
               "name": {
                 "en": "Dancing funfair",
                 "nl": "Dancing funfair"
@@ -1988,6 +2038,7 @@
               }
             },
             {
+              "id": "swedish_tunes_dadgad",
               "name": {
                 "en": "Swedish Tunes and accompaniment for DADGAD guitar",
                 "nl": "Zweedse deunen & begeleiding voor de DADGAD-gitaar"
@@ -2019,6 +2070,7 @@
               }
             },
             {
+              "id": "excursion_weerribben_2",
               "name": {
                 "en": "Excursion to national park De Weerribben",
                 "nl": "Excursie naar nationaal park De Weerribben"

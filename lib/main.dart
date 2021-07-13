@@ -63,7 +63,7 @@ Future<void> _main() async {
     await sharedPrefs.remove(_LOCALE_KEY);
   }
 
-  runApp(CaDansaApp(locale, primarySwatch, accentColor));
+  runApp(CaDansaApp(locale, primarySwatch, accentColor, sharedPrefs));
 }
 
 class CaDansaApp extends StatefulWidget {
@@ -71,11 +71,13 @@ class CaDansaApp extends StatefulWidget {
     this._initialLocale,
     this._initialPrimarySwatch,
     this._initialAccentColor,
+    this._sharedPreferences,
   );
 
   final Locale? _initialLocale;
   final MaterialColor _initialPrimarySwatch;
   final Color? _initialAccentColor;
+  final SharedPreferences _sharedPreferences;
 
   @override
   _CaDansaAppState createState() => _CaDansaAppState();
@@ -154,7 +156,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       _configUrl = dotenv.env[_CONFIG_URL_KEY];
     }
 
-    final sharedPrefs = await SharedPreferences.getInstance();
     final dynamic jsonConfig = await _loadJson(_configUrl!);
     if (jsonConfig != null) {
       try {
@@ -162,14 +163,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         _lastConfigLoad = DateTime.now();
 
         if (config.allEvents.isNotEmpty) {
-          final eventIndex = sharedPrefs.getInt(_EVENT_INDEX_KEY)
+          final eventIndex = widget._sharedPreferences.getInt(_EVENT_INDEX_KEY)
               ?.clamp(0, config.allEvents.length - 1)
               ?? _DEFAULT_EVENT_INDEX;
           await _switchToEvent(config.allEvents[eventIndex], eventIndex);
         }
 
         if (mounted) {
-          final pageIndex = sharedPrefs.getInt(PAGE_INDEX_KEY);
+          final pageIndex = widget._sharedPreferences.getInt(PAGE_INDEX_KEY);
           setState(() {
             _mode = _CaDansaAppStateMode.done;
             _initialPageIndex = pageIndex;
@@ -247,9 +248,10 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final currentEvent = _currentEvent;
     if (currentEvent != null && _mode == _CaDansaAppStateMode.done) {
       return CaDansaEventPage(
-        Event(currentEvent, _currentEventConfig),
-        _initialPageIndex,
-        _buildDrawer,
+        event: Event(currentEvent, _config!.defaults, _currentEventConfig),
+        initialIndex: _initialPageIndex,
+        buildDrawer:_buildDrawer,
+        sharedPreferences: widget._sharedPreferences,
         key: ValueKey(_currentEventIndex),
       );
     } else if (_mode == _CaDansaAppStateMode.loading) {
@@ -379,24 +381,23 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     _currentEventConfig = await _loadJson(event.configUri);
     _initialPageIndex = 0;
 
-    final sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.setInt(_EVENT_INDEX_KEY, index);
+    await widget._sharedPreferences.setInt(_EVENT_INDEX_KEY, index);
 
     {
       final primarySwatch = event.primarySwatch;
       if (primarySwatch != null) {
-        await sharedPrefs.setInt(_PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
+        await widget._sharedPreferences.setInt(_PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
       } else {
-        await sharedPrefs.remove(_PRIMARY_SWATCH_COLOR_KEY);
+        await widget._sharedPreferences.remove(_PRIMARY_SWATCH_COLOR_KEY);
       }
     }
 
     {
       final accentColorIndex = event.accentColor;
       if (accentColorIndex != null) {
-        await sharedPrefs.setInt(_ACCENT_COLOR_KEY, accentColorIndex.value);
+        await widget._sharedPreferences.setInt(_ACCENT_COLOR_KEY, accentColorIndex.value);
       } else {
-        await sharedPrefs.remove(_ACCENT_COLOR_KEY);
+        await widget._sharedPreferences.remove(_ACCENT_COLOR_KEY);
       }
     }
   }
@@ -404,8 +405,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Future<void> _setLocale(final Locale locale) async {
     _localeStreamController.add(locale);
 
-    final sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.setStringList(
+    await widget._sharedPreferences.setStringList(
         _LOCALE_KEY,
         [locale.languageCode, locale.scriptCode, locale.countryCode]
             .whereNotNull()

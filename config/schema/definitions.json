@@ -9,6 +9,10 @@
     },
     "minProperties": 1
   },
+  "id": {
+    "type": "string",
+    "pattern": "^[A-Za-z][_0-9A-Za-z]*$"
+  },
   "fontSize": {
     "type": "number",
     "exclusiveMinimum": 0

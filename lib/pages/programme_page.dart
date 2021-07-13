@@ -4,6 +4,7 @@ import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/util/temporal_state.dart';
+import 'package:cadansa_app/widgets/favorite_button.dart';
 import 'package:cadansa_app/widgets/programme_item_body.dart';
 import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
@@ -12,18 +13,22 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shimmer/shimmer.dart';
 
 class ProgrammePage extends StatefulWidget {
-  const ProgrammePage(
-    this._programme,
-    this._event,
-    this._pageHooks,
-    this._pageController, {
+  const ProgrammePage({
+    required this.programme,
+    required this.event,
+    required this.pageHooks,
+    required this.pageController,
+    required this.getFavorites,
+    required this.setFavorite,
     final Key? key,
   }) : super(key: key);
 
-  final Programme _programme;
-  final Event _event;
-  final PageHooks _pageHooks;
-  final IndexedPageController _pageController;
+  final Programme programme;
+  final Event event;
+  final PageHooks pageHooks;
+  final IndexedPageController pageController;
+  final Set<String> Function() getFavorites;
+  final Future<bool> Function(ProgrammeItem) setFavorite;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
@@ -36,16 +41,16 @@ class ProgrammePage extends StatefulWidget {
 class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateMixin {
   late final TabController _tabController = TabController(
     initialIndex: _initialIndex,
-    length: widget._programme.days.length,
+    length: widget.programme.days.length,
     vsync: this,
   )..addListener(() {
-    widget._pageController.index = _tabController.index;
+    widget.pageController.index = _tabController.index;
   });
 
   @override
   Widget build(final BuildContext context) => ExpandableTheme(
     data: ProgrammePage._EXPANDABLE_THEME,
-    child: widget._pageHooks.buildScaffold(
+    child: widget.pageHooks.buildScaffold(
       appBarBottomWidget: TabBar(
         controller: _tabController,
         tabs: tabs,
@@ -58,23 +63,23 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   );
 
   int get _initialIndex {
-    final index = widget._pageController.index;
+    final index = widget.pageController.index;
     if (index != null) {
-      return index.clamp(0, widget._programme.days.length - 1);
+      return index.clamp(0, widget.programme.days.length - 1);
     }
 
     final now = DateTime.now();
-    return widget._pageController.index = widget._programme.days
+    return widget.pageController.index = widget.programme.days
         .map((day) => day.startsOn)
         .whereNotNull().toList(growable: false)
         .indexWhere((startsOn) => now.difference(startsOn).inDays < 1)
-        .clamp(0, widget._programme.days.length - 1);
+        .clamp(0, widget.programme.days.length - 1);
   }
 
   List<Tab> get tabs {
     final locale = Localizations.localeOf(context);
     final autoSizeGroup = AutoSizeGroup();
-    return widget._programme.days.map((day) {
+    return widget.programme.days.map((day) {
       return Tab(
         child: AutoSizeText(
           day.name.get(locale),
@@ -89,12 +94,14 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   List<Widget> get tabChildren {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
-    return widget._programme.days.asMap().entries.map((entry) {
+    final favorites = widget.getFavorites();
+    return widget.programme.days.asMap().entries.map((entry) {
       final day = entry.value;
       return ListView.separated(
         itemCount: day.items.length,
         itemBuilder: (context, index) {
           final item = day.items[index];
+          final isExpandable = item.description.get(locale).isNotEmpty;
           final startTime = item.startTime;
           final endTime = item.endTime;
 
@@ -114,10 +121,17 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
               maxLines: 2,
               softWrap: true,
             ),
+            trailing: _canFavorite && item.canFavorite ? FavoriteButton(
+              isFavorite: favorites.contains(item.id),
+              innerColor: widget.programme.favoriteInnerColor,
+              outerColor: widget.programme.favoriteOuterColor,
+              onPressed: () => _onFavoritePressed(item),
+              tooltip: widget.programme.favoriteTooltip,
+            ) : null,
             subtitle: subtitle,
           );
 
-          if (item.description.get(locale).isNotEmpty) {
+          if (isExpandable) {
             return ExpandableNotifier(
               child: ScrollOnExpand(
                 child: ExpandablePanel(
@@ -130,7 +144,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
                     padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0, top: 15.0, bottom: 10.0),
                     child: ProgrammeItemBody(
                       item: item,
-                      actionHandler: widget._pageHooks.actionHandler,
+                      actionHandler: widget.pageHooks.actionHandler,
                     ),
                   ),
                 ),
@@ -148,6 +162,14 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   String _formatItemName(final ProgrammeItem item) {
     final locale = Localizations.localeOf(context);
     return '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}';
+  }
+
+  bool get _canFavorite =>
+      widget.programme.supportsFavorites && widget.event.canFavorite;
+
+  void _onFavoritePressed(final ProgrammeItem item) {
+    widget.setFavorite(item);
+    setState(() {});
   }
 
   static TemporalState? _getPlayingStatus(final ProgrammeDay day, final ProgrammeItem item) {
@@ -199,7 +221,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
     }
 
     // Icons for the current event may be shown as grey, when they are in the past
-    final color = widget._event.doColorIcons &&
+    final color = widget.event.doColorIcons &&
             (status == null || status == TemporalState.past)
         ? Colors.grey
         : Theme.of(context).primaryColor;

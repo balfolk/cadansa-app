@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cadansa_app/data/parse_utils.dart';
+import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/util/page_util.dart';
@@ -12,16 +12,18 @@ import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/webfeed.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage(
-    this._feedUrl,
-    this._feedEmptyText,
-    this._pageHooks, {
+  const FeedPage({
+    required this.data,
+    required this.pageHooks,
+    required this.getReadGuids,
+    required this.setReadGuid,
     final Key? key,
   }) : super(key: key);
 
-  final LText _feedUrl;
-  final LText _feedEmptyText;
-  final PageHooks _pageHooks;
+  final FeedPageData data;
+  final PageHooks pageHooks;
+  final Set<String> Function() getReadGuids;
+  final Future<void> Function(String?) setReadGuid;
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -56,7 +58,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Future<String?> _fetchFeed() async {
-    final url = Uri.tryParse(widget._feedUrl.get(Localizations.localeOf(context)));
+    final url = Uri.tryParse(widget.data.feedUrl.get(Localizations.localeOf(context)));
     if (url == null) return null;
 
     try {
@@ -68,7 +70,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   @override
-  Widget build(final BuildContext context) => widget._pageHooks.buildScaffold(
+  Widget build(final BuildContext context) => widget.pageHooks.buildScaffold(
     body: _buildBody(context),
   );
 
@@ -106,64 +108,98 @@ class _FeedPageState extends State<FeedPage> {
     }
 
     final feedItems = feed?.items;
-    if (feedItems == null || feedItems.isEmpty) {
-      return _buildEmptyFeed(context);
+    final Widget list;
+    if (feedItems != null && feedItems.isNotEmpty) {
+      final readGuids =
+          widget.data.supportsUnread ? widget.getReadGuids() : null;
+      list = ListView.separated(
+        itemBuilder: (context, index) {
+          final item = feedItems[index];
+          return FeedItem(
+            item: item,
+            read: readGuids == null || readGuids.contains(item.guid),
+            onPressed: () => _openItem(item),
+          );
+        },
+        separatorBuilder: (context, _) => const Divider(),
+        itemCount: feedItems.length,
+      );
+    } else {
+      list = _buildEmptyFeed();
     }
 
     return Refresher(
       onRefresh: _fetchFeed,
-      child: ListView.separated(
-        itemBuilder: (context, index) => FeedItem(feedItems[index]),
-        separatorBuilder: (context, _) => const Divider(),
-        itemCount: feedItems.length,
-      ),
+      child: list,
     );
   }
 
-  Widget _buildEmptyFeed(final BuildContext context) => Center(
-    child: AutoSizeText(
-      widget._feedEmptyText.get(Localizations.localeOf(context)),
+  Widget _buildEmptyFeed() => LayoutBuilder(
+    builder: (context, constraints) => ListView(
+      children: [
+        SizedBox(
+          height: constraints.maxHeight,
+          child: Center(
+            child: Text(
+              widget.data.feedEmptyText.get(Localizations.localeOf(context)),
+            ),
+          ),
+        ),
+      ],
     ),
   );
+
+  Future<void> _openItem(final RssItem item) async {
+    final link = item.link?.trim();
+    if (link != null && link.isNotEmpty) {
+      await Future.wait([
+        openInAppBrowser(context: context, url: link),
+        widget.setReadGuid(item.guid),
+      ]);
+      setState(() {});
+    }
+  }
 }
 
 class FeedItem extends StatelessWidget {
-  const FeedItem(this._item, {final Key? key}) : super(key: key);
+  const FeedItem({
+    required this.item,
+    this.read = true,
+    required this.onPressed,
+    final Key? key,
+  }) : super(key: key);
 
-  final RssItem _item;
+  final RssItem item;
+  final bool read;
+  final VoidCallback onPressed;
 
   @override
   Widget build(final BuildContext context) {
     return ListTile(
+      selected: !read,
       title: Text(
-        _item.title ?? '',
+        item.title ?? '',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: read ? null : const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
         _subtitle(context),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      onTap: () => _open(context),
+      onTap: onPressed,
     );
   }
 
   String _subtitle(final BuildContext context) {
     final locale = Localizations.localeOf(context);
-    final pubDate = _item.pubDate;
+    final pubDate = item.pubDate;
     final dateTime = pubDate != null
         ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).add_jm().format(pubDate)
         : null;
 
-    final parts = [_item.author, dateTime].whereNotNull();
+    final parts = [item.author, dateTime].whereNotNull();
     return parts.where((part) => part.isNotEmpty).join(' • ');
-  }
-
-  void _open(final BuildContext context) {
-    final link = _item.link?.trim();
-    if (link != null && link.isNotEmpty) {
-      openInAppBrowser(context: context, url: link);
-    }
   }
 }
