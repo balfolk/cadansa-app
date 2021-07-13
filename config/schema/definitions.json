@@ -54,7 +54,7 @@
   },
   "color": {
     "type": "array",
-    "oneOf": [
+    "anyOf": [
       {
         "items": {
           "$ref": "#/colorValue"
