@@ -8,8 +8,6 @@ This is the [Flutter](https://flutter.dev/)-based mobile app for the [CaDansa fe
 
 ### Part 0: Requirements
 
-#### Shared
-
 Any system will require about 10 GB of free disk space, and an installation of any Linux distribution, macOS, or Windows 10.
 
 #### Linux
@@ -20,8 +18,6 @@ Most Linux distributions should not need any additional dependencies. The full l
 
 Make sure you're on the latest version of macOS. Install XCode through the Mac App Store, open it, and press "Install" when the popup for additional components appears.
 Then install the XCode command line tools by running `xcode-select --install` on the command line, followed by `sudo xcodebuild -license`. 
-
-If you're on an Apple Silicon (ARM) chip, getting the emulators to work may require a bit more setup.
 
 #### Windows
 
@@ -41,23 +37,20 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 *  Accept the Android licenses using `flutter doctor --android-licenses`.
 *  Open Android Studio and create a new project from this repository.
     * On an Apple Silicon (ARM) machine, _do not_ attempt to set Android Studio to full screen - use Windows -> Zoom instead. For an unknown reason full screen breaks the application.
-    *  You need to have an SSH key set up in order to do so.
-    *  Make sure to add it as a Flutter project. If you can't do that, first ensure you have gone through the entire set-up process of Flutter.
+    * You need to have an SSH key set up in order to do so.
+    * Make sure to add it as a Flutter project. If you can't do that, first ensure you have gone through the entire set-up process of Flutter.
 *  Head to Android Studio Settings -> Languages & Frameworks -> Dart and enable Dart support for this project. Set the Dart SDK location to `bin/cache/dart-sdk` relative your Flutter installation directory.
     * Android Studio Settings are located under Android Studio -> Preferences (or  ⌘,) on macOS and under File -> Settings on Linux and Windows.
 *  The banner in Android Studio should change to give you the option to get packages; do so now. Wait for the downloads to complete.
     * If there's no banner, manually execute `flutter pub get`.
+*  Set up a `.env` file in the top-level repository directory containing `CONFIG_URI=https://...`, where the URI points to a local or remote resource containing the configuration.
+    * If you use a local file, add it to the `assets` section of the `pubspec.yaml`, and use the same (relative) path in the `.env` file. Make sure to not commit these changes!
 *  Obtain the app & map fonts (or use your favourite fonts), and put them into `assets/fonts/app-font.otf` and `assets/fonts/map-{regular,bold,light}.otf`, respectively.
 
 ### Part 2a: Running the app on an Android Emulator
 
 * Make sure that you have an Android Emulator of a recent Android SDK version (eg. API 30) set up and ready to go.
-    * To make logging into the app easy, you can log in on the device with a test Google account.
     * Starting with Ubuntu 19.10, 32-bit apps are no longer supported. Make sure you download and use a 64-bit Android image.
-    * On an Apple Silicon (ARM) chip, the normal Android Emulator does not yet function (as of 2020-12-26).
-      Google has provided a preview of an [M1-compatible Android Emulator](https://github.com/google/android-emulator-m1-preview/releases).
-      Make sure to follow the instructions on that page and download an emulator _with Google API support_, and to always use that instance of the Emulator.
-      It is recommended to remove all emulated Android devices from the emulator provided by Android Studio to prevent confusion (and save some disk space).
 * Now you can start the application and debug it. Enjoy!
 
 ### Part 2b: Running the app on an iOS emulator (macOS only)
@@ -72,7 +65,7 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 * Once a simulated iOS device is running, it should show up in the list of target devices in Android Studio. At this point XCode can safely be closed.
 
 In case of errors on iOS, it is advised to first try cleaning everything before attempting a fresh build:
-```flutter clean; flutter upgrade; flutter build ios -t lib/main_dev.dart --flavor dev```
+```flutter clean; flutter upgrade; flutter build ios```
 
 ## Updating dependencies
 
