@@ -97,7 +97,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   final StreamController<Locale> _localeStreamController = StreamController();
 
   int? _currentEventIndex;
-  GlobalEvent? _currentEvent;
   dynamic _currentEventConfig;
   int? _initialPageIndex;
 
@@ -212,11 +211,15 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     return jsonString != null ? jsonDecode(jsonString) : null;
   }
 
+  GlobalEvent? get _currentEvent =>
+      _config?.allEvents.elementAtOrNull(_currentEventIndex);
+
   @override
   Widget build(final BuildContext context) {
-    final title = _currentEvent?.title ?? _config?.title ?? LText(APP_TITLE);
-    final primarySwatch = _currentEvent?.primarySwatch ?? widget._initialPrimarySwatch;
-    final accentColor = _currentEvent?.accentColor ?? widget._initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
+    final currentEvent = _currentEvent;
+    final title = currentEvent?.title ?? _config?.title ?? LText(APP_TITLE);
+    final primarySwatch = currentEvent?.primarySwatch ?? widget._initialPrimarySwatch;
+    final accentColor = currentEvent?.accentColor ?? widget._initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
 
     return StreamBuilder<Locale>(
       stream: _localeStreamController.stream,
@@ -256,7 +259,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         key: ValueKey(_currentEventIndex),
       );
     } else if (_mode == _CaDansaAppStateMode.loading) {
-      return LoadingPage();
+      return const LoadingPage();
     } else {
       return TimeoutPage(_resetConfig);
     }
@@ -284,7 +287,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           final index = currentIndex++;
           return EventTile(
             event: event,
-            isSelected: identical(event, _currentEvent),
+            isSelected: index == _currentEventIndex,
             onTap: () async {
               await _switchToEvent(event, index);
               if (mounted) {
@@ -378,7 +381,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
   Future<void> _switchToEvent(final GlobalEvent event, final int index) async {
     _currentEventIndex = index;
-    _currentEvent = event;
     _currentEventConfig = await _loadJson(event.configUri);
     _initialPageIndex = 0;
 
@@ -452,12 +454,14 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     _localeStreamController.close();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 }
 
 class LoadingPage extends StatelessWidget {
+  const LoadingPage();
+
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
