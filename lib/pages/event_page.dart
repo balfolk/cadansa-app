@@ -18,14 +18,14 @@ import 'package:url_launcher/url_launcher.dart';
 class CaDansaEventPage extends StatefulWidget {
   const CaDansaEventPage({
     required this.event,
-    required this.initialIndex,
+    required this.initialAction,
     required this.buildDrawer,
     required this.sharedPreferences,
     final Key? key,
   }) : super(key: key);
 
   final Event event;
-  final int? initialIndex;
+  final String? initialAction;
   final Widget? Function({required BuildContext context}) buildDrawer;
   final SharedPreferences sharedPreferences;
 
@@ -37,6 +37,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   int _currentIndex = _DEFAULT_PAGE_INDEX;
 
   int? _highlightAreaFloorIndex, _highlightAreaIndex;
+  String? _openProgrammeItemId;
 
   late final PageHooks _pageHooks = PageHooks(
     actionHandler: _handleAction,
@@ -57,27 +58,38 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
       );
     },
   );
-  late final IndexedPageController _programmePageController =
-      IndexedPageController(index: widget.initialIndex);
+  late final _programmePageController = IndexedPageController();
 
   static const _DEFAULT_PAGE_INDEX = 0;
   static const _ACTION_SEPARATOR = ':',
       _ACTION_PAGE = 'page',
       _ACTION_URL = 'url',
-      _ACTION_AREA = 'area';
+      _ACTION_AREA = 'area',
+      _ACTION_ITEM = 'item';
+
+  @override
+  void initState() {
+    super.initState();
+    _handleInitialAction();
+  }
 
   @override
   void didUpdateWidget(final CaDansaEventPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _validateIndex();
+    _setCurrentIndex();
+    _handleInitialAction();
   }
 
-  void _validateIndex() {
-    final newIndex = _currentIndex.clamp(0, widget.event.pages.length - 1);
-    if (newIndex != _currentIndex) {
-      _currentIndex = newIndex;
-      _storePageIndex(newIndex);
+  void _setCurrentIndex([int? newIndex]) {
+    final newValidIndex = (newIndex ?? _currentIndex).clamp(0, widget.event.pages.length - 1);
+    if (newValidIndex != _currentIndex) {
+      _currentIndex = newValidIndex;
+      _storePageIndex(newValidIndex);
     }
+  }
+
+  void _handleInitialAction() {
+    _handleAction(widget.initialAction);
   }
 
   @override
@@ -93,6 +105,8 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
         event: widget.event,
         pageHooks: _pageHooks,
         pageController: _programmePageController,
+        sharedPreferences: widget.sharedPreferences,
+        openItemId: _openProgrammeItemId,
         getFavorites: _getEventFavorites,
         setFavorite: _setFavorite,
         key: key,
@@ -131,14 +145,20 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   void _handleAction(final String? action) {
     final split = action?.split(_ACTION_SEPARATOR);
     if (action == null || split == null || split.isEmpty) {
-      debugPrint('Illegal action: $action');
+      debugPrint('Unprocessed action: $action');
       return;
     }
 
     switch (split.first) {
       case _ACTION_PAGE:
-        final index = int.tryParse(action.substring('$_ACTION_PAGE$_ACTION_SEPARATOR'.length));
-        _selectPage(index);
+        int? pageIndex, subPageIndex;
+        if (split.length >= 2) {
+          pageIndex = int.tryParse(split[1]);
+          if (split.length >= 3) {
+            subPageIndex = int.tryParse(split[2]);
+          }
+        }
+        _selectPage(pageIndex, subPageIndex);
         break;
       case _ACTION_URL:
         final url = action.substring('$_ACTION_URL$_ACTION_SEPARATOR'.length);
@@ -149,17 +169,38 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
         final areaId = action.substring('$_ACTION_AREA$_ACTION_SEPARATOR'.length);
         _selectArea(areaId);
         break;
+      case _ACTION_ITEM:
+        final itemId = split.length >= 2 ? split[1] : null;
+        if (itemId != null && itemId.isNotEmpty) {
+          int? foundDayIndex;
+          final int foundPageIndex = widget.event.pages.indexWhere((page) {
+            // Don't try to shortcut this with a whereType<ProgrammePageData>,
+            // as that'll mangle the returned page index.
+            if (page is! ProgrammePageData) return false;
+            final dayIndex = page.programme.days.indexWhere(
+                (day) => day.items.any((item) => item.id == itemId));
+            if (dayIndex >= 0) {
+              foundDayIndex = dayIndex;
+              return true;
+            }
+            return false;
+          });
+          if (foundPageIndex >= 0 && foundDayIndex != null) {
+            _selectPage(foundPageIndex, foundDayIndex, itemId);
+          }
+        }
     }
   }
 
-  void _selectPage(final int? pageIndex) {
-    if (!mounted ||
-        pageIndex == null ||
-        pageIndex < 0 ||
-        pageIndex >= widget.event.pages.length) return;
+  void _selectPage(final int? pageIndex, [final int? subPageIndex, final String? openProgrammeItemId]) {
+    if (!mounted || pageIndex == null) return;
 
     setState(() {
-      _currentIndex = pageIndex;
+      _setCurrentIndex(pageIndex);
+      if (subPageIndex != null) {
+        _programmePageController.index = subPageIndex;
+      }
+      _openProgrammeItemId = openProgrammeItemId;
     });
   }
 
@@ -190,7 +231,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     if (mounted && pageIndex != null && floorIndex != null && areaIndex != null) {
       final thePageIndex = pageIndex;
       setState(() {
-        _currentIndex = thePageIndex;
+        _setCurrentIndex(thePageIndex);
         _highlightAreaFloorIndex = floorIndex;
         _highlightAreaIndex = areaIndex;
       });

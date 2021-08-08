@@ -245,11 +245,12 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   Widget get _homePage {
+    final config = _config;
     final currentEvent = _currentEvent;
-    if (currentEvent != null && _mode == _CaDansaAppStateMode.done) {
+    if (config != null && currentEvent != null && _mode == _CaDansaAppStateMode.done) {
       return CaDansaEventPage(
-        event: Event(currentEvent, _config!.defaults, _currentEventConfig),
-        initialIndex: _initialPageIndex,
+        event: Event(currentEvent, config.defaults, _currentEventConfig),
+        initialAction: null,
         buildDrawer:_buildDrawer,
         sharedPreferences: widget._sharedPreferences,
         key: ValueKey(_currentEventIndex),
