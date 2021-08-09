@@ -48,7 +48,22 @@ void main() {
     expect(const LText.empty().get(_und), '');
   });
 
-  test('toDateTime', () {
+  test('parseNum', () {
+    expect(parseNum(42), 42);
+    expect(parseNum(3.14), 3.14);
+
+    expect(parseNum('42'), 42);
+    expect(parseNum('3.14 \t'), 3.14);
+
+    expect(parseNum('bla'), isNull);
+    expect(parseNum(''), isNull);
+    expect(parseNum(<dynamic, dynamic>{}), isNull);
+    expect(parseNum(<dynamic>{}), isNull);
+    expect(parseNum(<dynamic>[]), isNull);
+    expect(parseNum(null), isNull);
+  });
+
+  test('parseDateTime', () {
     expect(parseDateTime('42'), DateTime.fromMillisecondsSinceEpoch(42));
     expect(parseDateTime('83.1 \t'), DateTime.fromMillisecondsSinceEpoch(83));
     expect(parseDateTime(42.1), DateTime.fromMillisecondsSinceEpoch(42));
@@ -60,7 +75,7 @@ void main() {
     expect(() => parseDateTime('bla'), throwsArgumentError);
   });
 
-  test('toTimeOfDay', () {
+  test('parseTimeOfDay', () {
     expect(parseTimeOfDay('13:37'), const TimeOfDay(hour: 13, minute: 37));
     expect(parseTimeOfDay('\t23  : 59'), const TimeOfDay(hour: 23, minute: 59));
     expect(parseTimeOfDay('14.42: 12.'), const TimeOfDay(hour: 14, minute: 12));

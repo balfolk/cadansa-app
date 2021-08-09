@@ -87,16 +87,22 @@ BuiltMap<String, T> parseMap<T>(final dynamic json, final T Function(dynamic) pa
       ?.forEach((key, dynamic value) => builder[key] = parseItem(value)));
 }
 
+num? parseNum(final dynamic json) {
+  num? number;
+  if (json is num) {
+    number = json;
+  } else if (json is String) {
+    number = num.tryParse(json);
+  }
+  return number;
+}
+
 DateTime? parseDateTime(final dynamic json) {
-  num? milliseconds;
   if (json == null || (json is String && json.isEmpty)) {
     return null;
-  } else if (json is String) {
-    milliseconds = num.tryParse(json);
-  } else if (json is num) {
-    milliseconds = json;
   }
 
+  final milliseconds = parseNum(json);
   if (milliseconds == null) {
     throw ArgumentError.value(json, 'json', 'does not represent a DateTime');
   }
@@ -124,8 +130,8 @@ TimeOfDay? parseTimeOfDay(final dynamic json) {
     throw ArgumentError.value(json, 'json', 'does not represent a TimeOfDay');
   }
 
-  final hour = num.tryParse(parts[0])?.toInt(),
-      minute = num.tryParse(parts[1])?.toInt();
+  final hour = parseNum(parts[0])?.toInt(),
+      minute = parseNum(parts[1])?.toInt();
   if (hour == null || hour < 0 || hour >= TimeOfDay.hoursPerDay
       || minute == null || minute < 0 || minute >= TimeOfDay.minutesPerHour) {
     throw ArgumentError.value(json, 'json', 'does not represent a TimeOfDay');
@@ -135,7 +141,7 @@ TimeOfDay? parseTimeOfDay(final dynamic json) {
 }
 
 Offset parseOffset(final dynamic json) {
-  return Offset((json[0] as num).toDouble(), (json[1] as num).toDouble());
+  return Offset(parseNum(json[0])!.toDouble(), parseNum(json[1])!.toDouble());
 }
 
 Locale parseLocale(final dynamic json) {
@@ -145,8 +151,12 @@ Locale parseLocale(final dynamic json) {
 
 Color? parseColor(final dynamic json) {
   if (json == null || (json is Iterable && json.length < 3)) return null;
-  return Color.fromRGBO(json[0] as int, json[1] as int, json[2] as int,
-      ((json as Iterable).elementAtOrNull(3) as num?)?.toDouble() ?? 1.0);
+  return Color.fromRGBO(
+    parseNum(json[0])!.toInt(),
+    parseNum(json[1])!.toInt(),
+    parseNum(json[2])!.toInt(),
+    parseNum((json as Iterable).elementAtOrNull(3))?.toDouble() ?? 1.0,
+  );
 }
 
 MaterialColor? parseMaterialColor(final dynamic json) {

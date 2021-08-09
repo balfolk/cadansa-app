@@ -33,10 +33,10 @@ class Floor {
   Floor.parse(final dynamic json) : this._(
       LText(json['title']),
       LText(json['path']),
-      json['version'] as num?,
-      (json['initialScale'] as num?)?.toDouble(),
-      (json['minScale'] as num?)?.toDouble(),
-      (json['maxScale'] as num?)?.toDouble(),
+      parseNum(json['version']),
+      parseNum(json['initialScale'])?.toDouble(),
+      parseNum(json['minScale'])?.toDouble(),
+      parseNum(json['maxScale'])?.toDouble(),
       parseList(json['areas'], (dynamic area) => FloorArea.parse(area)),
       parseList(json['text'], (dynamic area) => FloorText.parse(area)));
 
@@ -82,9 +82,9 @@ class FloorArea {
     json['id'] as String?,
     parseList(json['path'], parseOffset),
     LText(json['title']),
-    (json['titleFontSize'] as num?)?.toDouble(),
+    parseNum(json['titleFontSize'])?.toDouble(),
     json['buttonIcon'] as String?,
-    (json['buttonSize'] as num).toDouble(),
+    parseNum(json['buttonSize'])!.toDouble(),
     LText(json['actionTitle']),
     LText(json['action']),
     parseOffset(json['center']),
@@ -147,9 +147,9 @@ class FloorText {
 
   FloorText.parse(final dynamic json) : this._(
     parseOffset(json['location']),
-    (json['angle'] as num?)?.toDouble() ?? 0.0,
-    (json['alignment'] as num?)?.toInt() ?? TextAlign.center.index,
-    (json['fontSize'] as num?)?.toDouble(),
+    parseNum(json['angle'])?.toDouble() ?? 0.0,
+    parseNum(json['alignment'])?.toInt() ?? TextAlign.center.index,
+    parseNum(json['fontSize'])?.toDouble(),
     LText(json['text']),
   );
 
