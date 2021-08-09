@@ -6,14 +6,14 @@ import 'package:sanitize_html/sanitize_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
-  const InfoPage(
-    this._content,
-    this._pageHooks, {
+  const InfoPage({
+    required this.content,
+    required this.pageHooks,
     final Key? key,
   }) : super(key: key);
 
-  final LText _content;
-  final PageHooks _pageHooks;
+  final LText content;
+  final PageHooks pageHooks;
 
   @override
   _InfoPageState createState() => _InfoPageState();
@@ -26,8 +26,8 @@ class _InfoPageState extends State<InfoPage> {
 
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
-    final content = sanitizeHtml(widget._content.get(locale));
-    return widget._pageHooks.buildScaffold(
+    final content = sanitizeHtml(widget.content.get(locale));
+    return widget.pageHooks.buildScaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),

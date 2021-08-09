@@ -4,17 +4,17 @@ import 'package:cadansa_app/widgets/map.dart';
 import 'package:flutter/material.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage(
-    this._mapData,
-    this._pageHooks,
-    this._initialFloorIndex,
-    this._highlightAreaIndex, {
+  const MapPage({
+    required this.mapData,
+    required this.pageHooks,
+    required this.initialFloorIndex,
+    required this.highlightAreaIndex,
     final Key? key,
   }) : super(key: key);
 
-  final MapData _mapData;
-  final PageHooks _pageHooks;
-  final int? _initialFloorIndex, _highlightAreaIndex;
+  final MapData mapData;
+  final PageHooks pageHooks;
+  final int? initialFloorIndex, highlightAreaIndex;
 
   @override
   _MapPageState createState() => _MapPageState();
@@ -23,9 +23,9 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   @override
   Widget build(final BuildContext context) => DefaultTabController(
-    length: widget._mapData.floors.length,
-    initialIndex: widget._initialFloorIndex ?? 0,
-    child: widget._pageHooks.buildScaffold(
+    length: widget.mapData.floors.length,
+    initialIndex: widget.initialFloorIndex ?? 0,
+    child: widget.pageHooks.buildScaffold(
       appBarBottomWidget: TabBar(tabs: tabs),
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
@@ -36,18 +36,18 @@ class _MapPageState extends State<MapPage> {
 
   List<Tab> get tabs {
     final locale = Localizations.localeOf(context);
-    return widget._mapData.floors.map((floor) {
+    return widget.mapData.floors.map((floor) {
       return Tab(text: floor.title.get(locale));
     }).toList(growable: false);
   }
 
   List<Widget> get tabChildren {
-    return widget._mapData.floors
+    return widget.mapData.floors
         .asMap().entries
         .map((floor) => MapWidget(
           floor.value,
-          widget._pageHooks.actionHandler,
-          floor.key == widget._initialFloorIndex ? widget._highlightAreaIndex : null,
+          widget.pageHooks.actionHandler,
+          floor.key == widget.initialFloorIndex ? widget.highlightAreaIndex : null,
           key: ValueKey(floor.key),
         ))
         .toList(growable: false);

@@ -103,7 +103,13 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     _currentIndex = _currentIndex.clamp(0, widget.event.pages.length - 1);
     final pageData = widget.event.pages[_currentIndex];
     if (pageData is MapPageData) {
-      return MapPage(pageData.mapData, _pageHooks, _highlightAreaFloorIndex, _highlightAreaIndex, key: key);
+      return MapPage(
+        mapData: pageData.mapData,
+        pageHooks: _pageHooks,
+        initialFloorIndex: _highlightAreaFloorIndex,
+        highlightAreaIndex: _highlightAreaIndex,
+        key: key,
+      );
     } else if (pageData is ProgrammePageData) {
       return ProgrammePage(
         programme: pageData.programme,
@@ -117,7 +123,11 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
         key: key,
       );
     } else if (pageData is InfoPageData) {
-      return InfoPage(pageData.content, _pageHooks, key: key);
+      return InfoPage(
+        content: pageData.content,
+        pageHooks: _pageHooks,
+        key: key,
+      );
     } else if (pageData is FeedPageData) {
       return FeedPage(
         data: pageData,
