@@ -33,10 +33,7 @@ const _CONFIG_LIFETIME = Duration(hours: 5);
 const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
-const _PRIMARY_SWATCH_COLOR_KEY = 'primarySwatchColor';
-const _ACCENT_COLOR_KEY = 'accentColor';
 const _EVENT_INDEX_KEY = 'eventIndex';
-const _LOCALE_KEY = 'locale';
 
 class CaDansaApp extends StatefulWidget {
   const CaDansaApp({
@@ -371,18 +368,18 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     {
       final primarySwatch = event.primarySwatch;
       if (primarySwatch != null) {
-        await widget.sharedPreferences.setInt(_PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
+        await widget.sharedPreferences.setInt(PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
       } else {
-        await widget.sharedPreferences.remove(_PRIMARY_SWATCH_COLOR_KEY);
+        await widget.sharedPreferences.remove(PRIMARY_SWATCH_COLOR_KEY);
       }
     }
 
     {
       final accentColorIndex = event.accentColor;
       if (accentColorIndex != null) {
-        await widget.sharedPreferences.setInt(_ACCENT_COLOR_KEY, accentColorIndex.value);
+        await widget.sharedPreferences.setInt(ACCENT_COLOR_KEY, accentColorIndex.value);
       } else {
-        await widget.sharedPreferences.remove(_ACCENT_COLOR_KEY);
+        await widget.sharedPreferences.remove(ACCENT_COLOR_KEY);
       }
     }
   }
@@ -407,7 +404,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     _localeStreamController.add(locale);
 
     await widget.sharedPreferences.setStringList(
-        _LOCALE_KEY,
+        LOCALE_KEY,
         [locale.languageCode, locale.scriptCode, locale.countryCode]
             .whereNotNull()
             .toList());
