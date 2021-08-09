@@ -14,7 +14,20 @@
       "en": "Favourite",
       "nl": "Favoriet",
       "fr": "Préféré(e)"
-    }
+    },
+    "notificationTimeBefore": 600000,
+    "favoriteSnackText": {
+      "en": "You will receive a notification {minutes} minutes before {name} starts.",
+      "nl": "Je krijgt een melding {minutes} minuten voordat {name} begint.",
+      "fr": "Tu recevras une notification {minutes} minutes avant le début de {name}."
+    },
+    "unfavoriteSnackText": "",
+    "notificationTitle": {
+      "en": "{name} starts in {minutes} minutes!",
+      "nl": "{name} begint over {minutes} minuten!",
+      "fr": "{name} commencera dans {minutes} minutes!"
+    },
+    "notificationBody": ""
   },
   "eventSections": [
     {

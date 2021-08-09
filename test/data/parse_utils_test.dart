@@ -95,4 +95,16 @@ void main() {
     expect(() => parseTimeOfDay(15), throwsArgumentError);
     expect(() => parseTimeOfDay(15.12), throwsArgumentError);
   });
+
+  test('parseDuration', () {
+    expect(parseDuration('42'), const Duration(milliseconds: 42));
+    expect(parseDuration('83.1 \t'), const Duration(milliseconds: 83));
+    expect(parseDuration(42.1), const Duration(milliseconds: 42));
+    expect(parseDuration(83.9), const Duration(milliseconds: 83));
+
+    expect(parseDuration(''), isNull);
+    expect(parseDuration(null), isNull);
+    expect(parseDuration(<dynamic, dynamic>{}), isNull);
+    expect(parseDuration('bla'), isNull);
+  });
 }

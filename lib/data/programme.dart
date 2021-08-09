@@ -68,6 +68,32 @@ class ProgrammeDay {
   DateTime? get startsOn => _startsOn;
 
   BuiltList<ProgrammeItem> get items => _items;
+
+  DateTimeRange? rangeOfItem(final ProgrammeItem item) {
+    // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
+    const HOUR_NIGHT_CUTOFF = 6;
+
+    final startsOn = this.startsOn;
+    if (startsOn == null) {
+      return null;
+    }
+
+    final itemStartTime = item.startTime;
+    final startDay = DateTime(startsOn.year, startsOn.month, startsOn.day);
+    final startMoment = startDay.add(Duration(
+        days: itemStartTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+        hours: itemStartTime.hour,
+        minutes: itemStartTime.minute));
+    final itemEndTime = item.endTime;
+    final endMoment = itemEndTime != null
+        ? startDay.add(Duration(
+            days: itemEndTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
+            hours: itemEndTime.hour,
+            minutes: itemEndTime.minute))
+        // Default to the last moment of this day
+        : startDay.add(const Duration(days: 1, hours: HOUR_NIGHT_CUTOFF));
+    return DateTimeRange(start: startMoment, end: endMoment);
+  }
 }
 
 @immutable

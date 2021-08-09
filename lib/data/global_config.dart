@@ -60,12 +60,22 @@ class GlobalDefaults {
       : supportsFavorites = json['supportsFavorites'] as bool,
         favoriteInnerColor = parseColor(json['favoriteInnerColor'])!,
         favoriteOuterColor = parseColor(json['favoriteOuterColor'])!,
-        favoriteTooltip = LText(json['favoriteTooltip']);
+        favoriteTooltip = LText(json['favoriteTooltip']),
+        notificationTimeBefore = parseDuration(json['notificationTimeBefore'])!,
+        favoriteSnackText = LText(json['favoriteSnackText']),
+        unfavoriteSnackText = LText(json['unfavoriteSnackText']),
+        notificationTitle = LText(json['notificationTitle']),
+        notificationBody = LText(json['notificationBody']);
 
   final bool supportsFavorites;
   final Color favoriteInnerColor;
   final Color favoriteOuterColor;
   final LText favoriteTooltip;
+  final Duration notificationTimeBefore;
+  final LText favoriteSnackText;
+  final LText unfavoriteSnackText;
+  final LText notificationTitle;
+  final LText notificationBody;
 }
 
 @immutable

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/global_config.dart';
@@ -10,9 +11,11 @@ import 'package:cadansa_app/pages/event_page.dart';
 import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
+import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
 import 'package:cadansa_app/widgets/locale_widgets.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,16 +40,17 @@ const _ACCENT_COLOR_KEY = 'accentColor';
 const _EVENT_INDEX_KEY = 'eventIndex';
 const _LOCALE_KEY = 'locale';
 
-late PackageInfo _packageInfo;
-
 void main() {
   _main();
 }
 
 Future<void> _main() async {
+  tz.initializeTimeZones(); // required by flutter_local_notifications
   WidgetsFlutterBinding.ensureInitialized();
-  _packageInfo = await PackageInfo.fromPlatform();
+
   final sharedPrefs = await SharedPreferences.getInstance();
+  await dotenv.load();
+  final packageInfo = await PackageInfo.fromPlatform();
 
   final primarySwatchColor = sharedPrefs.getInt(_PRIMARY_SWATCH_COLOR_KEY);
   final primarySwatch = getPrimarySwatch(primarySwatchColor) ?? DEFAULT_PRIMARY_SWATCH;
@@ -63,21 +67,32 @@ Future<void> _main() async {
     await sharedPrefs.remove(_LOCALE_KEY);
   }
 
-  runApp(CaDansaApp(locale, primarySwatch, accentColor, sharedPrefs));
+  runApp(CaDansaApp(
+    initialLocale: locale,
+    initialPrimarySwatch: primarySwatch,
+    initialAccentColor: accentColor,
+    sharedPreferences: sharedPrefs,
+    env: dotenv.env,
+    packageInfo: packageInfo,
+  ));
 }
 
 class CaDansaApp extends StatefulWidget {
-  const CaDansaApp(
-    this._initialLocale,
-    this._initialPrimarySwatch,
-    this._initialAccentColor,
-    this._sharedPreferences,
-  );
+  const CaDansaApp({
+    required this.initialLocale,
+    required this.initialPrimarySwatch,
+    required this.initialAccentColor,
+    required this.sharedPreferences,
+    required this.env,
+    required this.packageInfo
+  });
 
-  final Locale? _initialLocale;
-  final MaterialColor _initialPrimarySwatch;
-  final Color? _initialAccentColor;
-  final SharedPreferences _sharedPreferences;
+  final Locale? initialLocale;
+  final MaterialColor initialPrimarySwatch;
+  final Color? initialAccentColor;
+  final SharedPreferences sharedPreferences;
+  final Map<String, String> env;
+  final PackageInfo packageInfo;
 
   @override
   _CaDansaAppState createState() => _CaDansaAppState();
@@ -87,119 +102,124 @@ enum _CaDansaAppStateMode { done, loading, error }
 
 // ignore: prefer_mixin
 class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
-  final BaseCacheManager _configCacheManager = _JsonCacheManager();
-
   _CaDansaAppStateMode _mode = _CaDansaAppStateMode.loading;
-  String? _configUrl;
   GlobalConfig? _config;
   DateTime? _lastConfigLoad;
 
-  final StreamController<Locale> _localeStreamController = StreamController();
-
   int? _currentEventIndex;
   dynamic _currentEventConfig;
-  int? _initialPageIndex;
+  String? _initialAction;
+
+  late final BaseCacheManager _configCacheManager = _JsonCacheManager();
+  late final String? _configUri = widget.env[_CONFIG_URI_KEY];
+  late final StreamController<Locale> _localeStreamController = StreamController();
 
   static const _DEFAULT_LOCALES = [
     Locale('en', 'GB'),
     Locale('nl', 'NL'),
     Locale('fr', 'FR'),
   ];
-  static const _CONFIG_URL_KEY = 'CONFIG_URL';
+  static const _CONFIG_URI_KEY = 'CONFIG_URI';
 
   @override
   void initState() {
     super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
     WidgetsBinding.instance!.addObserver(this);
-    _loadConfig();
+    await initializeNotifications(
+      context: context,
+      onSelectNotification: _onSelectNotification,
+    );
+    if (mounted) {
+      await _reloadConfig(movePage: true);
+    }
   }
 
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _loadConfig();
+      _reloadConfig(movePage: false);
     }
   }
 
-  void _resetConfig({final bool force = false}) {
+  Future<void> _resetConfig({final bool force = false}) async {
     if (mounted) {
       setState(() {
         _mode = _CaDansaAppStateMode.loading;
       });
-    }
 
-    _loadConfig(force: force);
+      await _reloadConfig(movePage: true, force: force);
+    }
   }
 
-  Future<void> _loadConfig({final bool force = false}) async {
+  Future<void> _reloadConfig({required final bool movePage, final bool force = false}) async {
+    final success = await _loadConfig(force: force);
+    final newMode = success ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
+    if (_mode != newMode) {
+      String? initialAction;
+      if (success && movePage) {
+        final initialNotification = await getInitialNotification();
+        if (initialNotification != null) {
+          initialAction = initialNotification;
+        } else {
+          initialAction = 'page'
+              ':${widget.sharedPreferences.getInt(PAGE_INDEX_KEY)}'
+              ':${widget.sharedPreferences.getInt(PAGE_SUB_INDEX_KEY) ?? ''}';
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _mode = newMode;
+          _initialAction = initialAction;
+        });
+      }
+    }
+  }
+
+  Future<bool> _loadConfig({final bool force = false}) async {
     final lastConfigLoad = _lastConfigLoad;
-    if (!force && _config != null && lastConfigLoad != null
-        && lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
+    if (!force &&
+        _config != null &&
+        lastConfigLoad != null &&
+        lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
       // Config still valid, use the existing one rather than reloading
-      if (mounted && _mode != _CaDansaAppStateMode.done) {
-        setState(() {
-          _mode = _CaDansaAppStateMode.done;
-        });
-      }
-      return;
+      return true;
     }
 
-    if (_configUrl == null) {
-      await dotenv.load();
-      if (mounted && !dotenv.isEveryDefined({_CONFIG_URL_KEY})) {
-        setState(() {
-          _mode = _CaDansaAppStateMode.done;
-        });
-        return;
+    final configUri = _configUri;
+    if (configUri == null) return false;
+
+    final dynamic jsonConfig = await _loadJson(configUri);
+    if (jsonConfig == null) return false;
+
+    try {
+      final config = _config = GlobalConfig(jsonConfig);
+      _lastConfigLoad = DateTime.now();
+
+      if (config.allEvents.isNotEmpty) {
+        final eventIndex = widget.sharedPreferences.getInt(_EVENT_INDEX_KEY)
+            ?.clamp(0, config.allEvents.length - 1)
+            ?? _DEFAULT_EVENT_INDEX;
+        await _switchToEvent(config.allEvents[eventIndex], eventIndex);
       }
-      _configUrl = dotenv.env[_CONFIG_URL_KEY];
-    }
-
-    final dynamic jsonConfig = await _loadJson(_configUrl!);
-    if (jsonConfig != null) {
-      try {
-        final config = _config = GlobalConfig(jsonConfig);
-        _lastConfigLoad = DateTime.now();
-
-        if (config.allEvents.isNotEmpty) {
-          final eventIndex = widget._sharedPreferences.getInt(_EVENT_INDEX_KEY)
-              ?.clamp(0, config.allEvents.length - 1)
-              ?? _DEFAULT_EVENT_INDEX;
-          await _switchToEvent(config.allEvents[eventIndex], eventIndex);
-        }
-
-        if (mounted) {
-          final pageIndex = widget._sharedPreferences.getInt(PAGE_INDEX_KEY);
-          setState(() {
-            _mode = _CaDansaAppStateMode.done;
-            _initialPageIndex = pageIndex;
-          });
-        }
       // ignore: avoid_catches_without_on_clauses
-      } catch (e, stackTrace) {
-        debugPrint('$e');
-        debugPrintStack(stackTrace: stackTrace);
-        if (mounted) {
-          setState(() {
-            _mode =
-            _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
-          });
-        }
-      }
-    } else if (mounted) {
-      setState(() {
-        _mode =
-        _config != null ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
-      });
+    } catch (e, stackTrace) {
+      debugPrint('$e');
+      debugPrintStack(stackTrace: stackTrace);
     }
+
+    return _config != null;
   }
 
   Future<dynamic> _loadJson(final String url) async {
     String? jsonString;
     if (url.startsWith('http')) {
       try {
-        final file =
-        await _configCacheManager.getSingleFile(url).timeout(_LOAD_TIMEOUT);
+        final file = await _configCacheManager.getSingleFile(url).timeout(_LOAD_TIMEOUT);
         jsonString = file.readAsStringSync();
       } on Exception {
         jsonString = null;
@@ -218,12 +238,12 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Widget build(final BuildContext context) {
     final currentEvent = _currentEvent;
     final title = currentEvent?.title ?? _config?.title ?? LText(APP_TITLE);
-    final primarySwatch = currentEvent?.primarySwatch ?? widget._initialPrimarySwatch;
-    final accentColor = currentEvent?.accentColor ?? widget._initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
+    final primarySwatch = currentEvent?.primarySwatch ?? widget.initialPrimarySwatch;
+    final accentColor = currentEvent?.accentColor ?? widget.initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
 
     return StreamBuilder<Locale>(
       stream: _localeStreamController.stream,
-      initialData: widget._initialLocale,
+      initialData: widget.initialLocale,
       builder: (_, localeSnapshot) {
         final locale = localeSnapshot.hasData
             ? localeSnapshot.data
@@ -252,10 +272,11 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final currentEvent = _currentEvent;
     if (config != null && currentEvent != null && _mode == _CaDansaAppStateMode.done) {
       return CaDansaEventPage(
-        event: Event(currentEvent, config.defaults, _currentEventConfig),
-        initialAction: null,
+        event: Event(currentEvent, _currentEventConfig, EventConstants(_currentEventConfig, config.defaults)),
+        initialAction: _initialAction,
         buildDrawer:_buildDrawer,
-        sharedPreferences: widget._sharedPreferences,
+        sharedPreferences: widget.sharedPreferences,
+        moveToEvent: _switchToEventById,
         key: ValueKey(_currentEventIndex),
       );
     } else if (_mode == _CaDansaAppStateMode.loading) {
@@ -333,7 +354,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
     if (kDebugMode) {
       bottomWidgets.add(ElevatedButton.icon(
-        onPressed: _reloadConfig,
+        onPressed: _forceReload,
         icon: const Icon(MdiIcons.refresh),
         label: const Text('Reload config'),
       ));
@@ -382,42 +403,58 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Future<void> _switchToEvent(final GlobalEvent event, final int index) async {
     _currentEventIndex = index;
     _currentEventConfig = await _loadJson(event.configUri);
-    _initialPageIndex = 0;
+    _initialAction = null;
 
-    await widget._sharedPreferences.setInt(_EVENT_INDEX_KEY, index);
+    await widget.sharedPreferences.setInt(_EVENT_INDEX_KEY, index);
 
     {
       final primarySwatch = event.primarySwatch;
       if (primarySwatch != null) {
-        await widget._sharedPreferences.setInt(_PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
+        await widget.sharedPreferences.setInt(_PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
       } else {
-        await widget._sharedPreferences.remove(_PRIMARY_SWATCH_COLOR_KEY);
+        await widget.sharedPreferences.remove(_PRIMARY_SWATCH_COLOR_KEY);
       }
     }
 
     {
       final accentColorIndex = event.accentColor;
       if (accentColorIndex != null) {
-        await widget._sharedPreferences.setInt(_ACCENT_COLOR_KEY, accentColorIndex.value);
+        await widget.sharedPreferences.setInt(_ACCENT_COLOR_KEY, accentColorIndex.value);
       } else {
-        await widget._sharedPreferences.remove(_ACCENT_COLOR_KEY);
+        await widget.sharedPreferences.remove(_ACCENT_COLOR_KEY);
       }
+    }
+  }
+
+  Future<void> _switchToEventById({required final String eventId, required final String action}) async {
+    final config = _config;
+    if (config == null) return;
+
+    final targetEvent =
+        config.allEvents.asMap().entries.firstWhereOrNull((event) => event.value.id == eventId);
+    if (targetEvent == null) return;
+
+    await _switchToEvent(targetEvent.value, targetEvent.key);
+    if (mounted) {
+      setState(() {
+        _initialAction = action;
+      });
     }
   }
 
   Future<void> _setLocale(final Locale locale) async {
     _localeStreamController.add(locale);
 
-    await widget._sharedPreferences.setStringList(
+    await widget.sharedPreferences.setStringList(
         _LOCALE_KEY,
         [locale.languageCode, locale.scriptCode, locale.countryCode]
             .whereNotNull()
             .toList());
   }
 
-  Future<void> _reloadConfig() async {
+  Future<void> _forceReload() async {
     await _configCacheManager.emptyCache();
-    _resetConfig(force: true);
+    await _resetConfig(force: true);
   }
 
   Iterable<Locale> get _supportedLocales =>
@@ -434,7 +471,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           title: Text(legal.labelTerms.get(locale)),
         ),
         body: Html(
-          data: '<h1>${_packageInfo.appName}</h1>${legal.terms.get(locale)}',
+          data: '<h1>${widget.packageInfo.appName}</h1>${legal.terms.get(locale)}',
         ),
       );
     }));
@@ -445,10 +482,18 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final year = DateFormat.y(locale.toLanguageTag()).format(DateTime.now());
     showAboutDialog(
       context: context,
-      applicationName: _packageInfo.appName,
+      applicationName: widget.packageInfo.appName,
       applicationLegalese: 'Copyright © $year ${legal.copyright.get(locale)}',
-      applicationVersion: '${_packageInfo.version} (${_packageInfo.buildNumber})',
+      applicationVersion: '${widget.packageInfo.version} (${widget.packageInfo.buildNumber})',
     );
+  }
+
+  Future<void> _onSelectNotification(final String? payload) async {
+    if (mounted && payload != null && payload.isNotEmpty) {
+      setState(() {
+        _initialAction = payload;
+      });
+    }
   }
 
   @override

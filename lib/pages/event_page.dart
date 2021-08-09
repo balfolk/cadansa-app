@@ -9,8 +9,11 @@ import 'package:cadansa_app/pages/info_page.dart';
 import 'package:cadansa_app/pages/map_page.dart';
 import 'package:cadansa_app/pages/programme_page.dart';
 import 'package:cadansa_app/util/extensions.dart';
+import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/util/page_util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:format/format.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,6 +24,7 @@ class CaDansaEventPage extends StatefulWidget {
     required this.initialAction,
     required this.buildDrawer,
     required this.sharedPreferences,
+    required this.moveToEvent,
     final Key? key,
   }) : super(key: key);
 
@@ -28,6 +32,7 @@ class CaDansaEventPage extends StatefulWidget {
   final String? initialAction;
   final Widget? Function({required BuildContext context}) buildDrawer;
   final SharedPreferences sharedPreferences;
+  final void Function({required String eventId, required String action}) moveToEvent;
 
   @override
   _CaDansaEventPageState createState() => _CaDansaEventPageState();
@@ -170,8 +175,19 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
         _selectArea(areaId);
         break;
       case _ACTION_ITEM:
-        final itemId = split.length >= 2 ? split[1] : null;
-        if (itemId != null && itemId.isNotEmpty) {
+        String? eventId, itemId;
+        if (split.length >= 3) {
+          // Interpret the action as eventId:itemId
+          eventId = split[1];
+          itemId = split[2];
+        } else if (split.length >= 2) {
+          // Interpret the action as itemId
+          itemId = split[1];
+        }
+
+        if (eventId != null && eventId.isNotEmpty && eventId != widget.event.id) {
+          widget.moveToEvent(eventId: eventId, action: action);
+        } else if (itemId != null && itemId.isNotEmpty) {
           int? foundDayIndex;
           final int foundPageIndex = widget.event.pages.indexWhere((page) {
             // Don't try to shortcut this with a whereType<ProgrammePageData>,
@@ -247,19 +263,61 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
         .getStringList(_favoritesPreferencesKey)?.toSet() ?? {};
   }
 
-  Future<bool> _setFavorite(final ProgrammeItem item) async {
+  Future<bool> _setFavorite({
+    required final ProgrammeDay day,
+    required final ProgrammeItem item,
+  }) async {
     final id = item.id;
     if (id == null) return false;
+
+    final locale = Localizations.localeOf(context);
+    final formatMap = {
+      'name': item.name.get(locale),
+      'event': widget.event.title.get(locale),
+      'days': widget.event.constants.notificationTimeBefore.inDays.toString(),
+      'hours': widget.event.constants.notificationTimeBefore.inHours.toString(),
+      'minutes': widget.event.constants.notificationTimeBefore.inMinutes.toString(),
+      'seconds': widget.event.constants.notificationTimeBefore.inSeconds.toString(),
+    };
 
     final favorites = _getEventFavorites();
     if (favorites.contains(id)) {
       favorites.remove(id);
+      _maybeShowSnackBar(widget.event.constants.unfavoriteSnackText.get(locale).format(formatMap));
+      await cancelNotification(id: id);
     } else {
       favorites.add(id);
+      final itemStart = day.rangeOfItem(item)?.start;
+      final notificationTime = kDebugMode
+          ? DateTime.now().add(const Duration(seconds: 5))
+          : itemStart?.subtract(widget.event.constants.notificationTimeBefore);
+      if (notificationTime != null) {
+        if (await addNotification(
+          id: id,
+          eventId: widget.event.id,
+          title: widget.event.constants.notificationTitle.get(locale).format(formatMap),
+          body: widget.event.constants.notificationBody.get(locale).format(formatMap),
+          payload: '$_ACTION_ITEM$_ACTION_SEPARATOR${widget.event.id}$_ACTION_SEPARATOR$id',
+          color: widget.event.primarySwatch,
+          when: notificationTime,
+          whenStart: itemStart,
+        )) {
+          _maybeShowSnackBar(widget.event.constants.favoriteSnackText.get(locale).format(formatMap));
+        }
+      }
     }
 
     return widget.sharedPreferences
         .setStringList(_favoritesPreferencesKey, favorites.toList());
+  }
+
+  /// Show a [SnackBar] if possible and if the provided text is not empty.
+  void _maybeShowSnackBar(final String text) {
+    if (text.isNotEmpty) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(
+        content: Text(text),
+      ));
+    }
   }
 
   String get _favoritesPreferencesKey => 'favorites_${widget.event.id}';

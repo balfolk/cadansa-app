@@ -299,6 +299,21 @@
                   },
                   "favoriteTooltip": {
                     "$ref": "definitions.json#/text"
+                  },
+                  "notificationTimeBefore": {
+                    "$ref": "definitions.json#/duration"
+                  },
+                  "favoriteSnackText": {
+                    "$ref": "definitions.json#/text"
+                  },
+                  "unfavoriteSnackText": {
+                    "$ref": "definitions.json#/text"
+                  },
+                  "notificationTitle": {
+                    "$ref": "definitions.json#/text"
+                  },
+                  "notificationBod": {
+                    "$ref": "definitions.json#/text"
                   }
                 },
                 "required": [

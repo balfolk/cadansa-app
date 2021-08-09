@@ -136,32 +136,12 @@ class ProgrammeItemsList extends StatelessWidget {
   }
 
   TemporalState? _getPlayingStatus(final ProgrammeItem item) {
-    // Anything with hours smaller than this number is in the "wee hours" and takes place on the preceding day
-    const HOUR_NIGHT_CUTOFF = 6;
+    final itemRange = day.rangeOfItem(item);
+    if (itemRange == null) return null;
 
-    final dayStartsOn = day.startsOn;
-    if (dayStartsOn == null) {
-      return null;
-    }
-
-    final itemStartTime = item.startTime;
-    final startDay = DateTime(dayStartsOn.year, dayStartsOn.month, dayStartsOn.day);
-    final startMoment = startDay.add(Duration(
-        days: itemStartTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: itemStartTime.hour,
-        minutes: itemStartTime.minute));
-    final itemEndTime = item.endTime;
-    final endMoment = itemEndTime != null ? startDay.add(Duration(
-        days: itemEndTime.hour < HOUR_NIGHT_CUTOFF ? 1 : 0,
-        hours: itemEndTime.hour,
-        minutes: itemEndTime.minute)) : null;
     final now = DateTime.now();
-    if (now.isBefore(startMoment)) return TemporalState.future;
-    if (endMoment != null) {
-      if (now.isAfter(endMoment)) return TemporalState.past;
-      return TemporalState.present;
-    } else {
-      return TemporalState.past;
-    }
+    if (now.isBefore(itemRange.start)) return TemporalState.future;
+    if (now.isAfter(itemRange.end)) return TemporalState.past;
+    return TemporalState.present;
   }
 }

@@ -56,6 +56,10 @@
   "action": {
     "type": "string"
   },
+  "duration": {
+    "type": "number",
+    "minimum": 0
+  },
   "color": {
     "type": "array",
     "anyOf": [

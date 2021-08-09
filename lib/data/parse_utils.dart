@@ -140,6 +140,15 @@ TimeOfDay? parseTimeOfDay(final dynamic json) {
   return TimeOfDay(hour: hour, minute: minute);
 }
 
+Duration? parseDuration(final dynamic json) {
+  final milliseconds = parseNum(json);
+  if (milliseconds == null) {
+    return null;
+  }
+
+  return Duration(milliseconds: milliseconds.toInt());
+}
+
 Offset parseOffset(final dynamic json) {
   return Offset(parseNum(json[0])!.toDouble(), parseNum(json[1])!.toDouble());
 }

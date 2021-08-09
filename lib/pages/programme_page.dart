@@ -31,7 +31,7 @@ class ProgrammePage extends StatefulWidget {
   final SharedPreferences sharedPreferences;
   final String? openItemId;
   final Set<String> Function() getFavorites;
-  final Future<bool> Function(ProgrammeItem) setFavorite;
+  final Future<bool> Function({required ProgrammeDay day, required ProgrammeItem item}) setFavorite;
 
   static const _EXPANDABLE_THEME = ExpandableThemeData(
     tapBodyToCollapse: true,
@@ -104,7 +104,7 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
         isFavorite: favorites.contains(item.id),
         innerColor: widget.programme.favoriteInnerColor,
         outerColor: widget.programme.favoriteOuterColor,
-        onPressed: () => _onFavoritePressed(item),
+        onPressed: () => _onFavoritePressed(day: day, item: item),
         tooltip: widget.programme.favoriteTooltip,
       ) : null,
       doColorIcons: widget.event.doColorIcons,
@@ -124,8 +124,11 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   bool get _canFavorite =>
       widget.programme.supportsFavorites && widget.event.canFavorite;
 
-  void _onFavoritePressed(final ProgrammeItem item) {
-    widget.setFavorite(item);
+  void _onFavoritePressed({
+    required final ProgrammeDay day,
+    required final ProgrammeItem item,
+  }) {
+    widget.setFavorite(day: day, item: item);
     setState(() {});
   }
 
