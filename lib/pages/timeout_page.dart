@@ -13,8 +13,6 @@ class TimeoutPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Fix the status bar brightness - hopefully this becomes obsolete soon
-        backwardsCompatibility: false,
         systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
         title: const Text(APP_TITLE),
       ),

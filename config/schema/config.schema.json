@@ -101,7 +101,7 @@
               "primarySwatchColor": {
                 "$ref": "definitions.json#/color"
               },
-              "accentColor": {
+              "secondaryColor": {
                 "$ref": "definitions.json#/color"
               }
             },

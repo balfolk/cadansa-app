@@ -50,8 +50,6 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
       final locale = Localizations.localeOf(context);
       return Scaffold(
         appBar: AppBar(
-          // Fix the status bar brightness - hopefully this becomes obsolete soon
-          backwardsCompatibility: false,
           systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(widget.event.title.get(locale)),
           actions: actions?.toList(growable: false),

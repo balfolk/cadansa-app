@@ -36,9 +36,9 @@ class _MapPageState extends State<MapPage> {
 
   List<Tab> get tabs {
     final locale = Localizations.localeOf(context);
-    return widget.mapData.floors.map((floor) {
-      return Tab(text: floor.title.get(locale));
-    }).toList(growable: false);
+    return widget.mapData.floors
+        .map((floor) => Tab(text: floor.title.get(locale)))
+        .toList(growable: false);
   }
 
   List<Widget> get tabChildren {

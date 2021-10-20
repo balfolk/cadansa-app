@@ -43,7 +43,7 @@ class GlobalEvent {
         avatarUri = json['avatar'] as String?,
         configUri = json['config'] as String,
         primarySwatch = parseMaterialColor(json['primarySwatchColor']),
-        accentColor = parseColor(json['accentColor']);
+        secondaryColor = parseColor(json['secondaryColor']);
 
   final String id;
   final LText title;
@@ -51,7 +51,7 @@ class GlobalEvent {
   final String? avatarUri;
   final String configUri;
   final MaterialColor? primarySwatch;
-  final Color? accentColor;
+  final Color? secondaryColor;
 }
 
 @immutable

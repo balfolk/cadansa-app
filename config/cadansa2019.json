@@ -95,7 +95,7 @@
         "en": "Other",
         "nl": "Overige"
       },
-      "icon": "teach"
+      "icon": "human-male-board"
     }
   },
   "pages": [
@@ -270,7 +270,7 @@
                 [-463,   -1]
               ],
               "center": [-270, -211],
-              "buttonIcon": "teach",
+              "buttonIcon": "human-male-board",
               "buttonSize": 240.0,
               "actionTitle": {
                 "en": "Workshops",

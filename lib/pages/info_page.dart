@@ -35,7 +35,7 @@ class _InfoPageState extends State<InfoPage> {
             data: content,
             onLinkTap: _onLinkTap,
             style: {
-              htmlAnchor: Style(color: theme.accentColor),
+              htmlAnchor: Style(color: theme.colorScheme.secondary),
             },
           ),
         ),

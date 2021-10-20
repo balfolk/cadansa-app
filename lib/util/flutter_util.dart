@@ -106,7 +106,7 @@ Future<void> openInAppBrowser({
   final parsed = Uri.tryParse(url);
   if (parsed == null) return;
 
-  final toolbarColor = Theme.of(context).primaryColor;
+  final colorScheme = Theme.of(context).colorScheme;
   await _IN_APP_BROWSER.openUrlRequest(
     urlRequest: URLRequest(url: parsed),
     options: InAppBrowserClassOptions(
@@ -119,9 +119,9 @@ Future<void> openInAppBrowser({
       ),
       ios: IOSInAppBrowserOptions(
         presentationStyle: IOSUIModalPresentationStyle.FORM_SHEET,
-        toolbarBottomBackgroundColor: toolbarColor,
-        toolbarBottomTintColor: Theme.of(context).accentColor,
-        toolbarTopTintColor: Theme.of(context).accentColor,
+        toolbarBottomBackgroundColor: colorScheme.primary,
+        toolbarBottomTintColor: colorScheme.secondary,
+        toolbarTopTintColor: colorScheme.secondary,
       ),
     ),
   );

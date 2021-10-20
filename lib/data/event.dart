@@ -23,7 +23,7 @@ class Event {
   DateTime get startDate => _globalEvent.startDate;
   DateTime get endDate => _globalEvent.endDate;
   MaterialColor? get primarySwatch => _globalEvent.primarySwatch;
-  Color? get accentColor => _globalEvent.accentColor;
+  Color? get secondaryColor => _globalEvent.secondaryColor;
 
   /// Whether we should color icons on a programme page for this event.
   bool get doColorIcons => _temporalState == TemporalState.present;

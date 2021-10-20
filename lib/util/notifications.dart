@@ -87,7 +87,6 @@ Future<bool> addNotification({
     android: AndroidNotificationDetails(
       eventId,
       eventId,
-      '',
       groupKey: eventId,
       color: color,
       when: whenStart?.millisecondsSinceEpoch,

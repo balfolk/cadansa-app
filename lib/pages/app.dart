@@ -30,7 +30,7 @@ const _LOAD_TIMEOUT = Duration(seconds: 5);
 
 const _CONFIG_LIFETIME = Duration(hours: 5);
 
-const _DEFAULT_ACCENT_COLOR = Colors.tealAccent;
+const _DEFAULT_SECONDARY_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
 const _EVENT_INDEX_KEY = 'eventIndex';
@@ -39,7 +39,7 @@ class CaDansaApp extends StatefulWidget {
   const CaDansaApp({
     required this.initialLocale,
     required this.initialPrimarySwatch,
-    required this.initialAccentColor,
+    required this.initialSecondaryColor,
     required this.sharedPreferences,
     required this.env,
     required this.packageInfo
@@ -47,7 +47,7 @@ class CaDansaApp extends StatefulWidget {
 
   final Locale? initialLocale;
   final MaterialColor initialPrimarySwatch;
-  final Color? initialAccentColor;
+  final Color? initialSecondaryColor;
   final SharedPreferences sharedPreferences;
   final Map<String, String> env;
   final PackageInfo packageInfo;
@@ -197,7 +197,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final currentEvent = _currentEvent;
     final title = currentEvent?.title ?? _config?.title ?? LText(APP_TITLE);
     final primarySwatch = currentEvent?.primarySwatch ?? widget.initialPrimarySwatch;
-    final accentColor = currentEvent?.accentColor ?? widget.initialAccentColor ?? _DEFAULT_ACCENT_COLOR;
+    final secondaryColor = currentEvent?.secondaryColor ?? widget.initialSecondaryColor ?? _DEFAULT_SECONDARY_COLOR;
 
     return StreamBuilder<Locale>(
       stream: _localeStreamController.stream,
@@ -206,12 +206,16 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         final locale = localeSnapshot.hasData
             ? localeSnapshot.data
             : Localizations.maybeLocaleOf(context);
+        final theme = ThemeData(
+          primarySwatch: primarySwatch,
+          fontFamily: 'AppFontFamily',
+        );
         return MaterialApp(
           onGenerateTitle: (context) => title.get(locale ?? Localizations.localeOf(context)),
-          theme: ThemeData(
-            primarySwatch: primarySwatch,
-            accentColor: accentColor,
-            fontFamily: 'AppFontFamily',
+          theme: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(
+              secondary: secondaryColor,
+            ),
           ),
           home: _homePage,
           localizationsDelegates: const [
@@ -375,11 +379,11 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
 
     {
-      final accentColorIndex = event.accentColor;
-      if (accentColorIndex != null) {
-        await widget.sharedPreferences.setInt(ACCENT_COLOR_KEY, accentColorIndex.value);
+      final secondaryColorIndex = event.secondaryColor;
+      if (secondaryColorIndex != null) {
+        await widget.sharedPreferences.setInt(SECONDARY_COLOR_KEY, secondaryColorIndex.value);
       } else {
-        await widget.sharedPreferences.remove(ACCENT_COLOR_KEY);
+        await widget.sharedPreferences.remove(SECONDARY_COLOR_KEY);
       }
     }
   }
@@ -423,8 +427,6 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       final locale = Localizations.localeOf(context);
       return Scaffold(
         appBar: AppBar(
-          // Fix the status bar brightness - hopefully this becomes obsolete soon
-          backwardsCompatibility: false,
           systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(legal.labelTerms.get(locale)),
         ),

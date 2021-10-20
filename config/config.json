@@ -45,7 +45,7 @@
           "avatar": "https://www.cadansa.nl/wp-content/uploads/avatar2019.png",
           "config": "config/cadansa2019.json",
           "primarySwatchColor": [0, 150, 136],
-          "accentColor": [100, 255, 218]
+          "secondaryColor": [100, 255, 218]
         }
       ]
     }
