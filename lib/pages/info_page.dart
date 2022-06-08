@@ -50,7 +50,10 @@ class _InfoPageState extends State<InfoPage> {
     Object? element,
   ) {
     if (url != null) {
-      launch(url);
+      final uri = Uri.tryParse(url);
+      if (uri != null) {
+        launchUrl(uri);
+      }
     }
   }
 }

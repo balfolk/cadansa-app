@@ -18,8 +18,12 @@ Brightness _getOtherBrightness(final Brightness brightness) {
 }
 
 extension MyThemeData on ThemeData {
-  SystemUiOverlayStyle get systemUiOverlayStyle => SystemUiOverlayStyle(
-    statusBarIconBrightness: _getOtherBrightness(primaryColorBrightness),
-    statusBarBrightness: primaryColorBrightness,
-  );
+  SystemUiOverlayStyle get systemUiOverlayStyle {
+    final primaryColorBrightness =
+        ThemeData.estimateBrightnessForColor(primaryColor);
+    return SystemUiOverlayStyle(
+      statusBarIconBrightness: _getOtherBrightness(primaryColorBrightness),
+      statusBarBrightness: primaryColorBrightness,
+    );
+  }
 }

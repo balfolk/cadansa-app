@@ -64,7 +64,12 @@ class ProgrammeItemBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 10.0),
           child: OutlinedButton.icon(
-            onPressed: () => launch(websiteUrl.get(locale)),
+            onPressed: () {
+              final uri = Uri.tryParse(websiteUrl.get(locale));
+              if (uri != null) {
+                launchUrl(uri);
+              }
+            },
             icon: Icon(findIcon(item.website.icon)),
             label: Text(
               websiteText.get(locale),

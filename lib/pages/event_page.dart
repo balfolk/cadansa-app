@@ -229,8 +229,11 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
   }
 
   void _launchUrl(final String? url) {
-    if (url != null && url.isNotEmpty) {
-      launch(url);
+    if (url != null) {
+      final uri = Uri.tryParse(url);
+      if (uri != null) {
+        launchUrl(uri);
+      }
     }
   }
 
