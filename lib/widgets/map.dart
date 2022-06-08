@@ -51,24 +51,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   AlignmentDirectional? _indicatorAlignment;
   Size? _lastKnownSize;
 
-  late final AnimationController _mapMoveAnimationController = AnimationController(
-    duration: MapWidget._MAP_MOVE_ANIMATION_DURATION,
-    vsync: this,
-  )..addListener(() {
-    final mapMoveTargetArea = _mapMoveTargetArea;
-    final mapMoveAnimation = _mapMoveAnimation;
-    if (mapMoveTargetArea == null || mapMoveAnimation == null) return;
-
-    _controller.position = mapMoveAnimation.value;
-    if (_mapMoveAnimationController.isCompleted &&
-        _calculateIndicatorCoordinates(mapMoveTargetArea)) {
-      setState(() {
-        _activeArea = _mapMoveTargetArea;
-        _mapMoveTargetArea = null;
-        _mapMoveAnimation = null;
-      });
-    }
-  });
+  AnimationController? _mapMoveAnimationController;
 
   Animation<Offset>? _mapMoveAnimation;
   FloorArea? _mapMoveTargetArea;
@@ -78,6 +61,27 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
     super.initState();
     _controllerOutputStreamSubscription =
         _controller.outputStateStream.listen(_onMapControllerEvent);
+    _mapMoveAnimationController = AnimationController(
+      duration: MapWidget._MAP_MOVE_ANIMATION_DURATION,
+      vsync: this,
+    )..addListener(() {
+      final mapMoveAnimationController = _mapMoveAnimationController;
+      final mapMoveTargetArea = _mapMoveTargetArea;
+        final mapMoveAnimation = _mapMoveAnimation;
+        if (mapMoveAnimationController == null ||
+            mapMoveTargetArea == null ||
+            mapMoveAnimation == null) return;
+
+        _controller.position = mapMoveAnimation.value;
+      if (mapMoveAnimationController.isCompleted &&
+          _calculateIndicatorCoordinates(mapMoveTargetArea)) {
+        setState(() {
+          _activeArea = _mapMoveTargetArea;
+          _mapMoveTargetArea = null;
+          _mapMoveAnimation = null;
+        });
+      }
+    });
   }
 
   @override
@@ -265,7 +269,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   void _onTapUp(final BuildContext context, final TapUpDetails tapUpDetails, final PhotoViewControllerValue controllerValue) {
     _lastKnownSize = context.findRenderObject()?.paintBounds.size;
 
-    if (_mapMoveAnimationController.isAnimating) {
+    if (_mapMoveAnimationController?.isAnimating ?? false) {
       return;
     }
 
@@ -293,11 +297,14 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
 
   void _animateAreaMapMove(final FloorArea targetArea) {
     final scale = _controller.scale;
-    if (scale == null) return;
+    final mapMoveAnimationController = _mapMoveAnimationController;
+    if (scale == null || mapMoveAnimationController == null) return;
 
     final moveTo = -targetArea.center * scale;
-    _mapMoveAnimation = Tween(begin: _controller.position, end: moveTo).animate(_mapMoveAnimationController);
-    _mapMoveAnimationController.forward(from: _mapMoveAnimationController.lowerBound);
+    _mapMoveAnimation = Tween(begin: _controller.position, end: moveTo)
+        .animate(mapMoveAnimationController);
+    mapMoveAnimationController.forward(
+        from: mapMoveAnimationController.lowerBound);
     _mapMoveTargetArea = targetArea;
   }
 
@@ -381,7 +388,7 @@ class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMix
   void dispose() {
     _controllerOutputStreamSubscription?.cancel();
     _controller.dispose();
-    _mapMoveAnimationController.dispose();
+    _mapMoveAnimationController?.dispose();
     super.dispose();
   }
 }
