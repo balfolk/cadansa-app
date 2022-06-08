@@ -38,10 +38,10 @@ class ProgrammePage extends StatefulWidget {
   );
 
   @override
-  _ProgrammePageState createState() => _ProgrammePageState();
+  ProgrammePageState createState() => ProgrammePageState();
 }
 
-class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateMixin {
+class ProgrammePageState extends State<ProgrammePage> with TickerProviderStateMixin {
   late final TabController _tabController = TabController(
     initialIndex: _initialIndex,
     length: widget.programme.days.length,

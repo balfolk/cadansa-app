@@ -52,13 +52,13 @@ class CaDansaApp extends StatefulWidget {
   final PackageInfo packageInfo;
 
   @override
-  _CaDansaAppState createState() => _CaDansaAppState();
+  CaDansaAppState createState() => CaDansaAppState();
 }
 
 enum _CaDansaAppStateMode { done, loading, error }
 
 // ignore: prefer_mixin
-class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
+class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   _CaDansaAppStateMode _mode = _CaDansaAppStateMode.loading;
   GlobalConfig? _config;
   DateTime? _lastConfigLoad;

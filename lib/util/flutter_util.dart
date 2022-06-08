@@ -97,7 +97,7 @@ MaterialColor createMaterialColor(final Color color) {
   return MaterialColor(color.value, swatch);
 }
 
-late final _IN_APP_BROWSER = InAppBrowser();
+final _IN_APP_BROWSER = InAppBrowser();
 
 Future<void> openInAppBrowser({
   required final BuildContext context,

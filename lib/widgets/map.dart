@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/map.dart';
@@ -40,10 +39,10 @@ class MapWidget extends StatefulWidget {
   static const _MAP_MOVE_ANIMATION_DURATION = Duration(milliseconds: 500);
 
   @override
-  _MapWidgetState createState() => _MapWidgetState();
+  MapWidgetState createState() => MapWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixin {
+class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixin {
   final PhotoViewController _controller = PhotoViewController();
   late final StreamSubscription<Object?>? _controllerOutputStreamSubscription;
   FloorArea? _activeArea;

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:built_collection/built_collection.dart';
 import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/flutter_util.dart';

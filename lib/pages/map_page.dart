@@ -17,10 +17,10 @@ class MapPage extends StatefulWidget {
   final int? initialFloorIndex, highlightAreaIndex;
 
   @override
-  _MapPageState createState() => _MapPageState();
+  MapPageState createState() => MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
+class MapPageState extends State<MapPage> {
   @override
   Widget build(final BuildContext context) => DefaultTabController(
     length: widget.mapData.floors.length,

@@ -35,10 +35,10 @@ class CaDansaEventPage extends StatefulWidget {
   final void Function({required String eventId, required String action}) moveToEvent;
 
   @override
-  _CaDansaEventPageState createState() => _CaDansaEventPageState();
+  CaDansaEventPageState createState() => CaDansaEventPageState();
 }
 
-class _CaDansaEventPageState extends State<CaDansaEventPage> {
+class CaDansaEventPageState extends State<CaDansaEventPage> {
   int _currentIndex = _DEFAULT_PAGE_INDEX;
 
   int? _highlightAreaFloorIndex, _highlightAreaIndex;
@@ -83,7 +83,7 @@ class _CaDansaEventPageState extends State<CaDansaEventPage> {
     _handleInitialAction();
   }
 
-  void _setCurrentIndex([int? newIndex]) {
+  void _setCurrentIndex([final int? newIndex]) {
     final newValidIndex = (newIndex ?? _currentIndex).clamp(0, widget.event.pages.length - 1);
     if (newValidIndex != _currentIndex) {
       _currentIndex = newValidIndex;

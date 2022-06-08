@@ -1,51 +1,49 @@
-import 'dart:ui';
-
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
 void main() {
 
-  late Locale _und, _enUs;
+  late Locale und, enUs;
 
   setUp(() {
-    _und = const Locale('UND');
-    _enUs = const Locale('en', 'US');
+    und = const Locale('UND');
+    enUs = const Locale('en', 'US');
   });
 
   test('LText(string)', () {
-    expect(LText('foo').get(_und), 'foo');
-    expect(LText('bar_%s').get(_und), 'bar_UND');
-    expect(LText('bar_%s_%s').get(_und), 'bar_UND_');
-    expect(LText('bar_%s+%s').get(_enUs), 'bar_en+US');
+    expect(LText('foo').get(und), 'foo');
+    expect(LText('bar_%s').get(und), 'bar_UND');
+    expect(LText('bar_%s_%s').get(und), 'bar_UND_');
+    expect(LText('bar_%s+%s').get(enUs), 'bar_en+US');
   });
 
   test('LText(map)', () {
-    expect(LText(const {'und': 'foo', 'en': 'bar'}).get(_und), 'foo');
-    expect(LText(const {'fr': 'foo', 'en': 'bar'}).get(_enUs), 'bar');
-    expect(LText(const {'fr': 'foo', 'en_GB': 'bar'}).get(_enUs), 'bar');
-    expect(LText(const {'en_US': 'foo', 'en_GB': 'bar'}).get(_enUs), 'foo');
-    expect(LText(const {'en': 'foo', 'en_GB': 'bar'}).get(_enUs), 'foo');
-    expect(LText(const {'en': 'foo', 'en_GB': 'bar'}).get(_und), 'foo');
-    expect(LText(const <String, dynamic>{}).get(_und), '');
-    expect(LText(const <String, String>{}).get(_und), '');
-    expect(LText(const <String, int>{}).get(_und), '');
-    expect(LText(const <dynamic, dynamic>{}).get(_und), '');
+    expect(LText(const {'und': 'foo', 'en': 'bar'}).get(und), 'foo');
+    expect(LText(const {'fr': 'foo', 'en': 'bar'}).get(enUs), 'bar');
+    expect(LText(const {'fr': 'foo', 'en_GB': 'bar'}).get(enUs), 'bar');
+    expect(LText(const {'en_US': 'foo', 'en_GB': 'bar'}).get(enUs), 'foo');
+    expect(LText(const {'en': 'foo', 'en_GB': 'bar'}).get(enUs), 'foo');
+    expect(LText(const {'en': 'foo', 'en_GB': 'bar'}).get(und), 'foo');
+    expect(LText(const <String, dynamic>{}).get(und), '');
+    expect(LText(const <String, String>{}).get(und), '');
+    expect(LText(const <String, int>{}).get(und), '');
+    expect(LText(const <dynamic, dynamic>{}).get(und), '');
   });
 
   test('LText(other)', () {
-    expect(LText(42).get(_und), '42');
-    expect(LText(3.14).get(_und), '3.14');
-    expect(LText(const ['foo', 83]).get(_und), '[foo, 83]');
-    expect(LText(const <dynamic>[]).get(_und), '');
-    expect(LText(const <dynamic>{}).get(_und), '');
-    expect(LText(const Iterable<dynamic>.empty()).get(_und), '');
-    expect(LText(null).get(_und), '');
+    expect(LText(42).get(und), '42');
+    expect(LText(3.14).get(und), '3.14');
+    expect(LText(const ['foo', 83]).get(und), '[foo, 83]');
+    expect(LText(const <dynamic>[]).get(und), '');
+    expect(LText(const <dynamic>{}).get(und), '');
+    expect(LText(const Iterable<dynamic>.empty()).get(und), '');
+    expect(LText(null).get(und), '');
   });
 
   test('LText.empty()', () {
-    expect(const LText.empty().get(_enUs), '');
-    expect(const LText.empty().get(_und), '');
+    expect(const LText.empty().get(enUs), '');
+    expect(const LText.empty().get(und), '');
   });
 
   test('parseNum', () {

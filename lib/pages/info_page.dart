@@ -16,10 +16,10 @@ class InfoPage extends StatefulWidget {
   final PageHooks pageHooks;
 
   @override
-  _InfoPageState createState() => _InfoPageState();
+  InfoPageState createState() => InfoPageState();
 }
 
-class _InfoPageState extends State<InfoPage> {
+class InfoPageState extends State<InfoPage> {
   @override
   Widget build(final BuildContext context) {
     const htmlAnchor = 'a';

@@ -8,7 +8,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/webfeed.dart';
 
 class FeedPage extends StatefulWidget {
@@ -26,7 +25,7 @@ class FeedPage extends StatefulWidget {
   final Future<void> Function(String?) setReadGuid;
 
   @override
-  _FeedPageState createState() => _FeedPageState();
+  FeedPageState createState() => FeedPageState();
 }
 
 enum _FeedPageStatus {
@@ -35,7 +34,7 @@ enum _FeedPageStatus {
   ERROR
 }
 
-class _FeedPageState extends State<FeedPage> {
+class FeedPageState extends State<FeedPage> {
   _FeedPageStatus _status = _FeedPageStatus.LOADING;
   String? _feed;
 

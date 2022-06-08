@@ -3,7 +3,6 @@ import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -19,10 +19,10 @@ class FavoriteButton extends StatefulWidget {
   final LText tooltip;
 
   @override
-  _FavoriteButtonState createState() => _FavoriteButtonState();
+  FavoriteButtonState createState() => FavoriteButtonState();
 }
 
-class _FavoriteButtonState extends State<FavoriteButton>
+class FavoriteButtonState extends State<FavoriteButton>
     with SingleTickerProviderStateMixin {
 
   late final AnimationController animationController = AnimationController(

@@ -28,9 +28,9 @@ Future<void> _main() async {
   final secondaryColor =
       secondaryColorValue != null ? Color(secondaryColorValue) : null;
 
-  final localeList = sharedPrefs.getStringList(LOCALE_KEY);
+  final localeList = sharedPrefs.getStringList(LOCALE_KEY) ?? [];
   Locale? locale;
-  if (localeList != null && localeList.isNotEmpty) {
+  if (localeList.isNotEmpty) {
     locale = Locale.fromSubtags(
       languageCode: localeList[0],
       scriptCode: localeList.length >= 2 ? localeList[1] : null,
