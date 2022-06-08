@@ -52,6 +52,9 @@ class GlobalEvent {
   final String configUri;
   final MaterialColor? primarySwatch;
   final Color? secondaryColor;
+
+  bool get isCurrent =>
+      startDate.isBefore(DateTime.now()) && endDate.isAfter(DateTime.now());
 }
 
 @immutable

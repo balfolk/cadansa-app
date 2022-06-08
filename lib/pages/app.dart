@@ -14,7 +14,6 @@ import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
 import 'package:cadansa_app/widgets/locale_widgets.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,13 +85,13 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   }
 
   Future<void> _init() async {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     await initializeNotifications(
       context: context,
       onSelectNotification: _onSelectNotification,
     );
     if (mounted) {
-      await _reloadConfig(movePage: true);
+      await _reloadConfig(movePage: true, initial: true);
     }
   }
 
@@ -109,12 +108,16 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         _mode = _CaDansaAppStateMode.loading;
       });
 
-      await _reloadConfig(movePage: true, force: force);
+      await _reloadConfig(movePage: true, initial: true, force: force);
     }
   }
 
-  Future<void> _reloadConfig({required final bool movePage, final bool force = false}) async {
-    final success = await _loadConfig(force: force);
+  Future<void> _reloadConfig({
+    required final bool movePage,
+    final bool initial = false,
+    final bool force = false,
+  }) async {
+    final success = await _loadConfig(initial: initial, force: force);
     final newMode = success ? _CaDansaAppStateMode.done : _CaDansaAppStateMode.error;
     if (_mode != newMode) {
       String? initialAction;
@@ -138,7 +141,10 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     }
   }
 
-  Future<bool> _loadConfig({final bool force = false}) async {
+  Future<bool> _loadConfig({
+    final bool initial = false,
+    final bool force = false,
+  }) async {
     final lastConfigLoad = _lastConfigLoad;
     if (!force &&
         _config != null &&
@@ -159,9 +165,15 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       _lastConfigLoad = DateTime.now();
 
       if (config.allEvents.isNotEmpty) {
-        final eventIndex = widget.sharedPreferences.getInt(_EVENT_INDEX_KEY)
-            ?.clamp(0, config.allEvents.length - 1)
-            ?? _DEFAULT_EVENT_INDEX;
+        // On initial load, find current event, if any
+        int eventIndex =
+            initial ? config.allEvents.indexWhere((e) => e.isCurrent) : -1;
+        // If no current events, use stored event index and default to 0
+        if (eventIndex == -1) {
+          eventIndex = widget.sharedPreferences.getInt(_EVENT_INDEX_KEY)
+              ?.clamp(0, config.allEvents.length - 1)
+              ?? _DEFAULT_EVENT_INDEX;
+        }
         await _switchToEvent(config.allEvents[eventIndex], eventIndex);
       }
       // ignore: avoid_catches_without_on_clauses
@@ -459,7 +471,7 @@ class _CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     _localeStreamController.close();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 }
@@ -477,5 +489,5 @@ class _JsonCacheManager extends CacheManager {
 
   static const key = 'jcm';
 
-  static late final _JsonCacheManager _instance = _JsonCacheManager._();
+  static final _JsonCacheManager _instance = _JsonCacheManager._();
 }
