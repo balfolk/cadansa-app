@@ -127,8 +127,8 @@ class _ProgrammePageState extends State<ProgrammePage> with TickerProviderStateM
   void _onFavoritePressed({
     required final ProgrammeDay day,
     required final ProgrammeItem item,
-  }) {
-    widget.setFavorite(day: day, item: item);
+  }) async {
+    await widget.setFavorite(day: day, item: item);
     setState(() {});
   }
 
