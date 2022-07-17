@@ -61,7 +61,7 @@ class FeedPageState extends State<FeedPage> {
     if (url == null) return null;
 
     try {
-      return http.read(url).timeout(_FETCH_TIMEOUT);
+      return await http.read(url).timeout(_FETCH_TIMEOUT);
     } on Exception catch (e) {
       debugPrint(e.toString());
       return null;
@@ -89,8 +89,12 @@ class FeedPageState extends State<FeedPage> {
       const Center(child: CircularProgressIndicator());
 
   Widget _buildError(final BuildContext context) => Center(
-    child: AutoSizeText(
-      Localization.TIMEOUT_MESSAGE.get(Localizations.localeOf(context)),
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: AutoSizeText(
+        Localization.TIMEOUT_MESSAGE.get(Localizations.localeOf(context)),
+        textAlign: TextAlign.center,
+      ),
     ),
   );
 
