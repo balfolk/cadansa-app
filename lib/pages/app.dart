@@ -307,23 +307,28 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         },
       ),
       const Divider(),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton(
-            onPressed: () => _showTerms(context, config.legal),
-            child: Text(config.legal.labelTerms.get(locale)),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 3.0),
-            child: Text('•'),
-          ),
-          TextButton(
-            onPressed: () => _showAbout(context, config.legal),
-            child: Text(config.legal.labelAbout.get(locale)),
-          ),
-        ],
-      )
+      SafeArea(
+        left: false,
+        top: false,
+        right: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () => _showTerms(context, config.legal),
+              child: Text(config.legal.labelTerms.get(locale)),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 3.0),
+              child: Text('•'),
+            ),
+            TextButton(
+              onPressed: () => _showAbout(context, config.legal),
+              child: Text(config.legal.labelAbout.get(locale)),
+            ),
+          ],
+        ),
+      ),
     ];
 
     if (kDebugMode) {

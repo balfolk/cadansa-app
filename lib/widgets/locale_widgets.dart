@@ -36,6 +36,9 @@ class _LocaleWidget extends StatelessWidget {
   final bool isActive;
   final void Function()? onPressed;
 
+  // Increase the flag size on iOS since somehow they're much smaller there
+  static const _iosFlagScaleFactor = 2.0;
+
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
@@ -59,7 +62,12 @@ class _LocaleWidget extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Text(stringToUnicodeFlag(locale.countryCode)),
+          child: Text(
+            stringToUnicodeFlag(locale.countryCode),
+            textScaleFactor: theme.platform == TargetPlatform.iOS
+                ? _iosFlagScaleFactor
+                : null,
+          ),
         ),
       ),
     );
