@@ -148,6 +148,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
                 MdiIcons.fromString(area.buttonIcon),
                 size: size / 2,
               ),
+              heroTag: null,
             ),
           )];
 
