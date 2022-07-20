@@ -54,7 +54,7 @@
     "$comment": "We're not using the definition in icons.json because of performance issues in Android Studio"
   },
   "action": {
-    "type": "string"
+    "$ref": "#/text"
   },
   "duration": {
     "type": "number",
