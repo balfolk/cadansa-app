@@ -114,7 +114,7 @@
             "nl": "Begane grond",
             "fr": "Rez-de-chaussée"
           },
-          "path": "cadansa_map_0.png",
+          "path": "https://cadansa.nl/wp-content/uploads/cadansa_2019_map_0.png",
           "version": 2,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -406,7 +406,7 @@
             "nl": "Eerste verdieping",
             "fr": "À l'étage"
           },
-          "path": "cadansa_map_1.png",
+          "path": "https://cadansa.nl/wp-content/uploads/cadansa_2019_map_1.png",
           "version": 1,
           "minScale": 0.2,
           "maxScale": 1.0,
