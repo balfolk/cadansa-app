@@ -232,6 +232,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           home: _homePage,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: _supportedLocales,
