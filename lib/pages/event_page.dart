@@ -100,8 +100,10 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     final key = Key('page$_currentIndex');
     _currentIndex = _currentIndex.clamp(0, widget.event.pages.length - 1);
     final pageData = widget.event.pages[_currentIndex];
+
+    final Widget page;
     if (pageData is MapPageData) {
-      return MapPage(
+      page = MapPage(
         mapData: pageData.mapData,
         pageHooks: _pageHooks,
         initialFloorIndex: _highlightAreaFloorIndex,
@@ -109,7 +111,7 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
         key: key,
       );
     } else if (pageData is ProgrammePageData) {
-      return ProgrammePage(
+      page = ProgrammePage(
         programme: pageData.programme,
         event: widget.event,
         pageHooks: _pageHooks,
@@ -121,21 +123,29 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
         key: key,
       );
     } else if (pageData is InfoPageData) {
-      return InfoPage(
+      page = InfoPage(
         content: pageData.content,
+        linkColor: pageData.linkColor,
         pageHooks: _pageHooks,
         key: key,
       );
     } else if (pageData is FeedPageData) {
-      return FeedPage(
+      page = FeedPage(
         data: pageData,
         pageHooks: _pageHooks,
         getReadGuids: _getReadFeedGuids,
         setReadGuid: _setReadFeedGuid,
         key: key,
       );
+    } else {
+      throw StateError('Unknown page data object $pageData');
     }
-    throw StateError('Unknown page data object $pageData');
+
+    _highlightAreaFloorIndex = null;
+    _highlightAreaIndex = null;
+    _openProgrammeItemId = null;
+
+    return page;
   }
 
   Widget _buildBottomNavigationBar() {
@@ -256,9 +266,8 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     }
 
     if (mounted && pageIndex != null && floorIndex != null && areaIndex != null) {
-      final thePageIndex = pageIndex;
       setState(() {
-        _setCurrentIndex(thePageIndex);
+        _setCurrentIndex(pageIndex);
         _highlightAreaFloorIndex = floorIndex;
         _highlightAreaIndex = areaIndex;
       });
