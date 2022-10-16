@@ -1,7 +1,7 @@
 name: cadansa_app
 description: CaDansa app
 
-version: 2.1.1+12
+version: 2.1.2+13
 publish_to: none
 
 environment:
@@ -61,10 +61,6 @@ flutter:
     - assets/ca/lets-encrypt-r3.pem
     - assets/header.png
     - config/cadansa2019.json
-#    - config/config.json
-#    - config/cadansa2022.json
-#    - cadansa_map_2022_0_app.png
-#    - cadansa_map_2022_1_app.png
 
   fonts:
     - family: AppFontFamily
