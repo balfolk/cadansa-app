@@ -9,11 +9,12 @@ class EventTile extends StatelessWidget {
     required this.event,
     required this.isSelected,
     required this.onTap,
+    required this.isLarge,
   }) : super(key: key);
 
   final GlobalEvent event;
   final VoidCallback onTap;
-  final bool isSelected;
+  final bool isSelected, isLarge;
 
   @override
   Widget build(final BuildContext context) {
@@ -25,7 +26,7 @@ class EventTile extends StatelessWidget {
           border: Border.all(
             color: event.primarySwatch ?? DEFAULT_PRIMARY_SWATCH,
             style: isSelected ? BorderStyle.solid : BorderStyle.none,
-            width: 2.0,
+            width: isLarge ? 3.0 : 2.0,
           ),
           shape: BoxShape.circle,
         ),
@@ -34,10 +35,12 @@ class EventTile extends StatelessWidget {
           backgroundImage: avatarUri != null
               ? CachedNetworkImageProvider(avatarUri)
               : null,
+          radius: isLarge ? 24.0 : 20.0,
         ),
       ),
       title: Text(
         event.title.get(locale),
+        textScaleFactor: isLarge ? 1.5 : 1.0,
       ),
       subtitle: Text(
         formatDateRange(
@@ -45,6 +48,7 @@ class EventTile extends StatelessWidget {
           startDay: event.startDate,
           endDay: event.endDate,
         ),
+        textScaleFactor: isLarge ? 1.2 : 1.0,
       ),
       selected: isSelected,
       onTap: onTap,

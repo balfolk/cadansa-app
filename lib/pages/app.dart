@@ -270,32 +270,41 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final theme = Theme.of(context);
 
     var currentIndex = 0;
-    final eventWidgets = config.sections.map((section) {
+    final Iterable<List<Widget>> eventWidgets =
+        config.sections.map((final section) {
       final title = section.title.get(locale);
       return [
-        if (title.isNotEmpty) Padding(
-          padding: const EdgeInsetsDirectional.only(start: 16.0, top: 8.0, bottom: 8.0),
-          child: Text(
-            title,
-            style: theme.textTheme.headline6,
+        if (title.isNotEmpty)
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Text(
+              title,
+              style: theme.textTheme.headline6,
+            ),
           ),
-        ),
-        ...section.events.map((event) {
+        ...section.events.map((final event) {
           final index = currentIndex++;
-          return EventTile(
-            event: event,
-            isSelected: index == _currentEventIndex,
-            onTap: () async {
-              await _switchToEvent(event, index);
-              if (mounted) {
-                setState(() {});
-                Navigator.pop(context);
-              }
-            },
+          return Padding(
+            padding: event.isLarge
+                ? const EdgeInsets.symmetric(vertical: 8.0)
+                : EdgeInsets.zero,
+            child: EventTile(
+              event: event,
+              isSelected: index == _currentEventIndex,
+              onTap: () async {
+                await _switchToEvent(event, index);
+                if (mounted) {
+                  setState(() {});
+                  Navigator.pop(context);
+                }
+              },
+              isLarge: event.isLarge,
+            ),
           );
         }),
       ];
-    }).toList(growable: false);
+    });
 
     final bottomWidgets = <Widget>[
       LocaleWidgets(
@@ -362,11 +371,12 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         ),
         Expanded(
           child: ListView(
-            children: eventWidgets.reduce((prev, next) => [
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            children: eventWidgets.reduce((final prev, final next) => [
               ...prev,
               const Divider(),
               ...next,
-            ]),
+            ]).toList(growable: false),
           ),
         ),
         const Padding(

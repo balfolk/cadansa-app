@@ -43,7 +43,8 @@ class GlobalEvent {
         avatarUri = json['avatar'] as String?,
         configUri = json['config'] as String,
         primarySwatch = parseMaterialColor(json['primarySwatchColor']),
-        secondaryColor = parseColor(json['secondaryColor']);
+        secondaryColor = parseColor(json['secondaryColor']),
+        isLarge = json['isLarge'] as bool? ?? false;
 
   final String id;
   final LText title;
@@ -52,6 +53,7 @@ class GlobalEvent {
   final String configUri;
   final MaterialColor? primarySwatch;
   final Color? secondaryColor;
+  final bool isLarge;
 
   bool get isCurrent =>
       startDate.isBefore(DateTime.now()) && endDate.isAfter(DateTime.now());
