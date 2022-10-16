@@ -26,3 +26,4 @@ doc/api/
 # Project-specific
 .env
 /lib/generated_plugin_registrant.dart
+.DS_Store

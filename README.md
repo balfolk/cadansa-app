@@ -78,3 +78,23 @@ In case of errors on iOS, it is advised to first try cleaning everything before 
   Don't forget the `pubspec.lock` file, as that contains the actual version number with which you tested!
 
 Note: sometimes it's necessary to run `flutter update-packages --force-upgrade` to force an update of the built-in Flutter dependencies.
+
+## Taking screenshots
+
+### Apple
+
+To take iOS/iPadOS screenshots, use the following simulated devices:
+
+* 6.7" - iPhone 13 Pro Max (optional)
+* 6.5" - iPhone 11 Pro Max
+* 5.5" - iPhone 8 Plus
+* iPad Pro (12.9-inch) (3rd generation)
+* iPad Pro (12.9-inch) (2nd generation)
+
+The simulated devices' language should be set to "English (UK)", and the region to "Netherlands".
+
+Before taking the screenshots, use the following command to make the status bar prettier (noon local time on the first day of CaDansa that year, make sure to update the date):
+
+```shell
+xcrun simctl status_bar booted override --time "2022-10-20T12:00:00+02:00" --cellularBars 4 --batteryLevel 100
+```

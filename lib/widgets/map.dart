@@ -46,6 +46,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
   final PhotoViewController _controller = PhotoViewController();
   late final StreamSubscription<Object?>? _controllerOutputStreamSubscription;
   FloorArea? _activeArea;
+  FloorArea? _highlightedArea;
   Offset? _indicatorPosition;
   AlignmentDirectional? _indicatorAlignment;
   Size? _lastKnownSize;
@@ -81,14 +82,24 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
         });
       }
     });
+
+    _setHighlightedArea();
   }
 
   @override
   void didUpdateWidget(final MapWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget._highlightAreaIndex != oldWidget._highlightAreaIndex) {
+      _setHighlightedArea();
+    }
+  }
+
+  void _setHighlightedArea() {
     final highlightAreaIndex = widget._highlightAreaIndex;
-    if (highlightAreaIndex != null && highlightAreaIndex != oldWidget._highlightAreaIndex) {
-      _activeArea = widget._data.areas[highlightAreaIndex];
+    if (highlightAreaIndex != null) {
+      final areaToHighlight = widget._data.areas[highlightAreaIndex];
+      _highlightedArea = areaToHighlight;
+      _activeArea = areaToHighlight;
     }
   }
 
@@ -125,10 +136,25 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
 
     final scale = _controller.value.scale;
     if (scale != null) {
-      if (kDebugMode && _lastKnownSize != null) {
-        stackChildren.add(CustomPaint(
-          painter: _AreaPainter(widget._data.areas, _areaCoordinatesToMap, theme),
-        ));
+      if (_lastKnownSize != null) {
+        final highlightedArea = _highlightedArea;
+        if (kDebugMode) {
+          stackChildren.add(CustomPaint(
+            painter: _AreaPainter(
+              widget._data.areas,
+              _areaCoordinatesToMap,
+              theme,
+            ),
+          ));
+        } else if (highlightedArea != null) {
+          stackChildren.add(CustomPaint(
+            painter: _AreaPainter(
+              [highlightedArea],
+              _areaCoordinatesToMap,
+              theme
+            ),
+          ));
+        }
       }
 
       for (final area in widget._data.areas) {
@@ -144,11 +170,11 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
               backgroundColor: theme.primaryColor,
               foregroundColor: theme.colorScheme.onPrimary,
               elevation: 10.0,
+              heroTag: null,
               child: Icon(
                 MdiIcons.fromString(area.buttonIcon),
                 size: size / 2,
               ),
-              heroTag: null,
             ),
           )];
 

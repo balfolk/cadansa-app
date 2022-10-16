@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/app.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +19,12 @@ void main() {
 Future<void> _main() async {
   tz.initializeTimeZones(); // required by flutter_local_notifications
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Trust the old Let's Encrypt cert to avoid errors in older devices
+  final data =
+      await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
+  SecurityContext.defaultContext
+      .setTrustedCertificatesBytes(data.buffer.asUint8List());
 
   final sharedPrefs = await SharedPreferences.getInstance();
   await dotenv.load();

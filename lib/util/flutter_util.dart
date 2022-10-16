@@ -113,15 +113,21 @@ Future<void> openInAppBrowser({
       crossPlatform: InAppBrowserOptions(
         hideToolbarTop: Platform.isAndroid,
         hideUrlBar: true,
+        toolbarTopBackgroundColor: colorScheme.primary,
       ),
       android: AndroidInAppBrowserOptions(
         shouldCloseOnBackButtonPressed: true,
       ),
       ios: IOSInAppBrowserOptions(
-        presentationStyle: IOSUIModalPresentationStyle.FORM_SHEET,
+        presentationStyle: IOSUIModalPresentationStyle.PAGE_SHEET,
         toolbarBottomBackgroundColor: colorScheme.primary,
         toolbarBottomTintColor: colorScheme.secondary,
-        toolbarTopTintColor: colorScheme.secondary,
+        toolbarTopTintColor: colorScheme.primary,
+        closeButtonColor: colorScheme.secondary,
+        closeButtonCaption: '╳',
+        toolbarTopTranslucent: false,
+        toolbarBottomTranslucent: false,
+        hideToolbarBottom: true,
       ),
     ),
   );

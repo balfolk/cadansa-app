@@ -15,7 +15,7 @@ class IndicatorCard extends StatelessWidget {
   final Widget child;
   final Indicator indicator;
 
-  static const double _defaultElevation = 1.0;
+  static const double _defaultElevation = 3.0;
   static const double _defaultBorderRadius = 4.0;
 
   @override
@@ -26,7 +26,7 @@ class IndicatorCard extends StatelessWidget {
       painter: _IndicatorRectanglePainter(
         indicator,
         color ?? cardTheme.color ?? Theme.of(context).cardColor,
-        elevation ?? cardTheme.elevation ?? _defaultElevation,
+        elevation ?? _defaultElevation,
         _defaultBorderRadius,
         Directionality.of(context),
       ),
@@ -68,7 +68,7 @@ class Indicator {
   );
 
   @override
-  int get hashCode => hashValues(width, length, alignment);
+  int get hashCode => Object.hash(width, length, alignment);
 
   @override
   bool operator ==(final Object other) => other is Indicator
@@ -125,7 +125,8 @@ class _IndicatorRectanglePainter extends CustomPainter {
   }
 
   @override
-  int get hashCode => hashValues(_indicator, _color, _elevation, _borderRadius);
+  int get hashCode =>
+      Object.hash(_indicator, _color, _elevation, _borderRadius);
 
   @override
   bool operator ==(final Object other) {

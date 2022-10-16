@@ -25,7 +25,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const _LOAD_TIMEOUT = Duration(seconds: 5);
+const _LOAD_TIMEOUT = Duration(seconds: 10);
 
 const _CONFIG_LIFETIME = Duration(hours: 5);
 
@@ -145,20 +145,14 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     final bool initial = false,
     final bool force = false,
   }) async {
-    final lastConfigLoad = _lastConfigLoad;
-    if (!force &&
-        _config != null &&
-        lastConfigLoad != null &&
-        lastConfigLoad.add(_CONFIG_LIFETIME).isAfter(DateTime.now())) {
-      // Config still valid, use the existing one rather than reloading
-      return true;
-    }
+    final isLastConfigValid =
+        _lastConfigLoad?.add(_CONFIG_LIFETIME).isAfter(DateTime.now()) ?? false;
 
     final configUri = _configUri;
-    if (configUri == null) return false;
+    if (configUri == null) return isLastConfigValid;
 
     final dynamic jsonConfig = await _loadJson(configUri);
-    if (jsonConfig == null) return false;
+    if (jsonConfig == null) return isLastConfigValid;
 
     try {
       final config = _config = GlobalConfig(jsonConfig);
@@ -188,6 +182,11 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Future<dynamic> _loadJson(final String url) async {
     String? jsonString;
     if (url.startsWith('http')) {
+      try {
+        // Always leniently try to redownload the file first
+        await _configCacheManager.downloadFile(url);
+      // ignore: empty_catches
+      } on Exception {}
       try {
         final file = await _configCacheManager.getSingleFile(url).timeout(_LOAD_TIMEOUT);
         jsonString = file.readAsStringSync();

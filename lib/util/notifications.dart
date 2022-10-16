@@ -12,9 +12,9 @@ const _requestAlert = true, _requestBadge = false, _requestSound = true;
 
 Future<void> initializeNotifications({
   required final BuildContext context,
-  required Future<void> Function(String?) onSelectNotification,
+  required final Future<void> Function(String?) onSelectNotification,
 }) async {
-  Future<void> _onDidReceiveLocalNotification(final int id, final String? title,
+  Future<void> onDidReceiveLocalNotification(final int? id, final String? title,
       final String? body, final String? payload) async {
     final isOk = await showDialog<bool>(
       context: context,
@@ -35,23 +35,21 @@ Future<void> initializeNotifications({
     }
   }
 
+  final d = DarwinInitializationSettings(
+    requestSoundPermission: false,
+    requestBadgePermission: false,
+    requestAlertPermission: false,
+    onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+  );
   final initializationSettings = InitializationSettings(
     android: const AndroidInitializationSettings('@drawable/notification'),
-    iOS: IOSInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
-      onDidReceiveLocalNotification: _onDidReceiveLocalNotification,
-    ),
-    macOS: const MacOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    ),
+    iOS: d,
+    macOS: d,
   );
   await _flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    onSelectNotification: onSelectNotification,
+    onDidReceiveNotificationResponse: (final details) =>
+        onSelectNotification(details.payload),
   );
 }
 
@@ -63,11 +61,12 @@ Future<String?> getInitialNotification() async {
       await _flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   if (notificationAppLaunchDetails == null ||
       !notificationAppLaunchDetails.didNotificationLaunchApp ||
-      (notificationAppLaunchDetails.payload?.isEmpty ?? true)) {
+      (notificationAppLaunchDetails.notificationResponse?.payload?.isEmpty ??
+          true)) {
     return null;
   }
 
-  return notificationAppLaunchDetails.payload;
+  return notificationAppLaunchDetails.notificationResponse?.payload;
 }
 
 Future<bool> addNotification({
@@ -93,7 +92,7 @@ Future<bool> addNotification({
       showWhen: whenStart != null,
       largeIcon: const DrawableResourceAndroidBitmap('notification_large'),
     ),
-    iOS: IOSNotificationDetails(threadIdentifier: eventId),
+    iOS: DarwinNotificationDetails(threadIdentifier: eventId),
   );
   await _flutterLocalNotificationsPlugin.zonedSchedule(
     _stringToNotificationId(id),

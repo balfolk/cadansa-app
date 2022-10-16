@@ -3,6 +3,7 @@
 *.moved-aside
 *.pbxuser
 *.perspectivev3
+*.symbols
 **/*sync/
 .sconsign.dblite
 .tags*
