@@ -358,6 +358,11 @@
                     "type": {
                       "$ref": "definitions.json#/text"
                     }
+                  },
+                  "linkColor": {
+                    "type": {
+                      "$ref": "definitions.json#/color"
+                    }
                   }
                 },
                 "required": [

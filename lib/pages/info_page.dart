@@ -8,11 +8,13 @@ import 'package:url_launcher/url_launcher.dart';
 class InfoPage extends StatefulWidget {
   const InfoPage({
     required this.content,
+    required this.linkColor,
     required this.pageHooks,
     final Key? key,
   }) : super(key: key);
 
   final LText content;
+  final Color? linkColor;
   final PageHooks pageHooks;
 
   @override
@@ -35,7 +37,9 @@ class InfoPageState extends State<InfoPage> {
             data: content,
             onLinkTap: _onLinkTap,
             style: {
-              htmlAnchor: Style(color: theme.colorScheme.secondary),
+              htmlAnchor: Style(
+                color: widget.linkColor ?? theme.colorScheme.secondary,
+              ),
             },
           ),
         ),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
@@ -59,11 +61,14 @@ class ProgrammePageData extends PageData {
 class InfoPageData extends PageData {
   InfoPageData._(final LText title, final String icon, final dynamic json)
       : _content = LText(json['content']),
+        _linkColor = parseColor(json['linkColor']),
         super._(title, icon);
 
   final LText _content;
+  final Color? _linkColor;
 
   LText get content => _content;
+  Color? get linkColor => _linkColor;
 }
 
 @immutable
