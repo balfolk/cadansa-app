@@ -48,7 +48,7 @@ class _MyRefreshIndicator extends StatelessWidget {
       animation: controller,
       builder: (context, child) {
         double? progress;
-        if (controller.isDragging || controller.isHiding) {
+        if (controller.isDragging || controller.isCanceling || controller.isFinalizing) {
           progress = (controller.value - startDrawingPosition) / startDrawingPosition;
         } else if (controller.isArmed) {
           progress = 1.0;
