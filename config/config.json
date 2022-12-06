@@ -38,6 +38,16 @@
       },
       "events": [
         {
+          "id": "cadansa2022",
+          "title": "CaDansa 2022",
+          "startDate": "2022-10-20",
+          "endDate": "2022-10-23",
+          "avatar": "https://www.cadansa.nl/wp-content/uploads/app_image_2022.png",
+          "config": "https://www.cadansa.nl/app/v2/cadansa2022.json",
+          "primarySwatchColor": [101, 36, 36],
+          "secondaryColor": [255, 217, 142]
+        },
+        {
           "id": "cadansa2019",
           "title": "CaDansa 2019",
           "startDate": "2019-10-24",
