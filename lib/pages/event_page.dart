@@ -165,7 +165,7 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     );
   }
 
-  void _handleAction(final String? action) {
+  Future<void> _handleAction(final String? action) async {
     final split = action?.split(_ACTION_SEPARATOR);
     if (action == null || split == null || split.isEmpty) {
       debugPrint('Unprocessed action: $action');
@@ -186,7 +186,7 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
       case _ACTION_URL:
         final url = action.substring('$_ACTION_URL$_ACTION_SEPARATOR'.length);
         final locale = Localizations.localeOf(context);
-        _launchUrl(LText(url).get(locale));
+        await _launchUrl(LText(url).get(locale));
         break;
       case _ACTION_AREA:
         final areaId = action.substring('$_ACTION_AREA$_ACTION_SEPARATOR'.length);
@@ -238,11 +238,11 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     });
   }
 
-  void _launchUrl(final String? url) {
+  Future<void> _launchUrl(final String? url) async {
     if (url != null) {
       final uri = Uri.tryParse(url);
       if (uri != null) {
-        launchUrl(uri);
+        await launchUrl(uri);
       }
     }
   }

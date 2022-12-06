@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -95,42 +93,6 @@ MaterialColor createMaterialColor(final Color color) {
     );
   }
   return MaterialColor(color.value, swatch);
-}
-
-final _IN_APP_BROWSER = InAppBrowser();
-
-Future<void> openInAppBrowser({
-  required final BuildContext context,
-  required final String url,
-}) async {
-  final parsed = Uri.tryParse(url);
-  if (parsed == null) return;
-
-  final colorScheme = Theme.of(context).colorScheme;
-  await _IN_APP_BROWSER.openUrlRequest(
-    urlRequest: URLRequest(url: parsed),
-    options: InAppBrowserClassOptions(
-      crossPlatform: InAppBrowserOptions(
-        hideToolbarTop: Platform.isAndroid,
-        hideUrlBar: true,
-        toolbarTopBackgroundColor: colorScheme.primary,
-      ),
-      android: AndroidInAppBrowserOptions(
-        shouldCloseOnBackButtonPressed: true,
-      ),
-      ios: IOSInAppBrowserOptions(
-        presentationStyle: IOSUIModalPresentationStyle.PAGE_SHEET,
-        toolbarBottomBackgroundColor: colorScheme.primary,
-        toolbarBottomTintColor: colorScheme.secondary,
-        toolbarTopTintColor: colorScheme.primary,
-        closeButtonColor: colorScheme.secondary,
-        closeButtonCaption: '╳',
-        toolbarTopTranslucent: false,
-        toolbarBottomTranslucent: false,
-        hideToolbarBottom: true,
-      ),
-    ),
-  );
 }
 
 IconData? findIcon(final String? key) {

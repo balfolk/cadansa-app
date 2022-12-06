@@ -1,4 +1,4 @@
-typedef ActionHandler = void Function(String);
+typedef ActionHandler = Future<void> Function(String);
 
 const APP_TITLE = 'CaDansa';
 const PRIMARY_SWATCH_COLOR_KEY = 'primarySwatchColor';

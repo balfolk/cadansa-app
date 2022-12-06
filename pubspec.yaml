@@ -24,7 +24,6 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   flutter_dotenv: ^5.0.2
   flutter_html: ^3.0.0-alpha.6
-  flutter_inappwebview: ^5.7.2+2
   flutter_local_notifications: ^12.0.4
   format: ^1.2.0
   http: ^0.13.5

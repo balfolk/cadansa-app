@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/page.dart';
-import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/util/refresher.dart';
@@ -155,11 +154,10 @@ class FeedPageState extends State<FeedPage> {
   Future<void> _openItem(final RssItem item) async {
     final link = item.link?.trim();
     if (link != null && link.isNotEmpty) {
-      await Future.wait([
-        openInAppBrowser(context: context, url: link),
-        widget.setReadGuid(item.guid),
-      ]);
-      setState(() {});
+      await widget.pageHooks.actionHandler('url:$link');
+      setState(() {
+        widget.setReadGuid(item.guid);
+      });
     }
   }
 }
