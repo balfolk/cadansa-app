@@ -8,6 +8,7 @@ class Refresher extends StatelessWidget {
   const Refresher({
     required this.onRefresh,
     required this.child,
+    super.key,
   });
 
   final Future<void> Function()? onRefresh;

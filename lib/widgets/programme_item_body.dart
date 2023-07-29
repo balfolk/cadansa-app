@@ -7,7 +7,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammeItemBody extends StatelessWidget {
-  const ProgrammeItemBody({required this.item, required this.actionHandler});
+  const ProgrammeItemBody({
+    required this.item,
+    required this.actionHandler,
+    super.key,
+  });
 
   final ProgrammeItem item;
   final ActionHandler actionHandler;
@@ -87,6 +91,7 @@ class ProgrammeItemPropertyWidget extends StatelessWidget {
     required final IconData? icon,
     required final String text,
     final VoidCallback? onTap,
+    super.key,
   })  : _icon = icon,
         _text = text,
         _onTap = onTap;

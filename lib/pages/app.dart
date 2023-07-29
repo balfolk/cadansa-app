@@ -41,7 +41,8 @@ class CaDansaApp extends StatefulWidget {
     required this.initialSecondaryColor,
     required this.sharedPreferences,
     required this.env,
-    required this.packageInfo
+    required this.packageInfo,
+    super.key,
   });
 
   final Locale? initialLocale;

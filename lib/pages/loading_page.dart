@@ -3,7 +3,7 @@ import 'package:cadansa_app/util/extensions.dart';
 import 'package:flutter/material.dart';
 
 class LoadingPage extends StatelessWidget {
-  const LoadingPage();
+  const LoadingPage({super.key});
 
   @override
   Widget build(final BuildContext context) {

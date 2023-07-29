@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class TimeoutPage extends StatelessWidget {
-  const TimeoutPage(this._onRefresh);
+  const TimeoutPage(this._onRefresh, {super.key});
 
   final VoidCallback _onRefresh;
 

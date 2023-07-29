@@ -6,6 +6,7 @@ class LocaleWidgets extends StatelessWidget {
     required this.locales,
     required this.activeLocale,
     required this.setLocale,
+    super.key,
   });
 
   final Iterable<Locale> locales;
