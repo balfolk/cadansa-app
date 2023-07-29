@@ -180,11 +180,11 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
 
         final text = area.title.get(locale);
         if (text.isNotEmpty) {
-          final titleFontSize = area.titleFontSize ?? theme.textTheme.headline1?.fontSize;
+          final titleFontSize = area.titleFontSize ?? theme.textTheme.displayLarge?.fontSize;
           areaWidgets.add(Text(
             text,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyText2?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               fontFamily: MAP_FONT_FAMILY,
               fontSize: titleFontSize != null ? scale * titleFontSize : null,
             ),
@@ -218,9 +218,9 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
                 text.text.get(locale),
                 textAlign: text.textAlign,
                 textScaleFactor: scale,
-                style: theme.textTheme.caption?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   fontFeatures: const [FONT_FEATURE_SMALL_CAPS],
-                  fontSize: text.fontSize ?? theme.textTheme.headline2?.fontSize,
+                  fontSize: text.fontSize ?? theme.textTheme.displayMedium?.fontSize,
                 ),
               ),
             ),
@@ -254,7 +254,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
               onPressed: hasAction ? () => _onAreaPopupPressed(action) : null,
               child: Text(
                 title,
-                style: theme.textTheme.headline4?.copyWith(
+                style: theme.textTheme.headlineMedium?.copyWith(
                   color: hasAction ? theme.primaryColor : null,
                   fontFamily: MAP_FONT_FAMILY,
                 ),

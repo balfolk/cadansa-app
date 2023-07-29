@@ -72,7 +72,7 @@ class ProgrammeItemBody extends StatelessWidget {
             icon: Icon(findIcon(item.website.icon)),
             label: Text(
               websiteText.get(locale),
-              style: theme.textTheme.bodyText1?.copyWith(color: theme.primaryColor),
+              style: theme.textTheme.bodyLarge?.copyWith(color: theme.primaryColor),
             ),
           ),
         ),

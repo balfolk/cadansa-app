@@ -101,7 +101,7 @@ Future<bool> addNotification({
     tz.TZDateTime.fromMillisecondsSinceEpoch(tz.UTC, when.millisecondsSinceEpoch),
     platformChannelSpecifics,
     uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-    androidAllowWhileIdle: false,
+    androidScheduleMode: AndroidScheduleMode.exact,
     payload: payload,
   );
   return true;

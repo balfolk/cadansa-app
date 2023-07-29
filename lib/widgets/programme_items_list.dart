@@ -56,7 +56,7 @@ class ProgrammeItemsList extends StatelessWidget {
           leading: _getIcon(context: context, item: item),
           title: AutoSizeText(
             '${item.name.get(locale)} ${item.countries.map(stringToUnicodeFlag).join(' ')}',
-            style: theme.textTheme.headline6,
+            style: theme.textTheme.titleLarge,
             maxLines: 2,
             softWrap: true,
           ),

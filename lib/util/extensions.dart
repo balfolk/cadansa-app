@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-extension MyIterable<T> on Iterable<T> {
-  T? elementAtOrNull(final int? index) {
-    if (index != null && index >= 0 && index < length) {
-      return elementAt(index);
-    }
-    return null;
-  }
-}
 
 Brightness _getOtherBrightness(final Brightness brightness) {
   switch (brightness) {

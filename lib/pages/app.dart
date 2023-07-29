@@ -200,8 +200,12 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     return jsonString != null ? jsonDecode(jsonString) : null;
   }
 
-  GlobalEvent? get _currentEvent =>
-      _config?.allEvents.elementAtOrNull(_currentEventIndex);
+  GlobalEvent? get _currentEvent {
+    final currentEventIndex = _currentEventIndex;
+    return currentEventIndex != null
+      ? _config?.allEvents.elementAtOrNull(currentEventIndex)
+      : null;
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -280,7 +284,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               title,
-              style: theme.textTheme.headline6,
+              style: theme.textTheme.titleLarge,
             ),
           ),
         ...section.events.map((final event) {
@@ -345,12 +349,12 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     if (kDebugMode) {
       bottomWidgets.add(ElevatedButton.icon(
         onPressed: _forceReload,
-        icon: const Icon(MdiIcons.refresh),
+        icon: Icon(MdiIcons.refresh),
         label: const Text('Reload config'),
       ));
     }
 
-    final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.headline2);
+    final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.displayMedium);
     final logoUri = _config?.logoUri;
     final header = logoUri != null
         ? CachedNetworkImage(

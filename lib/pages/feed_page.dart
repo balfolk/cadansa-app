@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:webfeed/webfeed.dart';
+import 'package:rss_dart/dart_rss.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({
@@ -174,6 +174,8 @@ class FeedItem extends StatelessWidget {
   final bool read;
   final VoidCallback onPressed;
 
+  static final _RSS_DATE_FORMAT = DateFormat('E, d MMM y H:m:s Z', 'en_US');
+
   @override
   Widget build(final BuildContext context) {
     return ListTile(
@@ -195,7 +197,12 @@ class FeedItem extends StatelessWidget {
 
   String _subtitle(final BuildContext context) {
     final locale = Localizations.localeOf(context);
-    final pubDate = item.pubDate;
+    DateTime? pubDate;
+    try {
+      pubDate = _RSS_DATE_FORMAT.parseUtc(item.pubDate ?? '').toLocal();
+    } catch (_) {
+      pubDate = null;
+    }
     final dateTime = pubDate != null
         ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).add_jm().format(pubDate)
         : null;

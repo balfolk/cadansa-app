@@ -56,7 +56,7 @@ class _LocaleWidget extends StatelessWidget {
         onPressed: onPressed,
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(
-            theme.textTheme.button?.color,
+            theme.textTheme.labelLarge?.color,
           ),
           side: border,
         ),

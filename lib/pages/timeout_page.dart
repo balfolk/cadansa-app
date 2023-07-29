@@ -27,7 +27,7 @@ class TimeoutPage extends StatelessWidget {
             ),
             ElevatedButton.icon(
               onPressed: _onRefresh,
-              icon: const Icon(MdiIcons.refresh),
+              icon: Icon(MdiIcons.refresh),
               label: Text(Localization.REFRESH.get(Localizations.localeOf(context))),
             )],
           ),
