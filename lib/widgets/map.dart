@@ -217,7 +217,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
               child: Text(
                 text.text.get(locale),
                 textAlign: text.textAlign,
-                textScaleFactor: scale,
+                textScaler: TextScaler.linear(scale),
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontFeatures: const [FONT_FEATURE_SMALL_CAPS],
                   fontSize: text.fontSize ?? theme.textTheme.displayMedium?.fontSize,

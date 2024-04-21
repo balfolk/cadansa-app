@@ -299,7 +299,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
               isSelected: index == _currentEventIndex,
               onTap: () async {
                 await _switchToEvent(event, index);
-                if (mounted) {
+                if (context.mounted) {
                   setState(() {});
                   Navigator.pop(context);
                 }
@@ -317,7 +317,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         activeLocale: locale,
         setLocale: (final Locale locale) async {
           await _setLocale(locale);
-          if (mounted) {
+          if (context.mounted) {
             await Navigator.maybePop(context);
           }
         },

@@ -65,8 +65,8 @@ class _LocaleWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Text(
             stringToUnicodeFlag(locale.countryCode),
-            textScaleFactor: theme.platform == TargetPlatform.iOS
-                ? _iosFlagScaleFactor
+            textScaler: theme.platform == TargetPlatform.iOS
+                ? const TextScaler.linear(_iosFlagScaleFactor)
                 : null,
           ),
         ),

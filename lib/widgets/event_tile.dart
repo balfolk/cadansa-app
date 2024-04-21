@@ -40,7 +40,7 @@ class EventTile extends StatelessWidget {
       ),
       title: Text(
         event.title.get(locale),
-        textScaleFactor: isLarge ? 1.5 : 1.0,
+        textScaler: TextScaler.linear(isLarge ? 1.5 : 1.0),
       ),
       subtitle: Text(
         formatDateRange(
@@ -48,7 +48,7 @@ class EventTile extends StatelessWidget {
           startDay: event.startDate,
           endDay: event.endDate,
         ),
-        textScaleFactor: isLarge ? 1.2 : 1.0,
+        textScaler: TextScaler.linear(isLarge ? 1.2 : 1.0),
       ),
       selected: isSelected,
       onTap: onTap,
