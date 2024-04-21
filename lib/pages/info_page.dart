@@ -7,11 +7,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({
+    super.key,
     required this.content,
     required this.linkColor,
     required this.pageHooks,
-    final Key? key,
-  }) : super(key: key);
+  });
 
   final LText content;
   final Color? linkColor;
@@ -48,10 +48,9 @@ class InfoPageState extends State<InfoPage> {
   }
 
   void _onLinkTap(
-    String? url,
-    RenderContext context,
-    Map<String, String> attributes,
-    Object? element,
+    final String? url,
+    final Map<String, String> attributes,
+    final Object? element,
   ) {
     if (url != null) {
       final uri = Uri.tryParse(url);

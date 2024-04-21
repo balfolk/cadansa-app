@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 class IndicatorCard extends StatelessWidget {
   const IndicatorCard({
-    final Key? key,
+    super.key,
     this.color,
     this.elevation,
     required this.child,
     required this.indicator,
-  })  : assert(elevation == null || elevation >= 0.0),
-        super(key: key);
+  })  : assert(elevation == null || elevation >= 0.0);
 
   final Color? color;
   final double? elevation;

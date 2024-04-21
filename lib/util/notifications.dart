@@ -70,14 +70,14 @@ Future<String?> getInitialNotification() async {
 }
 
 Future<bool> addNotification({
-  required String id,
-  required String eventId,
-  required String title,
-  String? body,
-  required String payload,
-  Color? color,
-  required DateTime when,
-  DateTime? whenStart,
+  required final String id,
+  required final String eventId,
+  required final String title,
+  final String? body,
+  required final String payload,
+  final Color? color,
+  required final DateTime when,
+  final DateTime? whenStart,
 }) async {
   final hasPermission = await _requestPermissions();
   if (!hasPermission || when.isBefore(DateTime.now())) return false;
@@ -107,7 +107,7 @@ Future<bool> addNotification({
   return true;
 }
 
-Future<void> cancelNotification({required String id}) async {
+Future<void> cancelNotification({required final String id}) async {
   await _flutterLocalNotificationsPlugin.cancel(_stringToNotificationId(id));
 }
 

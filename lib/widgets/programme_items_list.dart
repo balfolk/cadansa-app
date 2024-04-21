@@ -15,13 +15,13 @@ import 'package:shimmer/shimmer.dart';
 
 class ProgrammeItemsList extends StatelessWidget {
   const ProgrammeItemsList({
+    super.key,
     required this.day,
     required this.openIndex,
     required this.trailing,
     required this.doColorIcons,
     required this.actionHandler,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final ProgrammeDay day;
   final int? openIndex;

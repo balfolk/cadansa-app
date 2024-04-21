@@ -19,8 +19,8 @@ class MapWidget extends StatefulWidget {
       this._data,
       this._actionHandler,
       this._highlightAreaIndex, {
-        final Key? key,
-      }) : super(key: key);
+        super.key,
+      });
 
   final Floor _data;
   final ActionHandler _actionHandler;

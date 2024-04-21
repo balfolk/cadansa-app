@@ -20,13 +20,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CaDansaEventPage extends StatefulWidget {
   const CaDansaEventPage({
+    super.key,
     required this.event,
     required this.initialAction,
     required this.buildDrawer,
     required this.sharedPreferences,
     required this.moveToEvent,
-    final Key? key,
-  }) : super(key: key);
+  });
 
   final Event event;
   final String? initialAction;

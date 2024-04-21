@@ -5,13 +5,13 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class FavoriteButton extends StatefulWidget {
   const FavoriteButton({
-    Key? key,
+    super.key,
     required this.isFavorite,
     required this.innerColor,
     required this.outerColor,
     required this.onPressed,
     required this.tooltip,
-  }) : super(key: key);
+  });
 
   final bool isFavorite;
   final Color innerColor, outerColor;

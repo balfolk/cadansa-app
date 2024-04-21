@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class LocaleWidgets extends StatelessWidget {
   const LocaleWidgets({
+    super.key,
     required this.locales,
     required this.activeLocale,
     required this.setLocale,
-    super.key,
   });
 
   final Iterable<Locale> locales;

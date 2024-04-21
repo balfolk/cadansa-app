@@ -8,9 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProgrammeItemBody extends StatelessWidget {
   const ProgrammeItemBody({
+    super.key,
     required this.item,
     required this.actionHandler,
-    super.key,
   });
 
   final ProgrammeItem item;
@@ -88,10 +88,10 @@ class ProgrammeItemBody extends StatelessWidget {
 
 class ProgrammeItemPropertyWidget extends StatelessWidget {
   const ProgrammeItemPropertyWidget({
+    super.key,
     required final IconData? icon,
     required final String text,
     final VoidCallback? onTap,
-    super.key,
   })  : _icon = icon,
         _text = text,
         _onTap = onTap;

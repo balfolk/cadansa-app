@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProgrammePage extends StatefulWidget {
   const ProgrammePage({
+    super.key,
     required this.programme,
     required this.event,
     required this.pageHooks,
@@ -21,8 +22,7 @@ class ProgrammePage extends StatefulWidget {
     required this.openItemId,
     required this.getFavorites,
     required this.setFavorite,
-    final Key? key,
-  }) : super(key: key);
+  });
 
   final Programme programme;
   final Event event;

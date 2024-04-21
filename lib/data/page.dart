@@ -37,9 +37,9 @@ abstract class PageData {
 
 @immutable
 class MapPageData extends PageData {
-  MapPageData._(final LText title, final String icon, final dynamic json)
+  MapPageData._(super.title, super.icon, final dynamic json)
       : _mapData = MapData.parse(json),
-        super._(title, icon);
+        super._();
 
   final MapData _mapData;
 
@@ -48,9 +48,9 @@ class MapPageData extends PageData {
 
 @immutable
 class ProgrammePageData extends PageData {
-  ProgrammePageData._(final LText title, final String icon, final dynamic json, final EventConstants eventConstants)
+  ProgrammePageData._(super.title, super.icon, final dynamic json, final EventConstants eventConstants)
       : _programme = Programme.parse(json, eventConstants),
-        super._(title, icon);
+        super._();
 
   final Programme _programme;
 
@@ -59,10 +59,10 @@ class ProgrammePageData extends PageData {
 
 @immutable
 class InfoPageData extends PageData {
-  InfoPageData._(final LText title, final String icon, final dynamic json)
+  InfoPageData._(super.title, super.icon, final dynamic json)
       : _content = LText(json['content']),
         _linkColor = parseColor(json['linkColor']),
-        super._(title, icon);
+        super._();
 
   final LText _content;
   final Color? _linkColor;
@@ -73,11 +73,11 @@ class InfoPageData extends PageData {
 
 @immutable
 class FeedPageData extends PageData {
-  FeedPageData._(final LText title, final String icon, final dynamic json)
+  FeedPageData._(super.title, super.icon, final dynamic json)
       : _feedUrl = LText(json['feedUrl']),
         _feedEmptyText = LText(json['feedEmptyText']),
         _supportsUnread = json['supportsUnread'] as bool,
-        super._(title, icon);
+        super._();
 
   final LText _feedUrl;
   final LText _feedEmptyText;

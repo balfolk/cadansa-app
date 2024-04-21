@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class EventTile extends StatelessWidget {
   const EventTile({
-    Key? key,
+    super.key,
     required this.event,
     required this.isSelected,
     required this.onTap,
     required this.isLarge,
-  }) : super(key: key);
+  });
 
   final GlobalEvent event;
   final VoidCallback onTap;

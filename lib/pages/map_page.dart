@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({
+    super.key,
     required this.mapData,
     required this.pageHooks,
     required this.initialFloorIndex,
     required this.highlightAreaIndex,
-    final Key? key,
-  }) : super(key: key);
+  });
 
   final MapData mapData;
   final PageHooks pageHooks;

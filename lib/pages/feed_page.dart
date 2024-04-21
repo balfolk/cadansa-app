@@ -11,12 +11,12 @@ import 'package:rss_dart/dart_rss.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({
+    super.key,
     required this.data,
     required this.pageHooks,
     required this.getReadGuids,
     required this.setReadGuid,
-    final Key? key,
-  }) : super(key: key);
+  });
 
   final FeedPageData data;
   final PageHooks pageHooks;
@@ -164,11 +164,11 @@ class FeedPageState extends State<FeedPage> {
 
 class FeedItem extends StatelessWidget {
   const FeedItem({
+    super.key,
     required this.item,
     this.read = true,
     required this.onPressed,
-    final Key? key,
-  }) : super(key: key);
+  });
 
   final RssItem item;
   final bool read;

@@ -36,13 +36,13 @@ const _EVENT_INDEX_KEY = 'eventIndex';
 
 class CaDansaApp extends StatefulWidget {
   const CaDansaApp({
+    super.key,
     required this.initialLocale,
     required this.initialPrimarySwatch,
     required this.initialSecondaryColor,
     required this.sharedPreferences,
     required this.env,
     required this.packageInfo,
-    super.key,
   });
 
   final Locale? initialLocale;

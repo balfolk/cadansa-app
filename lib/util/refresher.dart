@@ -6,9 +6,9 @@ const _offsetToArmed = 100.0;
 
 class Refresher extends StatelessWidget {
   const Refresher({
+    super.key,
     required this.onRefresh,
     required this.child,
-    super.key,
   });
 
   final Future<void> Function()? onRefresh;
