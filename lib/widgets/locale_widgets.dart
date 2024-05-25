@@ -43,9 +43,9 @@ class _LocaleWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
-    MaterialStateProperty<BorderSide?>? border;
+    WidgetStateProperty<BorderSide?>? border;
     if (isActive) {
-      border = MaterialStateProperty.all(BorderSide(
+      border = WidgetStateProperty.all(BorderSide(
         color: theme.primaryColor,
         width: 2.0,
       ));
@@ -56,7 +56,7 @@ class _LocaleWidget extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(
+          foregroundColor: WidgetStateProperty.all(
             theme.textTheme.labelLarge?.color,
           ),
           side: border,
