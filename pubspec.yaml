@@ -58,7 +58,7 @@ flutter:
   assets:
     - .env
     - assets/ca/lets-encrypt-r3.pem
-    - assets/header.png
+    - assets/images/
     - config/cadansa2019.json
     - config/cadansa2022.json
 
