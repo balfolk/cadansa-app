@@ -1,9 +1,9 @@
+**/dgph
 *.mode1v3
 *.mode2v3
 *.moved-aside
 *.pbxuser
 *.perspectivev3
-*.symbols
 **/*sync/
 .sconsign.dblite
 .tags*
