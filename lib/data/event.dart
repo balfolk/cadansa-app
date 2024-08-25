@@ -9,11 +9,14 @@ import 'package:meta/meta.dart';
 @immutable
 class Event {
   Event(this._globalEvent, final dynamic json, this.constants)
-      : pages = parseList(json['pages'],
-          (dynamic p) => PageData.parse(p, constants));
+      : pages = parseList(
+            json['pages'], (dynamic p) => PageData.parse(p, constants)),
+        popupMenuPages = parseList(
+            json['popupMenuPages'], (dynamic p) => PageData.parse(p, constants));
 
   final GlobalEvent _globalEvent;
   final BuiltList<PageData> pages;
+  final BuiltList<PageData> popupMenuPages;
   final EventConstants constants;
 
   String get id => _globalEvent.id;

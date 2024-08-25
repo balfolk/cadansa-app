@@ -1,13 +1,10 @@
 import 'dart:async';
+
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/global.dart';
-import 'package:cadansa_app/pages/feed_page.dart';
-import 'package:cadansa_app/pages/info_page.dart';
-import 'package:cadansa_app/pages/map_page.dart';
-import 'package:cadansa_app/pages/programme_page.dart';
 import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/util/page_util.dart';
@@ -48,11 +45,41 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     actionHandler: _handleAction,
     buildScaffold: ({actions, appBarBottomWidget, required body}) {
       final locale = Localizations.localeOf(context);
+      final popupMenuPages = widget.event.popupMenuPages;
       return Scaffold(
         appBar: AppBar(
           systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(widget.event.title.get(locale)),
-          actions: actions?.toList(growable: false),
+          actions: (actions ?? [])
+              .followedBy(popupMenuPages.isNotEmpty
+                  ? [
+                      PopupMenuButton(
+                        icon: const Icon(Icons.more_vert),
+                        itemBuilder: (final context) => popupMenuPages.map((page) {
+                          final title = page.title.get(locale);
+                          return PopupMenuItem(
+                            value: title,
+                            child: ListTile(
+                              leading: Icon(MdiIcons.fromString(page.icon)),
+                              title: Text(title),
+                            ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (final context) => _buildOverlayPage(
+                                    page,
+                                    context: context,
+                                  ),
+                                ),
+                              ),
+                            },
+                          );
+                        }).toList(growable: false),
+                      ),
+                    ]
+                  : [])
+              .toList(growable: false),
           bottom: appBarBottomWidget,
         ),
         body: body,
@@ -101,51 +128,65 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     _currentIndex = _currentIndex.clamp(0, widget.event.pages.length - 1);
     final pageData = widget.event.pages[_currentIndex];
 
-    final Widget page;
-    if (pageData is MapPageData) {
-      page = MapPage(
-        mapData: pageData.mapData,
-        pageHooks: _pageHooks,
-        initialFloorIndex: _highlightAreaFloorIndex,
-        highlightAreaIndex: _highlightAreaIndex,
-        key: key,
-      );
-    } else if (pageData is ProgrammePageData) {
-      page = ProgrammePage(
-        programme: pageData.programme,
-        event: widget.event,
-        pageHooks: _pageHooks,
-        pageController: _programmePageController,
-        sharedPreferences: widget.sharedPreferences,
-        openItemId: _openProgrammeItemId,
-        getFavorites: _getEventFavorites,
-        setFavorite: _setFavorite,
-        key: key,
-      );
-    } else if (pageData is InfoPageData) {
-      page = InfoPage(
-        content: pageData.content,
-        linkColor: pageData.linkColor,
-        pageHooks: _pageHooks,
-        key: key,
-      );
-    } else if (pageData is FeedPageData) {
-      page = FeedPage(
-        data: pageData,
-        pageHooks: _pageHooks,
-        getReadGuids: _getReadFeedGuids,
-        setReadGuid: _setReadFeedGuid,
-        key: key,
-      );
-    } else {
-      throw StateError('Unknown page data object $pageData');
-    }
+    final page = _buildPage(
+      pageData,
+      pageHooks: _pageHooks,
+      key: key,
+    );
 
     _highlightAreaFloorIndex = null;
     _highlightAreaIndex = null;
     _openProgrammeItemId = null;
 
     return page;
+  }
+
+  Widget _buildPage(
+    final PageData pageData, {
+    required final PageHooks pageHooks,
+    final Key? key,
+  }) {
+    return buildPage(
+      pageData,
+      event: widget.event,
+      pageHooks: pageHooks,
+      sharedPreferences: widget.sharedPreferences,
+      highlightAreaFloorIndex: _highlightAreaFloorIndex,
+      highlightAreaIndex: _highlightAreaIndex,
+      openProgrammeItemId: _openProgrammeItemId,
+      programmePageController: _programmePageController,
+      getEventFavorites: _getEventFavorites,
+      setFavorite: _setFavorite,
+      getReadFeedGuids: _getReadFeedGuids,
+      setReadFeedGuid: _setReadFeedGuid,
+      key: key,
+    );
+  }
+
+  Widget _buildOverlayPage(
+    final PageData pageData, {
+    required final BuildContext context,
+  }) {
+    final locale = Localizations.localeOf(context);
+    final pageHooks = PageHooks(
+      actionHandler: (final action) {
+        Navigator.pop(context);
+        return _handleAction(action);
+      },
+      buildScaffold: ({
+        final actions,
+        final appBarBottomWidget,
+        required final body,
+      }) =>
+          Scaffold(
+        appBar: AppBar(
+          leading: const BackButton(),
+          title: Text(pageData.title.get(locale)),
+        ),
+        body: body,
+      ),
+    );
+    return _buildPage(pageData, pageHooks: pageHooks);
   }
 
   Widget _buildBottomNavigationBar() {
