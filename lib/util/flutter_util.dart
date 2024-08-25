@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -95,4 +96,16 @@ MaterialColor createMaterialColor(final Color color) {
 
 IconData? findIcon(final String? key) {
   return key != null ? MdiIcons.fromString(key) : null;
+}
+
+ImageProvider? getImageProvider(final String? imageUri) {
+  if (imageUri == null) {
+    return null;
+  }
+
+  if (imageUri.startsWith('http')) {
+    return CachedNetworkImageProvider(imageUri);
+  } else {
+    return AssetImage(imageUri);
+  }
 }

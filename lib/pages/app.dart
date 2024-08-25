@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/event.dart';
 import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
@@ -10,6 +9,7 @@ import 'package:cadansa_app/pages/event_page.dart';
 import 'package:cadansa_app/pages/loading_page.dart';
 import 'package:cadansa_app/pages/timeout_page.dart';
 import 'package:cadansa_app/util/extensions.dart';
+import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
 import 'package:cadansa_app/widgets/locale_widgets.dart';
@@ -357,12 +357,13 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
 
     final headerPlaceholder = Text(APP_TITLE, style: theme.textTheme.displayMedium);
     final logoUri = _config?.logoUri;
-    final header = logoUri != null
-        ? CachedNetworkImage(
-      imageUrl: logoUri.get(locale),
-      errorWidget: (context, url, dynamic error) => headerPlaceholder,
-      fadeInDuration: Duration.zero,
-    )
+    final logoImageProvider = getImageProvider(logoUri?.get(locale));
+    final header = logoImageProvider != null
+        ? Image(
+            image: logoImageProvider,
+            errorBuilder: (final context, final error, final stackTrace) =>
+                headerPlaceholder,
+          )
         : headerPlaceholder;
 
     return Drawer(
