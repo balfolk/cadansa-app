@@ -61,6 +61,7 @@ flutter:
     - assets/images/
     - config/cadansa2019.json
     - config/cadansa2022.json
+    - config/cadansa2023.json
 
   fonts:
     - family: AppFontFamily

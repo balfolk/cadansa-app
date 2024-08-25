@@ -1,0 +1,1786 @@
+{
+  "workshopLevels": {
+    "0": {
+      "name": {
+        "en": "For everyone",
+        "nl": "Voor iedereen"
+      },
+      "icon": "account-group"
+    },
+    "1": {
+      "name": {
+        "en": "Beginner",
+        "nl": "Beginners"
+      },
+      "icon": "circle-slice-2"
+    },
+    "2": {
+      "name": {
+        "en": "Intermediate",
+        "nl": "Begonners"
+      },
+      "icon": "circle-slice-4"
+    },
+    "3": {
+      "name": {
+        "en": "Advanced",
+        "nl": "Halfgevorderden"
+      },
+      "icon": "circle-slice-6"
+    },
+    "4": {
+      "name": {
+        "en": "Expert",
+        "nl": "Gevorderden"
+      },
+      "icon": "circle-slice-8"
+    }
+  },
+  "itemKinds": {
+    "BAND_DANCE": {
+      "icon": "shoe-print"
+    },
+    "CEREMONY": {
+      "icon": "mushroom"
+    },
+    "MARKET": {
+      "icon": "shopping"
+    },
+    "OPEN": {
+      "icon": "door-open"
+    },
+    "CLOSED": {
+      "icon": "bed"
+    },
+    "WORKSHOP_DANCE": {
+      "name": {
+        "en": "Dancing",
+        "nl": "Dansworkshop"
+      },
+      "icon": "shoe-print"
+    },
+    "WORKSHOP_MUSIC": {
+      "name": {
+        "en": "Music workshop",
+        "nl": "Muziekworkshop"
+      },
+      "icon": "music"
+    },
+    "WORKSHOP_OTHER": {
+      "name": {
+        "en": "Other",
+        "nl": "Overige"
+      },
+      "icon": "yoga"
+    }
+  },
+  "pages": [
+    {
+      "type": "MAP",
+      "title": {
+        "en": "Map",
+        "nl": "Kaart",
+        "fr": "Plan"
+      },
+      "icon": "map",
+      "floors": [
+        {
+          "title": {
+            "en": "Ground floor",
+            "nl": "Begane grond",
+            "fr": "Rez-de-chaussée"
+          },
+          "path": "https://www.cadansa.nl/app/v2/cadansa_map_2022_0_app.png",
+          "version": 2,
+          "minScale": 0.2,
+          "maxScale": 1.0,
+          "areas": [
+            {
+              "path": [
+                [ 32, 640 ],
+                [ 32, 355 ],
+                [ -39, 355 ],
+                [ -36, 315 ],
+                [ -166, 295 ],
+                [ -57, -534 ],
+                [ 426, -646 ],
+                [ 1036, -646 ],
+                [ 1113, 640 ]
+              ],
+              "center": [ 574, -163 ],
+              "buttonIcon": "shoe-print",
+              "buttonSize": 350.0,
+              "title": {
+                "en": "Dance floor",
+                "nl": "Dansvloer",
+                "fr": "Salle de danse"
+              },
+              "titleFontSize": 192.0,
+              "actionTitle": {
+                "en": "View programme",
+                "nl": "Programma",
+                "fr": "Voir le programme"
+              },
+              "action": "page:1"
+            },
+            {
+              "id": "openStage",
+              "path": [
+                [ -59, -535 ],
+                [ -740, -627 ],
+                [ -807, -938 ],
+                [ -68, -1090 ]
+              ],
+              "center": [ -358, -888 ],
+              "title": {
+                "en": "Open Stage",
+                "nl": "Open podium",
+                "fr": "Scène ouverte"
+              },
+              "titleFontSize": 144.0,
+              "buttonIcon": "shoe-print",
+              "buttonSize": 240.0,
+              "actionTitle": {
+                "en": "View programme",
+                "nl": "Programma",
+                "fr": "Voir le programme"
+              },
+              "action": {
+                "en": "url:https://www.cadansa.nl/program/open-stage/",
+                "nl": "url:https://www.cadansa.nl/nl/programma/open-podium/"
+              }
+            },
+            {
+              "path": [
+                [ -1000, 506 ],
+                [ -857, 497 ],
+                [ -826, 840 ],
+                [ -910, 847 ],
+                [ -928, 635 ],
+                [ -989, 636 ]
+              ],
+              "center": [ -921, 576 ],
+              "buttonIcon": "glass-cocktail",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Bar",
+                "nl": "Bar",
+                "fr": "Bar"
+              }
+            },
+            {
+              "path": [
+                [ -660, -377 ],
+                [ -754, 300 ],
+                [ -990, 268 ],
+                [ -936, -149 ],
+                [ -805, -128 ],
+                [ -763, -391 ]
+              ],
+              "center": [ -858, 47 ],
+              "title": {
+                "en": "Food",
+                "nl": "Eten",
+                "fr": "Manger"
+              },
+              "titleFontSize": 144.0,
+              "buttonIcon": "silverware-fork-knife",
+              "buttonSize": 180.0,
+              "actionTitle": {
+                "en": "View menu",
+                "nl": "Bekijk het menu",
+                "fr": "Voir le menu"
+              },
+              "action": {
+                "en": "url:https://www.cadansa.nl/information/food-and-drinks-at-cadansa-2023/",
+                "nl": "url:https://www.cadansa.nl/nl/informatie/menu-cadansa-2023/"
+              }
+            },
+            {
+              "id": "quiet",
+              "path": [
+                [ -740, -627 ],
+                [ -972, -659 ],
+                [ -1012, -896 ],
+                [ -807, -938 ]
+              ],
+              "center": [ -886, -813 ],
+              "buttonIcon": "volume-off",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Quiet space",
+                "nl": "Rustruimte",
+                "fr": "Zone de silence"
+              }
+            },
+            {
+              "path": [
+                [ 1044, -592 ],
+                [ 1253, -603 ],
+                [ 1273, -284 ],
+                [ 1067, -269 ]
+              ],
+              "center": [ 1156, -438 ],
+              "buttonIcon": "hanger",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Cloakroom",
+                "nl": "Garderobe",
+                "fr": "Vestiaire"
+              }
+            },
+            {
+              "path": [
+                [ 1076, -82 ],
+                [ 1282, -98 ],
+                [ 1303, 219 ],
+                [ 1095, 237 ]
+              ],
+              "center": [ 1178, 72 ],
+              "buttonIcon": "hanger",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Cloakroom",
+                "nl": "Garderobe",
+                "fr": "Vestiaire"
+              }
+            },
+            {
+              "id": "ballet",
+              "path": [
+                [ -402, -481 ],
+                [ -71, -438 ],
+                [ -135, 49 ],
+                [ -463, -1 ]
+              ],
+              "center": [ -270, -211 ],
+              "buttonIcon": "human-male-board",
+              "buttonSize": 240.0,
+              "actionTitle": {
+                "en": "Ballet room",
+                "nl": "Balletzaal",
+                "fr": "Salle de ballet"
+              },
+              "action": "page:2"
+            },
+            {
+              "center": [ 334, 866 ],
+              "buttonIcon": "information",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Consigne and info",
+                "nl": "Consigne en info",
+                "fr": "Consigne et info"
+              }
+            },
+            {
+              "center": [ 490, 834 ],
+              "buttonIcon": "tshirt-crew",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Merchandise",
+                "nl": "Merchandise",
+                "fr": "Marchandise"
+              }
+            },
+            {
+              "center": [ 624, 810 ],
+              "buttonIcon": "cash-register",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Tickets and coins",
+                "nl": "Tickets en muntjes",
+                "fr": "Caisse et jetons"
+              }
+            },
+            {
+              "path": [
+                [ -463, -1 ],
+                [ -135, 49 ],
+                [ -167, 295 ],
+                [ -491, 221 ]
+              ],
+              "center": [ -324, 158 ],
+              "buttonIcon": "toilet",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Toilets",
+                "nl": "Toiletten",
+                "fr": "Toilettes"
+              }
+            },
+            {
+              "center": [ -462, 292 ],
+              "buttonIcon": "wheelchair-accessibility",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Accessible toilet",
+                "nl": "Toegankelijk toilet",
+                "fr": "Toilette accessible"
+              }
+            },
+            {
+              "center": [ -796, -474 ],
+              "buttonIcon": "toilet",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Toilets",
+                "nl": "Toiletten",
+                "fr": "Toilettes"
+              }
+            },
+            {
+              "center": [ -49, -49 ],
+              "buttonIcon": "glass-cocktail",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Bar",
+                "nl": "Bar",
+                "fr": "Bar"
+              }
+            },
+            {
+              "center": [ -6, 406 ],
+              "buttonIcon": "elevator-passenger",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Lift",
+                "nl": "Lift",
+                "fr": "Ascenseur"
+              }
+            }
+          ],
+          "text": [
+            {
+              "location": [330, 1270],
+              "angle": 348.15,
+              "fontSize": 60,
+              "text": {
+                "en": "Entrance",
+                "nl": "Ingang",
+                "fr": "Entrée"
+              }
+            },
+            {
+              "location": [917, 452],
+              "angle": 86.7,
+              "fontSize": 55,
+              "text": {
+                "en": "Volunteers",
+                "nl": "Vrijwilligers",
+                "fr": "Volontaires"
+              }
+            },
+            {
+              "location": [-866, 376],
+              "angle": 20.25,
+              "alignment": 1,
+              "fontSize": 60,
+              "text": {
+                "en": "Theatre",
+                "nl": "Theater",
+                "fr": "Théâtre"
+              }
+            },
+            {
+              "location": [-970, 952],
+              "angle": 348.15,
+              "alignment": 1,
+              "fontSize": 48,
+              "text": {
+                "en": "Music\nworkshops",
+                "nl": "Muziek-\nworkshops",
+                "fr": "Ateliers\nde musique"
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Upper floor",
+            "nl": "Eerste verdieping",
+            "fr": "À l'étage"
+          },
+          "path": "https://www.cadansa.nl/app/v2/cadansa_map_2022_1_app.png",
+          "version": 2,
+          "minScale": 0.2,
+          "maxScale": 1.0,
+          "areas": [
+            {
+              "id": "theatre",
+              "path": [
+                [ -896, -635 ],
+                [ -95, -528 ],
+                [ -189, 290 ],
+                [ -1002, 186 ]
+              ],
+              "center": [ -567, -214 ],
+              "buttonIcon": "human-male-board",
+              "buttonSize": 350.0,
+              "title": {
+                "en": "Theatre",
+                "nl": "Theater",
+                "fr": "Théâtre"
+              },
+              "titleFontSize": 192.0,
+              "actionTitle": {
+                "en": "Workshops",
+                "nl": "Workshops",
+                "fr": "Ateliers"
+              },
+              "action": "page:2"
+            },
+            {
+              "center": [-23, 313],
+              "buttonIcon": "elevator-passenger",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Lift",
+                "nl": "Lift",
+                "fr": "Ascenseur"
+              }
+            },
+            {
+              "center": [-116, 29],
+              "buttonIcon": "wheelchair-accessibility",
+              "buttonSize": 120.0,
+              "actionTitle": {
+                "en": "Accessible toilet",
+                "nl": "Toegankelijk toilet",
+                "fr": "Toilette accessible"
+              }
+            }
+          ],
+          "text": [
+            {
+              "location": [ 878, -153 ],
+              "angle": 86.7,
+              "fontSize": 60,
+              "text": {
+                "en": "Volunteers",
+                "nl": "Vrijwilligers",
+                "fr": "Volontaires"
+              }
+            },
+            {
+              "location": [ -813, 580 ],
+              "angle": 19.25,
+              "alignment": 1,
+              "fontSize": 60,
+              "text": {
+                "en": "Board games area",
+                "nl": "Bordspellen",
+                "fr": "Jeux de plateux"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "PROGRAMME",
+      "title": {
+        "en": "Programme",
+        "nl": "Programma",
+        "fr": "Programme"
+      },
+      "icon": "music-note-eighth",
+      "days": [
+        {
+          "name": {
+            "en": "Thursday",
+            "nl": "Donderdag",
+            "fr": "Jeudi"
+          },
+          "startsOn": 1698271200000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "18:00",
+              "kind": "OPEN"
+            },
+            {
+              "id": "starting_together",
+              "name": {
+                "en": "Starting together",
+                "nl": "Samen beginnen"
+              },
+              "startTime": "19:15",
+              "endTime": "19:30",
+              "kind": "CEREMONY"
+            },
+            {
+              "id": "two_catch_a_raindrop",
+              "name": "Two catch a raindrop",
+              "startTime": "19:30",
+              "endTime": "20:45",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "NL"
+              ],
+              "description": {
+                "en": "Come rain, come shine: come dance! Niek en Annelies predict some rainshine mazurkas in the morning, sunbow bourrées and some whirlwaltzing later on. Accordeon throughout with a spell of oboes, drops of glockenspiel, vocal intervals, playful interaction and other storied surprises.\n\nNiek van Uden-Luteijn: accordeon\nAnnelis van Uden-Luteijn: oboe",
+                "nl": "Zon? Regen? Dansen! Niek en Annelies voorspellen voor in de ochtend een druppelschijn-mazurka, hier en daar zonboog-bourrées en later stevige wervelwalsen. In het hele land accordeon en perioden met hobo, vanuit het zuiden vocale opklaringen, spetters klokkenspel en speelse interactie.\n\nNiek van Uden-Luteijn: accordeon\nAnnelis van Uden-Luteijn: hobo"
+              },
+              "website": {
+                "url": "https://www.facebook.com/TwoCatchARaindrop/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "barbara_negra",
+              "name": "Barbara Negra",
+              "startTime": "21:15",
+              "endTime": "22:30",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "NL"
+              ],
+              "description": {
+                "en": "Barbara Negra is a group of three Dutch friends: Tom Haage (guitar), Alrik Hiemstra (percussion) and Bart Boskaljon (diatonic accordion). Accompanied by a slight hangover, they dream of their travels through France, Spain, Argentina and beyond. With their singing and playing, they know how to turn anything into a party. Shake that booty! Swinging balfolk in honor of Barbara!\n\nTom Haage: guitar\nAlrik Hiemstra: percussion\nBart Boskaljon: diatonic accordeon",
+                "nl": "Barbara Negra bestaat uit drie Nederlandse vrienden: Tom Haage (gitaar), Alrik Hiemstra (percussie) en Bart Boskaljon (diatonisch accordeon). Vergezeld door een lichte kater dromen zij van hun reizen door Frankrijk, Spanje, Argentinië en verder. Al zingend en spelend weten ze van alles een feestje te maken. Schudden maar met die billen! Swingende balfolk ter ere van Barbara!\n\nTom Haage: gitaar\nAlrik Hiemstra: percussie\nBart Boskaljon: diatonisch accordeon"
+              },
+              "website": {
+                "url": "https://www.facebook.com/barbaranegramusic",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "bargainatt",
+              "name": "Bargainatt",
+              "startTime": "23:00",
+              "endTime": "00:45",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "From compositions to revisits of traditional tunes, Bargainatt invites you to discover his universe at the same time modern and authentic. The musicians take their inspiration from the dances of various regions of France that matter to them, trying to best respect the subtleties and traditions of these. From Auvergne to Bretagne, via Poitou and Gascogne, Bargainatt offers you a journey with multiple colors and influences, full of energy and freshness.\n\nCamillie Stimbre: violin and vocals\nYoumi Bazoge: violin and vocals\nYoumi Bazoge: violin and vocals\nLéon Olliver: diatonic accordeon and vocals\nNoé Bazoge: cello and vocals",
+                "nl": "Van eigen composities tot herinterpretaties van traditionele deuntjes: Bargainatt nodigt je uit om zijn universum te ontdekken, dat tegelijkertijd modern en authentiek is. De muzikanten halen hun inspiratie uit de dansen van verschillende Franse regio’s die voor hen belangrijk zijn, en proberen de subtiliteiten en tradities hiervan zo goed mogelijk te respecteren. Van de Auvergne naar Bretagne, via de Poitou en Gascogne, biedt Bargainatt je een reis met meerdere kleuren en invloeden, vol energie en frisheid.\n\nCamille Stimbre: viool en zang\nYoumi Bazoge: viool en zang\nLéon Olliver: diatonische accordeon en zang\nNoé Bazoge: cello en zang"
+              },
+              "website": {
+                "url": "http://www.bargainatt.com/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "bedtime_story",
+              "name": {
+                "en": "Bedtime story",
+                "nl": "Verhaaltje voor het slapengaan"
+              },
+              "startTime": "00:45",
+              "endTime": "01:00",
+              "kind": "CEREMONY"
+            },
+            {
+              "name": {
+                "en": "Time to go to sleep",
+                "nl": "Tijd om te gaan slapen"
+              },
+              "startTime": "01:00",
+              "kind": "CLOSED"
+            }
+          ]
+        },
+        {
+          "name": {
+            "en": "Friday",
+            "nl": "Vrijdag",
+            "fr": "Vendredi"
+          },
+          "startsOn": 1698357600000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "11:00",
+              "kind": "OPEN"
+            },
+            {
+              "id": "starting_together",
+              "name": {
+                "en": "Starting together",
+                "nl": "Samen beginnen"
+              },
+              "startTime": "16:30",
+              "endTime": "16:45",
+              "kind": "CEREMONY"
+            },
+            {
+              "id": "wouter_en_de_draak",
+              "name": "Wouter en de Draak",
+              "startTime": "16:45",
+              "endTime": "18:15",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "NL"
+              ],
+              "description": {
+                "en": "Joris Alblas on guitar and Wouter Kuyper on harmonica give dancers butterflies in their stomachs. With the melodies and rhythms flowing into each other, these two musicians bring together a perfect combination of their musicality and creativity. From enchantingly intimate mazurkas, refined gavotte de montagnes and kost ar’choads, to swinging and energetic scottishes: they can do it all.\n\nJoris Alblas: guitar\nWouter Kuyper: diatonic accordeon",
+                "nl": "Joris Alblas op gitaar en Wouter Kuyper op trekharmonica geven dansers vlinders in de buik. Met de in elkaar overvloeiende melodieën en ritmes komt een perfecte combinatie van de muzikaliteit en creativiteit van de twee muzikanten samen. Van betoverend intieme mazurka’s, fijne gavotte de montagnes en kost ar’choads tot swingende en energieke scottishes: ze kunnen het allemaal.\n\nJoris Alblas: gitaar\nWouter Kuyper: trekharmonica"
+              },
+              "website": {
+                "url": "https://www.facebook.com/WouterendeDraak",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "les_conteuses_de_pas",
+              "name": "Les conteuses de pas",
+              "startTime": "18:45",
+              "endTime": "20:15",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "Navigating from Brittany to Auvergne, from Normandy to Poitou, Les Conteuses de Pas follow their dancing fancies. Whether they opt for dances well-trodden in folk dancing events or less common steps, the arrangements are decidedly personal, interwoven with threads from India or Africa, or sporting a nuance of rock’n’roll. The continuous sound of the hurdy-gurdy, the clear notes of the harp and the vocal harmony, tune up and make you rush to the dance floor, to dance to traditional and original pieces alike.\n\nMarion Blanchard: vocals\nVirgilia Gacoin: vocals\nClémence Moiron: harp and vocals\nLucien Pillot: hurdy-gurdy",
+                "nl": "Al navigerend van Bretagne naar de Auvergne, van Normandië naar de Poitou, zo volgen Les Conteuses de Pas hun dansdromen. Of ze nu kiezen voor dansen die veel voorkomen in balfolk of voor minder gebruikelijke pasjes, de arrangementen zijn vastberaden persoonlijk, verweven met draden uit India of Afrika, of met een vleugje rock ‘n’ roll. Het doorlopende geluid van de draailier, de heldere tonen van de harp en de vocale harmonie stemmen op elkaar af en laten je de dansvloer op rennen, om te dansen op zowel traditionele als originele muziek.\n\nMarion Blanchard: zang\nVirgilia Gacoin: zang\nClémence Moiron: harp en zang\nLucien Pillot: draailier"
+              },
+              "website": {
+                "url": "https://www.lesconteusesdepas.fr/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "broes",
+              "name": "Broes",
+              "startTime": "20:45",
+              "endTime": "22:30",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "BE"
+              ],
+              "description": {
+                "en": "Broes originally started in 2009 with Florian De Schepper on guitar and Anouk Sanczuk on violin. The group expanded with Elke De Meester (chromatic accordion) in 2012. Just before the corona pandemic, jazz bass player Zjef Van Steenbergen and all-round percussionist Gielis Cautaers joined, a perfect addition to the existing base. It resulted in musical fireworks on stage, which was inevitable with five top musicians. In their music you can find a fine mix of meditative and energetic musical waves, combined with Arab, Irish, French, Balkan and African influences.\n\nFlorian De Schepper: guitar\nAnouk Sanczuk: violin\nElke De Meester: chromatic accordeon\nZjef Van Steenbergen: jazz bass\nGielis Cautaers: percussion",
+                "nl": "Broes begon oorspronkelijk met Florian De Schepper op gitaar en Anouk Sanczuk op viool, in 2009. De groep breidde zich uit met Elke De Meester (chromatische accordeon) in 2012. Net vóór de corona pandemie kwamen jazz bass speler Zjef Van Steenbergen en allround percussionist Gielis Cautaers erbij, een perfecte toevoeging op de al bestaande basis. Het resulteerde in muzikaal vuurwerk op de planken, onvermijdelijk met vijf topmuzikanten. In hun muziek is een fijne mix te vinden van meditatieve en energieke muzikale golven, gecombineerd met Arabische, Ierse, Franse, Balkan en Afrikaanse invloeden.\n\nFlorian De Schepper: gitaar\nAnouk Sanczuk: viool\nElke De Meester: chromatisch accordeon\nZjef Van Steenbergen: jazz bas\nGielis Cautaers: percussie"
+              },
+              "website": {
+                "url": "https://vi.be/broes",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "monsieur_fruits",
+              "name": "Monsieur Fruits",
+              "startTime": "23:15",
+              "endTime": "00:30",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "Monsieur Fruits is a guitar and a voice. A duet that turns into a trio when a ‘bucco-trombone’ joins the party. On the edge between Georges Marley and Bob Brassens, between lightness and casualness, chords that whirl and wander, slip on the ground or float in the air. It’s like a journey through space and time. The space of waltz and other dance, the time of a song that we know and another one that we do not. Monsieur Fruits music is made to be listened to, to be sung as well… and, of course, to be danced.\n\nMonsieur Fruits: guitar and vocals",
+                "nl": "Monsieur Fruits is een gitaar en een stem. Een duet dat verandert in een trio als een ‘bucco-trombone’ zich bij de partij voegt. Op de grens tussen Georges Marley en Bob Brassens, tussen lichtheid en nonchalance, dwarrelende en dwalende akkoorden, over de grond glijden of in de lucht zweven. Het is als een reis door ruimte en tijd. De ruimte van wals en andere dans, de tijd van een lied dat we kennen en een ander dat we niet kennen. Monsieur Fruits’ muziek is gemaakt om naar te luisteren, om mee te zingen… en natuurlijk om te dansen.\n\nMonsieur Fruits: gitaar, zang en bucco-trombone"
+              },
+              "website": {
+                "url": "https://www.monsieurfruits.net/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "bedtime_story",
+              "name": {
+                "en": "Bedtime story",
+                "nl": "Verhaaltje voor het slapengaan"
+              },
+              "startTime": "00:45",
+              "endTime": "01:00",
+              "kind": "CEREMONY"
+            },
+            {
+              "name": {
+                "en": "Time to go to sleep",
+                "nl": "Tijd om te gaan slapen"
+              },
+              "startTime": "02:00",
+              "kind": "CLOSED"
+            }
+          ]
+        },
+        {
+          "name": {
+            "en": "Saturday",
+            "nl": "Zaterdag",
+            "fr": "Samedi"
+          },
+          "startsOn": 1698444000000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "11:00",
+              "kind": "OPEN"
+            },
+            {
+              "id": "makers_market",
+              "name": {
+                "en": "Makers' market",
+                "nl": "Kleedjesmarkt"
+              },
+              "startTime": "13:30",
+              "endTime": "17:00",
+              "location": {
+                "title": {
+                  "en": "Foyer",
+                  "nl": "Foyer"
+                }
+              },
+              "kind": "MARKET",
+              "description": {
+                "en": "On our makers' market you can sell your own stuff!\n\nPlease note: it is not allowed to sell food and/or drinks, as well as items that are prohibited from sale or distribution in the Netherlands.",
+                "nl": "Op de kleedjesmarkt kan je je eigen dingen verkopen!\n\nLet op: het is niet toegestaan eten en/of drinken te verkopen, evenals artikelen die niet in Nederland verhandeld mogen worden."
+              }
+            },
+            {
+              "id": "starting_together",
+              "name": {
+                "en": "Starting together",
+                "nl": "Samen beginnen"
+              },
+              "startTime": "16:15",
+              "endTime": "16:30",
+              "kind": "CEREMONY"
+            },
+            {
+              "id": "la_reveilleuse",
+              "name": "La Réveilleuse",
+              "startTime": "16:30",
+              "endTime": "18:00",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "La Réveilleuse, is a bright and energetic french guitar-vocal duo for concert and balfolk. Inspired by traditional dance music, Camille Lachenal’s songs tell stories of life, powerful women and old trees while Simon McDonnell adds his fine folk arrangements to her words. Enter the “Cercle des Femmes”, meet “La Réveilleuse” in person on a three-step waltz, dance the mazurka under a chestnut tree and wander the woods to the sound of an avant-deux!\n\nCamille Lachenal: vocals, percussion, clarinet\nSimon McDonell: vocals, guitar, bodhran, harmonica, flûte irlandaise",
+                "nl": "La Réveilleuse is een energiek Frans duo met gitaar en zang. Het duo wordt geïnspireerd door traditionele dansmuziek. De zang van Camille Lachenal vertellen verhalen van het leven, krachtige vrouwen en oeroude bomen terwijl Simon McDonell daar zijn fijne folkarrangementen aan toevoegt. Treed de ‘cirkel van vrouwen’ binnen, ontmoet La Reveilleuse persoonlijk in een wals, dans de mazurka onder de bomen en dwaal door de wouden op het geluid van een avant-deux!\n\nCamille Lachenal: zang, percussie, klarinet\nSimon McDonell: zang, gitaar, bodhran, harmonica, Ierse fluit"
+              },
+              "website": {
+                "url": "https://lareveilleuse.com/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "l_air_inconnu",
+              "name": "L’Air Inconnu",
+              "startTime": "18:30",
+              "endTime": "20:00",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "L’Air Inconnu is an experienced and creative musical trio that brings to the stage today’s traditional dance and music, for all curious people – and plants or animals – who want to hear and see and dance it! Their compositions and arrangements of traditional dances are inspired by strong emotions and experiences from balls and festivals. The joy of encounters, intimate poetry, the power of sound, the energy of bodies in motion, the collectiveness of the dance floor: everything comes together in L’Air Inconnu.\n\nDani Velasco: violin and vocals\nSylvain Pool: guitar, citer, chromatic accordeon and vocals\nFabien Bucher: guitar and mandolin",
+                "nl": "L’Air Inconnu is een ervaren en creatief muzikaal trio, dat de traditionele dans en muziek van vandaag ten tonele brengt voor alle nieuwsgierige mensen – en planten of dieren – die het willen horen en zien en willen dansen! Hun composities en arrangementen van traditionele dansen zijn geïnspireerd door sterke emoties en ervaringen, opgedaan op bals en festivals. Het plezier van ontmoetingen, intieme poëzie, de kracht van geluid, de energie van lichamen in beweging, de collectiviteit van de dansvloer: alles komt samen bij L’Air Inconnu.\n\nDani Velasco: viool en zang\nSylvain Pool: guitaar, citer, chromatisch accordeon en zang\nFabien Bucher: gitaar en mandoline"
+              },
+              "website": {
+                "url": "https://www.canibalproductions.net/lairinconnu",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "duo_tanghe_coudroy",
+              "name": "Duo Tanghe Coudroy",
+              "startTime": "20:30",
+              "endTime": "22:00",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "Duo Tanghe Coudroy: guitar, an accordion and singing, for atypical, crafted, natural music which opens up beautiful, refined spaces, filled with a feeling of fragility and quiet energy. The repertoire obviously influenced by dance music, Brittany, Sweden, but also other desires which draw towards baroque music and other shores.\n\nMartin Coudroy: vocals, accordeon\nAurelien Tanghe: vocals, guitar",
+                "nl": "Duo Tanghe Coudroy: gitaar, een trekzak en zang, gecombineerd tot atypische, natuurlijke muziek die schitterende, intrinsieke ruimtes opent, gevuld met een gevoel van breekbaarheid en stille energie. Het repertorie is duidelijk beïnvloed door dans, Bretagne en Zweden, maar ook door andere invloeden zoals barokmuziek.\n\nMartin Coudroy: zang, accordeon\nAurelien Tanghe: zang, gitaar"
+              },
+              "website": {
+                "url": "https://duotanghecoudroy.wordpress.com/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "beat_bouet_trio",
+              "name": "Beat Bouet Trio",
+              "startTime": "22:30",
+              "endTime": "00:15",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "Can you imagine? A mix of Breton dance, American rap mixed with their own special lyrics… what a dream, right? The three men of Beat Bouet Trio make it happen. The very first foundation of this band was formed in the 90s, on the bus to school. There, the seats were always occupied by the same three loud, hip-hop listening boys who always chatted about girls, graffiti, raggamuffin and hip-hop. Not only in French, but also in their own dialect: a nice mix of Gallo, French and English. It was almost inevitable that the three of them developed into top musicians. They mix the music and singing learned from their grandfathers with their own hip-hop background. B-Key is the accordion player, T Burt the human beat box and Faya Gur’s voice brings it all together into an intergenerational interplay of music.\n\nB-Key: accordeon\nT Burt: human beatbox\nFaya Gur: vocals",
+                "nl": "Kun je het je voorstellen? Een mix van Bretonse dans, Amerikaanse rap en raggamuffin gemixt met eigen, bijzondere teksten… wat een droom, nietwaar? De drie van Beat Bouet Trio maken het waar. De allereerste basis van deze band ontstond in de jaren ‘90, in de bus naar school. Daar waar de stoelen altijd bezet waren bij dezelfde drie lawaaiige, hiphop luisterende jongens die altijd kletsten over meiden, graffiti en hiphop. En niet alleen in het Frans, maar ook in hun eigen dialect: een mooie mix van Gallo, Frans en Engels. Het was bijna vanzelfsprekend dat zij drieën zich doorontwikkelden tot topmuzikanten. Zij mixen de muziek en zang geleerd van hun opa’s met de hiphopachtergrond van henzelf. B-Key is de accordeonspeler, T Burt de menselijke beat box en Faya Gur’s stem brengt dat alles samen tot een intergenerationeel samenspel van muziek.\n\nB-Key: accordeon\nT Burt: menselijke beatbox\nFaya Gur’: zang"
+              },
+              "website": {
+                "url": "http://beatbouettrio.wix.com/beatbouettrio",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "marie_paulette",
+              "name": "Marie Paulette",
+              "startTime": "00:45",
+              "endTime": "02:00",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "FR"
+              ],
+              "description": {
+                "en": "The Duo Marie Paulette from Northern France (Calais) plays traditional music, but with a rock twist. This haywire duo pours some electric guitar, vocals and sound effects into their music. Marie Paulette is inspired by traditional dances and shapes them again and again, towards an electric and almost cosmopolitan trance. Diatonic accordion, electric guitar, dihponic vocals, samples and voice lead the dancers in an evolving and surprising repetition.\n\nVincent Evrard: guitar, sample, vocals\nColine Ledoux: diatonic accordeon",
+                "nl": "Het Duo Marie Paulette uit Noord Frankrijk (Calais) speelt traditionele muziek, maar dan in een rock jasje. Dit knotsgekke duo overgiet hun muziek met wat elektrische gitaar, zang en geluidseffecten. Zij worden geïnspireerd door traditionele dansen en vormen die opnieuw en net even anders, naar een electrische en bijna cosmopolitische trance. Met diatonisch accordeon, elektrische gitaar en vocals (bege)leiden zij de dansers de vloer op.\n\nVincent Evrard: gitaar, samples en zang\nColine Ledoux: diatonische accordeon"
+              },
+              "website": {
+                "url": "https://www.facebook.com/Vi.Co.nc.li",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "bedtime_story",
+              "name": {
+                "en": "Bedtime story",
+                "nl": "Verhaaltje voor het slapengaan"
+              },
+              "startTime": "02:00",
+              "endTime": "02:15",
+              "kind": "CEREMONY"
+            },
+            {
+              "name": {
+                "en": "Time to go to sleep",
+                "nl": "Tijd om te gaan slapen"
+              },
+              "startTime": "03:00",
+              "kind": "CLOSED"
+            }
+          ]
+        },
+        {
+          "name": {
+            "en": "Sunday",
+            "nl": "Zondag",
+            "fr": "Dimanche"
+          },
+          "startsOn": 1698530400000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "10:30",
+              "kind": "OPEN"
+            },
+            {
+              "id": "starting_together",
+              "name": {
+                "en": "Starting together",
+                "nl": "Samen beginnen"
+              },
+              "startTime": "12:45",
+              "endTime": "13:00",
+              "kind": "CEREMONY"
+            },
+            {
+              "id": "duo_decombel_en_van_mierlo",
+              "name": "Duo Decombel en Van Mierlo",
+              "startTime": "13:00",
+              "endTime": "14:15",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "BE"
+              ],
+              "description": {
+                "en": "Maarten Decombel and Toon Van Mierlo are highly respected folk musicians with a longstanding passion for newly composed music. As well as a twenty-year partnership in the internationally acclaimed Naragonia Quartet, individually they have also been in constant demand as parts of notable bands including MANdolinMAN, Novar, Snaarmaarwaar and Hot Griselda. With these bands they play all over Europe, Brazil, China, Canada… Then, in 2020, when the world had to be locked up because of an errant virus, they finally had the time to work together on an album and start their new duo. These two virtuoso musicians enter into a dialogue, in search of beauty and the sparkling connection of playing together.\n\nMaarten Decombel: guitar\nToon Van Mierlo: accordeon",
+                "nl": "Maarten Decombel en Toon Van Mierlo zijn zeer gerespecteerde folkmuzikanten met een jarenlange passie voor nieuw gecomponeerde muziek. Naast een twintigjarige samenwerking in het internationaal befaamde Naragonia Quartet, zijn ze elk apart ook constant in trek geweest als onderdeel van noemenswaardige bands zoals MANdolinMAN, Novar, Snaarmaarwaar en Hot Griselda. Met deze bands speelden ze door heel Europa, Brazilië, China, Canada… Toen, in 2020, op het moment dat de wereld op slot moest vanwege een dolend virus, hadden ze eindelijk de tijd om samen aan een album te werken en hun nieuwe duo te beginnen. Deze twee virtuoze musici gaan de dialoog aan, op zoek naar schoonheid en de sprankelende verbinding van samenspelen.\n\nMaarten Decombel: gitaar\nToon Van Mierlo: accordeon"
+              },
+              "website": {
+                "url": "https://decombelvanmierlo.be/about/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "itchy_fingers",
+              "name": "Itchy Fingers",
+              "startTime": "14:45",
+              "endTime": "16:15",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "NL"
+              ],
+              "description": {
+                "en": "Multi-instrumentalists Erik de Jong and Tijn Berends had been playing music together for several years already, at the sessions in O’Ceallaigh’s Pub in Groningen, when they decided in early 2012 to merge their musical skills into this pocket-sized band. More than ten years later the fun is far from over. With their performances on the stages of various Dutch folk festivals (Elfia, Archeon Midwinterfair, Keltfest, CaDansa), ceilidh workshops, folk bals, listening concerts and of course still regularly at sessions, Erik and Tijn show that they’re still thoroughly enjoying the music they make together. The duo’s various CD albums (a third is in the making) clearly show that the musical possibilities are far from exhausted, so this duo will continue to keep playing for a while.\n\nErik de Jong: accordeon, bodhran and tin-whistle\nTijn Berends: guitar, Irish bouzouki, concertina, harmonica and vocals",
+                "nl": "Multi-instrumentalisten Erik de Jong en Tijn Berends speelden al enkele jaren samen muziek bij de sessies in O´Ceallaigh´s Pub in Groningen, toen zij begin 2012 besloten hun muzikale vaardigheden te bundelen in deze band op zakformaat. Ruim tien jaar later is de lol er nog lang niet af. Bij hun optredens op de podia van verschillende Nederlandse folkfestivals (Elfia, Archeon Midwinterfair, Keltfest, CaDansa), ceilidh-workshops, folkbals, luisterconcerten en uiteraard nog steeds regelmatig bij sessies, laten Erik en Tijn zien dat ze nog steeds enorm veel plezier beleven aan de muziek die zij samen maken. De verschillende cd-albums van het duo (een derde is in de maak) laten duidelijk horen dat de muzikale mogelijkheden nog lang niet uitgeput zijn, dus voorlopig blijft dit duo lekker doorspelen.\n\nErik de Jong: accordeon, bodhran en tin-whistle\nTijn Berends: gitaar, Ierse bouzouki, concertina, mondharmonica en zang"
+              },
+              "website": {
+                "url": "http://www.itchy-fingers.nl/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "id": "naragonia_quartet",
+              "name": "Naragonia Quartet",
+              "startTime": "16:45",
+              "endTime": "18:30",
+              "kind": "BAND_DANCE",
+              "countries": [
+                "BE"
+              ],
+              "description": {
+                "en": "The Naragonia Quartet is more than just an instrumental extension of the well-known duo Pascale Rubens and Toon van Mierlo, who have been active in balfolk since 2003. With their own unique repertoire and sound, the Naragonia Quartet guarantees an evening full of beautiful music that is perfect for a ball. Maarten Decombel (mandola and guitar) and Luc Pilartz (violin), together with Toon Van Mierlo (including uillean pipes, French bagpipes, clarinet, soprano saxophone and diatonic accordion) and Pascale Rubens (violin and diatonic accordion), create a very distinctive and swinging universe where it is lovely to stay.\n\nMaarten Decombel: mandola and guitar\nLuc Pilartz: violin\nToon Van Mierlo: uillean pipes, French bagpipes, clarinet, sopraansaxophone and diatonic accordeon\nPascale Rubens: viool en diatonisch accordeon",
+                "nl": "Het Naragonia Quartet is meer dan enkel een instrumentale uitbreiding van het bekende duo van Pascale Rubens en Toon van Mierlo, al actief in de balfolk sinds 2003. Met een heel eigen repertoire en eigen klank garandeert het Naragonia Quartet een avond vol prachtige muziek geknipt voor een bal. Maarten Decombel (mandola en gitaar) en Luc Pilartz (viool) creëren in combinatie met Toon Van Mierlo (onder andere uillean pipes, Franse doedelzak, klarinet, sopraansaxofoon en diatonisch accordeon) en Pascale Rubens (viool en diatonisch accordeon) een heel eigenzinnig en swingend universum waar het fijn vertoeven is.\n\nMaarten Decombel: mandola en gitaar\nLuc Pilartz: viool\nToon Van Mierlo: uillean pipes, Franse doedelzak, klarinet, sopraansaxofoon en diatonisch accordeon\nPascale Rubens: viool en diatonisch accordeon"
+              },
+              "website": {
+                "url": "http://naragonia.com/quartet/",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            },
+            {
+              "name": "Closing Ceremony",
+              "startTime": "18:30",
+              "endTime": "19:30",
+              "kind": "CEREMONY",
+              "description": {
+                "en": "Come join us in closing this wonderful festival together and dance a last dance!",
+                "nl": "Kom samen met ons dit prachtige festival afsluiten en een laatste dansje dansen!"
+              },
+              "website": {
+                "url": "https://www.cadansa.nl",
+                "icon": "web",
+                "text": {
+                  "en": "Website",
+                  "nl": "Website",
+                  "fr": "Site web"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "PROGRAMME",
+      "title": {
+        "en": "Workshops",
+        "nl": "Workshops",
+        "fr": "Ateliers"
+      },
+      "icon": "school",
+      "days": [
+        {
+          "name": {
+            "en": "Thursday",
+            "nl": "Donderdag",
+            "fr": "Jeudi"
+          },
+          "startsOn": 1698271200000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "18:00",
+              "kind": "OPEN"
+            },
+            {
+              "id": "intro_balfolk_th",
+              "name": {
+                "en": "Intro balfolk",
+                "nl": "Intro balfolkdansen"
+              },
+              "startTime": "18:30",
+              "endTime": "19:15",
+              "location": {
+                "title": {
+                  "en": "Open stage",
+                  "nl": "Open podium"
+                },
+                "action": "area:openStage"
+              },
+              "teacher": "Louise & Marco",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "Are you new in balfolk, has it been a while since you danced balfolk or do you just like to warm-up your body and feet before ball, then this is your workshop.\n\nNo workshop registration required!",
+                "nl": "Ben je nieuw in de balfolk, is het al een poosje geleden of vind je het gewoon fijn om de pasjes wat te herhalen en zo wat op te warmen voor het bal? Dan is de introductieworkshop balfolk een goede keuze voor jou.\n\nGeen workshop aanmelding nodig!"
+              }
+            },
+            {
+              "name": {
+                "en": "Time to go to sleep",
+                "nl": "Tijd om te gaan slapen"
+              },
+              "startTime": "01:00",
+              "kind": "CLOSED"
+            }
+          ]
+        },
+        {
+          "name": {
+            "en": "Friday",
+            "nl": "Vrijdag",
+            "fr": "Vendredi"
+          },
+          "startsOn": 1698357600000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "11:00",
+              "kind": "OPEN"
+            },
+            {
+              "id": "tango",
+              "name": {
+                "en": "Argentine Tango",
+                "nl": "Tango basis"
+              },
+              "startTime": "11:30",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Ballet room",
+                  "nl": "Balletzaal"
+                },
+                "action": "area:ballet"
+              },
+              "teacher": "Bart & Sofie",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "The Tango is a beautiful dance full of improvisation, connection, sensation and fun. In this workshop you will learn the basics of this beautiful dance. We’ll dance in a closed embrace, look for the rhythm in the music that suits us and take all the time for our movements. Tango is a technical dance without a fixed step structure. We therefore do not focus so much on learning figures but more on learning (body) technique. In this workshop we won’t combine Tango with other folk dances. No dance experience is required for this workshop. You must register in advance (as a leader or follower). Please note: this workshop lasts 4 hours (2 workshop blocks). As the workshop is long and there is limited space, we only ask you to participate if you really intend to participate until the end.\n\nThis workshop is fully booked.",
+                "nl": "De Tango is een prachtige dans vol improvisatie, verbinding, sensatie en plezier. In deze workshop, gegeven door Bart Boskaljon, leer je de beginselen van deze prachtige dans. We dansen in een gesloten omhelzing, zoeken naar het ritme in de muziek dat bij ons past en nemen alle tijd voor onze bewegingen. Tango is een technische dans zonder vaste passenstructuur. We richten ons dan ook niet zo zeer op het leren van figuren maar meer op het aanleren van (lichaams)techniek. In deze workshop combineren we Tango niet met andere folk dansen. Voor deze workshop is geen danservaring vereist. Je moet je vooraf inschrijven (als leider of volger). Let op: deze workshop duurt in totaal 4 uur (2 workshopblokjes). Omdat de workshop lang duurt en er maar beperkt plek is, vragen we je alleen mee te doen als je echt van plan bent tot het einde mee te doen.\n\nDeze workshop zit vol."
+              }
+            },
+            {
+              "id": "festival_skills",
+              "name": {
+                "en": "Festival Skills",
+                "nl": "Festival Skills"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Open stage",
+                  "nl": "Open podium"
+                },
+                "action": "area:openStage"
+              },
+              "teacher": "Koen Dhondt",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "How to avoid spirals in jigs and cercles; it’s a real epidemic lately and no, it’s not the fault of the beginners! How to solve waltz traffic jams near the stage? How to stop my neighbours from bumping into me…? Better floor management can make the dance experience a lot nicer for everybody. Most dancers have basic skills that give nice results on small or medium dance floors, but lack the advanced skills that are needed on (crowded) festivals. Koen has been reflecting a lot on this subject, and has some new insights to share with all of you. If you’re wondering whom this workshop is for…. if you think you have nothing to learn on this topic, well … then you should definitely come to this workshop!\n\nNo workshop registration required!",
+                "nl": "Hoe kun je spiralen in jigs en tovercirkels vermijden; het is de laatste tijd een echte epidemie en nee, het is niet de schuld van de beginners! Hoe wals-files bij het podium op te lossen? Hoe kan ik voorkomen dat mijn buren tegen me aan botsen…? Beter dansvloer-management kan de danservaring voor iedereen een stuk fijner  maken. De meeste dansers beschikken over basisvaardigheden die prima werken op kleine of middelgrote dansvloeren, maar missen de geavanceerde vaardigheden die nodig zijn op (drukke) festivals. Koen heeft veel over dit onderwerp nagedacht en heeft een aantal nieuwe inzichten die hij met jullie allemaal wil delen. Voor wie deze workshop bedoeld is, vraag je je af? Als je denkt dat je niets meer te leren hebt over dit onderwerp… dan moet je zeker naar deze workshop komen!\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "sing_and_dance_fr",
+              "name": {
+                "en": "Sing and Dance I",
+                "nl": "Zingen en dansen I"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Theatre",
+                  "nl": "Theaterzaal"
+                },
+                "action": "area:theatre"
+              },
+              "teacher": "Marion (Les Conteuses de Pas)",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Chanter pour danser / Danser pour chanter : Singing and leading the dance into the dance. We will explore how to lead the dance while being part of it. Mostly inside the round/group dances from different areas of France. How give the energy to the dance, how not to get exhausted, how to make the dancers answer you (in the song)This workshop will be given by Les Conteuses de Pas, one of the bands that will perform on our main stage.\n\nNo workshop registration required!",
+                "nl": "Zingen om te dansen en dansen om te zingen: deze combinatie samen brengt extra verdieping. We zullen verkennen hoe de dans geleid kan worden, terwijl je er zelf onderdeel van bent. Voornamelijk gecombineerd met ronde- en groepsdansen uit verschillende regio’s in Frankrijk. Hoe geef je energie aan de dans, hoe zorg je ervoor dat je niet uitgeput raakt, hoe laat je dansers je antwoorden in de zang? Deze workshop wordt gegeven door Les Conteuses de Pas, een van de bands die ook komt optreden.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "diatonic_accordeon_fr",
+              "name": {
+                "en": "Intro diatonic accordeon",
+                "nl": "Intro trekzak"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Music room Otter",
+                  "nl": "Muzieklokaal Otter"
+                }
+              },
+              "teacher": "Wouter Kuyper",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Have you always wanted to try out diatonic accordion? Curious how these instruments work? Or have you started playing recently, and could you use some help? Then join this beginner workshop!\n\nNB: There will be a limited number of instruments available. Do you have your own diatonic accordion or are able to borrow one? Take it with you!\nThere is a maximum of 10 participants.\nYou'll have to sign up for this workshop.",
+                "nl": "Altijd al eens trekzak willen uitproberen? Nieuwsgierig naar hoe zo’n instrument nou precies werkt? Of je eerste stappen al gezet, en je wilt graag wat verder komen? Kom dan naar deze introductieworkshop! Iedereen is welkom!\n\nNB: Er is een beperkt aantal instrumenten beschikbaar. Heb je een eigen trekzak of kan je er een lenen? Neem deze dan mee!\nEr is een maximum van 10 deelnemers.\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "intro_bagpipe_fr",
+              "name": {
+                "en": "Intro bagpipe",
+                "nl": "Intro doedelzak"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Music room Fox",
+                  "nl": "Muzieklokaal Vos"
+                }
+              },
+              "teacher": "Menno Wester",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Have you always wanted to play the bagpipes? During this workshop we will discover this instrument. But above all, we will play the bagpipes ourselves! Together we will try out a first melody and discover the instrument, always keeping the fun of playing first. We will delve into the bagpipes as they are played in France, Flanders and the Low Countries. These are the instruments that also appear in the paintings of Jan Steen or Pieter Brueghel. You don’t need to bring an instrument: they are provided by the Dutch Hurdy-gurdy and Bagpipe Foundation (Draailier & Doedelzak). We don’t have any Scottish or Irish bagpipes with us. This workshop is intended for anyone who wants to spend two hours of fun and is interested in these instruments from the Low Countries. No playing experience or knowledge of music is required, just some enthusiasm and courage.\n\nYou'll have to sign up for this workshop.",
+                "nl": "Heb je altijd al eens doedelzak willen spelen? In deze workshop gaan we dit instrument ontdekken. Maar bovenal gaan we zelf op een doedelzak spelen!  Samen gaan we een eerste melodie proberen en het instrument ontdekken, waarbij steeds het speelplezier voorop staat. We gaan ons verdiepen in de doedelzakken zoals die bespeeld worden in Frankrijk, Vlaanderen en de Lage Landen. Dit zijn de instrumenten die ook op de schilderijen van Jan Steen of Pieter Brueghel staan. Je hoeft geen instrument mee te nemen: die worden verzorgd door Stichting Draailier & Doedelzak. We hebben geen Schotse of Ierse doedelzakken bij ons. Deze workshop is bedoeld voor eenieder die zich twee uur met plezier wil inzetten en geïnteresseerd is in deze instrumenten uit de Lage Landen. Speelervaring of muziekkennis is niet vereist, alleen wat enthousiasme en durf.\n\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant"
+                }
+              }
+            },
+            {
+              "id": "boat_tour_fr",
+              "name": {
+                "en": "Boat Tour",
+                "nl": "Boottocht Weerribben"
+              },
+              "startTime": "12:30",
+              "endTime": "14:30",
+              "location": {
+                "title": {
+                  "en": "Weerribben",
+                  "nl": "bezoekerscentrum De Wieden"
+                }
+              },
+              "kind": "WORKSHOP_OTHER",
+              "description": {
+                "en": "Are your feet tired of dancing? Then come relax during the boat tour through national park ‘De Wieden’ (‘The Lakes’) and enjoy the stunning views this uniquely Dutch water landscape offers. Its history is reflected in the tiny houses once owned by peat cutters, the drainage windmills and… why is there a church tower standing in the water? This nature reserve is also home to a great diversity of birds, butterflies, and other animals. If you’re really lucky, you might even spot an otter!\nThe skipper will be happy to take you to the most beautiful places in National Park the Weerribben – Wieden, one of the largest “low peat” areas in Europe. Low peat (peat under water level) habitats include bog pools, wet woodland, man-made ditch systems and fen grassland. The skipper will tell you about the special history and the rich plant and animal life along the way.\n\nImportant:\n😉 You must register in advance for this workshop. A maximum of 24 people can go on a boat.\n😉 There is a contribution of 2 festival tokens (= 5,60 euro) for the tour, to help us cover the costs of the boat and guide. Hand in the coins at the Info Stand at the festival to receive your ticket for the boat.\n😉 You will need to arrange your own transport to the visitor center (Beulakerpad 1, Sint Jansklooster). There is a carpool list at the festival where you can arrange a ride.\n😉 The boat leaves at the start time of the workshop, so please be on time! The boat trip takes 2 hours.\n😉 The boats are open. Check the weather forecast in advance: on an open boat, it is colder in cool weather than on land. Bring plenty of warm clothes and keep in mind there might be some rain.",
+                "nl": "Zijn je voeten te moe om te dansen? Dan kun je tijdens een boottocht door nationaal park ‘De Wieden’ ontspannen en genieten van de bijzondere uitzichten in dit unieke waterlandschap. Je ziet de geschiedenis van het gebied terug in de huizen van de turfstekers, de tjasker molentjes en… waarom staat daar een kerktoren in het water? In het park leven ook veel verschillende vogels, vlinders, en andere dieren. Als je veel geluk hebt, zie je misschien zelfs een otter! De schipper neemt jullie graag mee naar de mooiste plekjes in Nationaal Park Weerribben – Wieden, een van de grootste laagveengebieden van Europa. De schipper vertelt onderweg over de bijzondere historie én over het rijke planten- en dierenleven.\n\nBelangrijk:\n😉 Voor deze workshop moet je je vooraf inschrijven. Er kunnen 24 mensen op een boot.\n😉 Eigen bijdrage voor de boottocht is 2 festivalmuntjes ( 5,60 euro), om ons te helpen de kosten van de boot en gids te dekken. Lever de muntjes vooraf in bij de Infostand op het festival om je toegangsbewijs voor de boot te krijgen.\n😉 De boot vertrekt precies om 12.30 uur, dus wees op tijd. De tocht duurt zo’n twee uur.\n😉 De boten zijn niet overdekt. Check tevoren het weerbericht: op het water is het kouder dan op het land. Breng genoeg warme kleding mee en houd in gedachten dat het kan regenen.\n\nJe regelt je eigen vervoer naar bezoekerscentrum De Wieden (Beulakerpad 1, Sint Jansklooster). Er is een carpoollijst op het festival waar je een lift kunt regelen."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "u_think",
+              "name": {
+                "en": "So u think u can dance?",
+                "nl": "So u think u can dance?"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Open stage",
+                  "nl": "Open podium"
+                },
+                "action": "area:openStage"
+              },
+              "teacher": "Jolanda & Janniek",
+              "level": 4,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "For everyone who feels comfortable on the dancefloor and likes to change things up a bit. Challenge your feet, ears, brain and probably also your partner! In this workshop you’re going to examine your dance-style and then find the space in that. Learn new possibilities for variations, communication, interpretation… But beware, it’s going to be crazy! The level of this workshop is advanced: you must be able to dance couple dances without having to think.\n\nNo workshop registration required!",
+                "nl": "Voor iedereen die zich comfortabel voelt op de dansvloer en graag eens wat anders wil. Daag je voeten, oren, hersenen en waarschijnlijk ook je partner uit! In deze workshop van Jolanda en Janniek ga je je dansstijl onderzoeken en daar vervolgens de ruimte in vinden. Leer nieuwe mogelijkheden voor variaties, communicatie, interpretatie… Maar pas op, het wordt (te) gek! Deze dans is voor gevorderd niveau: je moet koppeldansen kunnen dansen zonder erbij na te hoeven denken.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "branle_de_noirmoutier",
+              "name": {
+                "en": "Branle de Noirmoutier",
+                "nl": "Branle de Noirmoutier"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Theatre",
+                  "nl": "Theaterzaal"
+                },
+                "action": "area:theatre"
+              },
+              "teacher": "Saskia & Arthur",
+              "level": 2,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "Once from the isle of Noirmoutier (Vendee, Poitou, France), this previously obscure collective dance has become very popular these last 10-12 years. You may recognize it: sets of lines, seemingly chasing each other back and forth. This workshop we will discover movements and steps that get our lines dancing like it’s no-one’s business. What’s up with the arms going up? Who’s hopping the hop-step? Which line lasts the longest, yours or mine? All are welcome to join, but we may go too fast for beginners. Especially suited for anyone who has seen or danced this in ball situations before and would like to learn more about it. Spoiler: the groove, steps and arm movements seen at the balls are probably different from what you’ll learn here 🙂\n\nNo workshop registration required!",
+                "nl": "Deze voorheen obscure collectieve dans, ooit afkomstig van het eiland Noirmoutier (Vendee, Poitou, Frankrijk), is de afgelopen 10-12 jaar erg populair geworden. Je herkent hem misschien wel: twee rijen die elkaar lijken na te jagen, heen en weer. In deze workshop, gegeven door Saskia en Arthur, ontdekken we bewegingen en passen die onze rijen laten dansen alsof het niemand wat aan gaat. Hoe zit het met de armen die omhoog gaan? Wie hopt er op de hop-stap? Welke rij houdt het het langste vol, die van jou of die van mij? Iedereen is welkom om mee te dansen, maar voor beginners gaat het misschien te snel. Vooral geschikt voor iedereen die deze dans al eerder op een bal heeft gezien of gedanst en er graag meer over wil leren. Spoiler: de groove, passen en armbewegingen die je op bals ziet, zijn waarschijnlijk anders dan wat je hier zult leren…\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "interplay",
+              "name": {
+                "en": "All instruments folk",
+                "nl": "Alle-instrumenten-folk"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Music room Otter",
+                  "nl": "Muzieklokaal Otter"
+                }
+              },
+              "teacher": "Elke (Broes)",
+              "level": 3,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Do you not only love dancing and listening to folk music, but do you also enjoy making music yourself? Good news! Then come join this folk ensemble workshop. Elke De Meester, accordionist of Broes, will teach you one or more of her favorite folk tunes, which we will then arrange together and play like a real CaDansaBand at the end! This workshop is for everyone with a good basic knowledge of your instrument is required and experience playing by ear (i.e. without sheet music) is also a must.\n\nThere is a maximum of 25 participants.\nYou'll have to sign up for this workshop.",
+                "nl": "Ben je niet alleen gek van dansen op en luisteren naar folkmuziek, maar vind je het ook onwijs leuk om zelf muziek te maken? Goed nieuws! Kom dan meedoen aan deze workshop folksamenspel. Elke De Meester, accordeoniste bij Broes, leert jullie een of meerdere van haar favoriete folktunes aan, die we dan samen arrangeren en als een echte CaDansaBand kunnen spelen op het einde! Een goede basiskennis van je instrument is vereist en ervaring met spelen op gehoor (dus zonder bladmuziek) is ook een must.\n\nEr is een maximum van 25 deelnemers.\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant"
+                }
+              }
+            },
+            {
+              "id": "hurdy_gurdy_fr",
+              "name": {
+                "en": "Intro hurdy-gurdy",
+                "nl": "Intro draailier"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Music room Fox",
+                  "nl": "Muzieklokaal Vos"
+                }
+              },
+              "teacher": "Draailier & Doedelzak",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Have you always been curious about the hurdy-gurdy? Then join this introduction workshop at CaDansa! Here we will try and play the hurdy-gurdy. Together we will try to make a first melody… of course, thereby we won’t forget the most important part: try to enjoy making music.\nFor whom? This workshop is for everyone who likes to focus for two hours on playing the hurdy-gurdy. Do you have no musical experience? Perfect! It's an introduction workshop. You don't have to bring your own instrument, we will bring some gurdies.\n\nWe use hurdy-gurdies which are provided for free by the Dutch Hurdy-gurdy and Bagpipe Foundation (Stichting Draailier en Doedelzak).\nYou'll have to sign up for this workshop.",
+                "nl": "Heb je altijd al eens draailier willen spelen? Tijdens CaDansa gaan we in deze workshop dit instrument ontdekken. Maar bovenal gaan we zelf op een draailier spelen! Aan de hand van een eenvoudige, maar mooie melodie zullen we de eerste stappen op het pad van de draailier maken. Een instrument is niet nodig, die nemen wij mee.\nVoor wie bedoeld? Deze workshops is bedoeld voor eenieder die zich twee uur met plezier wil inzetten en geïnteresseerd is in deze instrumenten. Speelervaring of muziekkennis is niet vereist, alleen wat enthousiasme en durf.\n\nLeeninstrumenten worden gratis verzorgd door Stichting Draailier en Doedelzak.\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "intro_balfolk_fr",
+              "name": {
+                "en": "Intro balfolk",
+                "nl": "Intro balfolkdansen"
+              },
+              "startTime": "16:45",
+              "endTime": "17:30",
+              "location": {
+                "title": {
+                  "en": "Open stage",
+                  "nl": "Open podium"
+                },
+                "action": "area:openStage"
+              },
+              "teacher": "Louise & Marco",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "Are you new in balfolk, has it been a while since you danced balfolk or do you just like to warm-up your body and feet before ball, then this is your workshop.\n\nNo workshop registration required!",
+                "nl": "Ben je nieuw in de balfolk, is het al een poosje geleden of vind je het gewoon fijn om de pasjes wat te herhalen en zo wat op te warmen voor het bal? Dan is de introductieworkshop balfolk een goede keuze voor jou.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "name": {
+                "en": "Time to go to sleep",
+                "nl": "Tijd om te gaan slapen"
+              },
+              "startTime": "02:00",
+              "kind": "CLOSED"
+            }
+          ]
+        },
+        {
+          "name": {
+            "en": "Saturday",
+            "nl": "Zaterdag",
+            "fr": "Samedi"
+          },
+          "startsOn": 1698444000000,
+          "items": [
+            {
+              "name": {
+                "en": "We're open!",
+                "nl": "We zijn open!"
+              },
+              "startTime": "11:00",
+              "kind": "OPEN"
+            },
+            {
+              "id": "world_of_floorcraft",
+              "name": {
+                "en": "World of Floorcraft",
+                "nl": "World of Floorcraft"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Theatre",
+                  "nl": "Theaterzaal"
+                },
+                "action": "area:theatre"
+              },
+              "teacher": "Rafael & Nele",
+              "level": 2,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "Join us in mastering the art of gracefully maneuvering through bustling dance floors. You will embark on a quest that teaches you the intricate steps to avoid treading on toes, be they yours or someone else’s. Accept missions designed to teach you the skills to handle emergencies with finesse and learn when to execute evasive maneuvers. Harness the power of your inner magic to dance as if you have boundless space, even in the midst of a crowded room. Collaborate and level up with fellow enthusiasts to conquer challenges together, and you might just discover the secret to avoiding the dreaded maelstrom of chaos. Enter with caution, but also with open arms; all passionate dancers are welcome. Dress code: simplicity reigns supreme, for there will be an abundance of dancing.\n\nNo workshop registration required!",
+                "nl": "Doe mee en leer de kunst van het sierlijk manoeuvreren door drukke dansvloeren. Je begint aan een queeste waarin je de gedetailleerde stappen leert om te voorkomen dat je op tenen staat – die van jou of van iemand anders. Accepteer missies speciaal ontworpen om vaardigheden aan te leren waarmee je  noodsituaties met finesse aanpakt en weet wanneer je ontwijkingsmanoeuvres moet uitvoeren. Benut de kracht van je innerlijke magie om te dansen alsof je grenzeloze ruimte hebt, zelfs midden in een volle zaal. Werk samen en level up met mede-enthousiastelingen om samen uitdagingen te overwinnen – en misschien ontdek je wel het geheim hoe je de gevreesde maalstroom van chaos vermijdt. Treed behoedzaam binnen, maar ook met open armen; alle gepassioneerde dansers zijn welkom. Dresscode: eenvoud spant de kroon, want er zal een overvloed aan dans zijn.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "dutch_dances",
+              "name": {
+                "en": "Dutch dances",
+                "nl": "Nederlandsche dansen"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Open stage",
+                  "nl": "Open podium"
+                },
+                "action": "area:openStage"
+              },
+              "teacher": "Anita & Wim",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "Balfolk is fantastic, but there is more! During CaDansa in the Netherlands you will have the opportunity to add some Dutch dances to your repertoire. Dutch dances are mainly figure dances, ranging from simple to challenging, with beautiful melodies. And we’ll dance to live music by Wouter Kuyper (diatonic accordion), so that alone is worth it. Come join in! Everyone is welcome. The steps are not difficult, but to remember the choreographies your memory gets somewhat challenged. The workshop is given in Dutch, with English as a second language.\n\nNo workshop registration required!",
+                "nl": "Balfolk is fantastisch, maar er is meer! Tijdens CaDansa in Nederland krijg je de mogelijkheid enkele Nederlandse dansen aan je repertoire toe te voegen. Nederlandse dansen zijn vooral figuurdansen, variërend van simpel tot uitdagend, met prachtige melodieën. En we dansen op live muziek door Wouter Kuyper (trekzak), dus alleen dat is al de moeite waard. Iedereen is welkom in deze workshop van Anita en Wim. De stappen zijn niet moeilijk, maar om de choreografieën te onthouden wordt je geheugen wel wat uitgedaagd. Let op: de workshop wordt gegeven in het Nederlands, met Engels als tweede taal.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "chacarera",
+              "name": {
+                "en": "Chacarera",
+                "nl": "Chacarera/Zuid-Amerikaanse folk"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Gym Hall",
+                  "nl": "Gymzaal"
+                }
+              },
+              "teacher": "Bart Boskaljon",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "The Chacarera is an Argentine folk dance that resembles a combination of bourrées, but with a good dash of Latin added. The basics are relatively simple and in this workshop you will learn enough to be able to dance the Chacarera. We’ll not only work with the basic steps, but also with the feeling and emotions that come with the dance. Together we’ll listen to the rhythms of the Chacarera and form the dance piece by piece. Fun is an important element in the Chacarera! While the Chacarera is traditionally danced in pairs (man + woman), you do not need a partner for this workshop. Dancing experience is also not required.\n\nNo workshop registration required!",
+                "nl": "De Chacarera is een Argentijnse volksdans die lijkt op een combinatie van bourrées maar dan met een goede scheut Latin erbij. De basis is relatief eenvoudig en in deze workshop leer je genoeg om de Chacarera te kunnen dansen. We gaan niet alleen met de basispassen aan de slag maar ook met het gevoel en de emoties die bij de dans horen. We luisteren samen naar de ritmes van de Chacarera en vormen stukje voor stukje de dans. Plezier is een belangrijk element in de Chacarera! Hoewel de Chacarera traditioneel in paren (man + vrouw) gedanst wordt, heb je voor deze workshop geen partner nodig. Danservaring is ook niet vereist.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "irish_pub",
+              "name": {
+                "en": "Irish pub session",
+                "nl": "Ierse pub sessie"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Music room Otter",
+                  "nl": "Muzieklokaal Otter"
+                }
+              },
+              "teacher": "Erik de Jong",
+              "level": 3,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "During this workshop, we will look at various characteristics of an Irish pub session. We’ll focus on the instrumental part of the session: the tunes. A bit of background is provided, such as: What is an Irish pub session and what exactly happens? What’s nice about it? What is the etiquette at an (average) Irish session? How do you best prepare yourself? And so forth. But of course we are not there to talk, but to make music! So of course that’s what we’ll mostly do. We’ll look at the different types of tunes you can encounter at an Irish session. The most common are jigs and reels, but there are many more types, which differ in time signature and tempo. Not all Irish music is easy to play in one go, so the teacher will email you some sheet music in advance, so that you can take a look at it (if you wish). We won’t immediately tackle the most difficult tunes, of course, but we will try as many different tunes as possible, so that there is a lot of variety.\nThe workshop is intended for instrumentalists who know their way around their instrument (reasonably) well*. Both melody instruments and accompaniment instruments (such as percussion and chord instruments) can participate. Irish music is often played smoothly, but we’ll build up the pace slowly. * In principle, all melody instruments can participate, but you have to take this into account that if you play a B-flat instrument (such as a clarinet), you will have to play with a lot of sharps.\n\nYou'll have to sign up for this workshop.",
+                "nl": "Tijdens deze workshop komen verschillende eigenschappen van een Ierse pubsessie naar voren. We richten ons hier op het puur instrumentale onderdeel van de sessie: de tunes. Een beetje achtergrond komt voorbij, zoals: wat is een Ierse pubsessie en wat gebeurt er precies? Wat is er leuk aan? Wat is de etiquette bij een (gemiddelde) Ierse sessie? Hoe bereid je je zelf het beste voor? Enzovoorts. Maar we zijn er natuurlijk niet om te praten, maar om muziek te maken! Dus dat gaan we uiteraard vooral doen. We kijken naar de verschillende soorten tunes die je tegen kunt komen op een Ierse sessie. De meest voorkomende zijn de jigs en reels, maar er zijn nog veel meer soorten, die verschillen in maatsoort en tempo. Niet alle Ierse muziek is zomaar makkelijk in één keer mee te spelen, daarom mailt de docent, Erik de Jong, je van tevoren wat bladmuziek, zodat je (als je dat wil) er alvast even naar kunt kijken. We zullen niet meteen de moeilijkste tunes onder handen nemen natuurlijk, maar wel zoveel mogelijk verschillende, zodat er veel afwisseling in zit. De workshop is bedoeld voor instrumentalisten die (redelijk) goed de weg weten op hun instrument*. Zowel melodie-instrumenten als begeleidingsinstrumenten (zoals percussie en akkoord-instrumenten) kunnen meedoen. Ierse muziek wordt vaak vlot gespeeld, maar we zullen het tempo langzaam opbouwen. * In principe kunnen alle melodie-instrumenten meedoen, alleen moet je er rekening mee houden dat als je een bes-instrument bespeelt (zoals een klarinet), je met veel kruisen zult moeten spelen.\n\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "sing_and_dance_sa",
+              "name": {
+                "en": "Sing and Dance II",
+                "nl": "Zingen en dansen II"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Ballet room",
+                  "nl": "Balletzaal"
+                },
+                "action": "area:ballet"
+              },
+              "teacher": "Marion (Les Conteuses de Pas)",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "We will explore how to lead the danse while not being part of it. Using several balfolk dances that you can’t sing to while dancing, like the ones that are too exhausting, or the couple dances. How to have the right rythm and keep it all through the dance, how to give the right impulse on the right time. This workshop will be given by Les Conteuses de Pas, one of the bands that will perform on our main stage.\n\nNo workshop registration required!",
+                "nl": "We zullen verkennen hoe we een gezongen dans kunnen leiden, zonder zelf mee te dansen. Met verschillende balfolkdansen waarbij je niet kunt zingen tijdens het dansen, zoals de dansen die te vermoeiend zijn, of de koppeldansen. Hoe geef je goed ritme aan en hoe behoud je dat tijdens het dansen, hoe geef je de juiste impulsen op de juiste tijden? Deze workshop wordt gegeven door Les Conteuses de Pas, een van de bands die deze dag ook komt optreden.\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "hurdy_gurdy_sa",
+              "name": {
+                "en": "Intro hurdy-gurdy",
+                "nl": "Intro draailier"
+              },
+              "startTime": "11:30",
+              "endTime": "13:30",
+              "location": {
+                "title": {
+                  "en": "Music room Fox",
+                  "nl": "Muzieklokaal Vos"
+                }
+              },
+              "teacher": "Draailier & Doedelzak",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Have you always been curious about the hurdy-gurdy? Then join this introduction workshop at CaDansa! Here we will try and play the hurdy-gurdy. Together we will try to make a first melody… of course, thereby we won’t forget the most important part: try to enjoy making music.\nFor whom? This workshop is for everyone who likes to focus for two hours on playing the hurdy-gurdy. Do you have no musical experience? Perfect! It's an introduction workshop. You don't have to bring your own instrument, we will bring some gurdies.\n\nWe use hurdy-gurdies which are provided for free by the Dutch Hurdy-gurdy and Bagpipe Foundation (Stichting Draailier en Doedelzak).\nYou'll have to sign up for this workshop.",
+                "nl": "Heb je altijd al eens draailier willen spelen? Tijdens CaDansa gaan we in deze workshop dit instrument ontdekken. Maar bovenal gaan we zelf op een draailier spelen! Aan de hand van een eenvoudige, maar mooie melodie zullen we de eerste stappen op het pad van de draailier maken. Een instrument is niet nodig, die nemen wij mee.\nVoor wie bedoeld? Deze workshops is bedoeld voor eenieder die zich twee uur met plezier wil inzetten en geïnteresseerd is in deze instrumenten. Speelervaring of muziekkennis is niet vereist, alleen wat enthousiasme en durf.\n\nLeeninstrumenten worden gratis verzorgd door Stichting Draailier en Doedelzak.\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "boat_tour_sa",
+              "name": {
+                "en": "Boat Tour",
+                "nl": "Boottocht Weerribben"
+              },
+              "startTime": "12:30",
+              "endTime": "14:30",
+              "location": {
+                "title": {
+                  "en": "Weerribben",
+                  "nl": "bezoekerscentrum De Wieden"
+                }
+              },
+              "kind": "WORKSHOP_OTHER",
+              "description": {
+                "en": "Are your feet tired of dancing? Then come relax during the boat tour through national park ‘De Wieden’ (‘The Lakes’) and enjoy the stunning views this uniquely Dutch water landscape offers. Its history is reflected in the tiny houses once owned by peat cutters, the drainage windmills and… why is there a church tower standing in the water? This nature reserve is also home to a great diversity of birds, butterflies, and other animals. If you’re really lucky, you might even spot an otter!\nThe skipper will be happy to take you to the most beautiful places in National Park the Weerribben – Wieden, one of the largest “low peat” areas in Europe. Low peat (peat under water level) habitats include bog pools, wet woodland, man-made ditch systems and fen grassland. The skipper will tell you about the special history and the rich plant and animal life along the way.\n\nImportant:\n😉 You must register in advance for this workshop. A maximum of 24 people can go on a boat.\n😉 There is a contribution of 2 festival tokens (= 5,60 euro) for the tour, to help us cover the costs of the boat and guide. Hand in the coins at the Info Stand at the festival to receive your ticket for the boat.\n😉 You will need to arrange your own transport to the visitor center (Beulakerpad 1, Sint Jansklooster). There is a carpool list at the festival where you can arrange a ride.\n😉 The boat leaves at the start time of the workshop, so please be on time! The boat trip takes 2 hours.\n😉 The boats are open. Check the weather forecast in advance: on an open boat, it is colder in cool weather than on land. Bring plenty of warm clothes and keep in mind there might be some rain.",
+                "nl": "Zijn je voeten te moe om te dansen? Dan kun je tijdens een boottocht door nationaal park ‘De Wieden’ ontspannen en genieten van de bijzondere uitzichten in dit unieke waterlandschap. Je ziet de geschiedenis van het gebied terug in de huizen van de turfstekers, de tjasker molentjes en… waarom staat daar een kerktoren in het water? In het park leven ook veel verschillende vogels, vlinders, en andere dieren. Als je veel geluk hebt, zie je misschien zelfs een otter! De schipper neemt jullie graag mee naar de mooiste plekjes in Nationaal Park Weerribben – Wieden, een van de grootste laagveengebieden van Europa. De schipper vertelt onderweg over de bijzondere historie én over het rijke planten- en dierenleven.\n\nBelangrijk:\n😉 Voor deze workshop moet je je vooraf inschrijven. Er kunnen 24 mensen op een boot.\n😉 Eigen bijdrage voor de boottocht is 2 festivalmuntjes ( 5,60 euro), om ons te helpen de kosten van de boot en gids te dekken. Lever de muntjes vooraf in bij de Infostand op het festival om je toegangsbewijs voor de boot te krijgen.\n😉 De boot vertrekt precies om 12.30 uur, dus wees op tijd. De tocht duurt zo’n twee uur.\n😉 De boten zijn niet overdekt. Check tevoren het weerbericht: op het water is het kouder dan op het land. Breng genoeg warme kleding mee en houd in gedachten dat het kan regenen.\n\nJe regelt je eigen vervoer naar bezoekerscentrum De Wieden (Beulakerpad 1, Sint Jansklooster). Er is een carpoollijst op het festival waar je een lift kunt regelen."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "makers_market",
+              "name": {
+                "en": "Makers' market",
+                "nl": "Kleedjesmarkt"
+              },
+              "startTime": "13:30",
+              "endTime": "17:00",
+              "location": {
+                "title": {
+                  "en": "Foyer",
+                  "nl": "Foyer"
+                }
+              },
+              "kind": "MARKET",
+              "description": {
+                "en": "On our makers' market you can sell your own stuff!\n\nPlease note: it is not allowed to sell food and/or drinks, as well as items that are prohibited from sale or distribution in the Netherlands.",
+                "nl": "Op de kleedjesmarkt kan je je eigen dingen verkopen!\n\nLet op: het is niet toegestaan eten en/of drinken te verkopen, evenals artikelen die niet in Nederland verhandeld mogen worden."
+              }
+            },
+            {
+              "id": "haka",
+              "name": {
+                "en": "Cancelled: Haka",
+                "nl": "Geannuleerd: Haka"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00"
+            },
+            {
+              "id": "wishes_and_desires",
+              "name": {
+                "en": "Wishes and Desires",
+                "nl": "Wensen en verlangens"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Theatre",
+                  "nl": "Theaterzaal"
+                },
+                "action": "area:theatre"
+              },
+              "teacher": "Bart-Jan",
+              "level": 0,
+              "kind": "WORKSHOP_OTHER",
+              "description": {
+                "en": "A workshop about feeling and expressing your desires. About recognizing your yesses and your no’s. In a playful way we’ll explore being open about your wishes, and learn ways to communicate about consent and limits. We’ll start with tuning in to ourselves and then connecting with others. We’ll practice talking about your boundaries and experience how easy connections can become when you trust the other person to be clear about them. The workshop aims at experience and consists of a set of connection-games and a little theory. Fun for anyone interested in connecting with other people in an authentic way. The workshop may entail touch. You always can set your own boundaries and we’ll respect anyones pace. Anyone is welcome to join!\n\nNo workshop registration required!",
+                "nl": "Een workshop over het voelen en uiten van je verlangens. Over het herkennen van je ja’s en je nee’s. Op een speelse manier onderzoeken we hoe we open kunnen zijn over onze wensen, en leren we manieren om te communiceren over toestemming en grenzen. We beginnen eerst met afstemmen op onszelf om vervolgens verbinding te maken met anderen. We oefenen met praten over je grenzen en ervaren hoe makkelijk connecties kunnen worden als je erop vertrouwt dat de ander daar duidelijk over is. De workshop is gericht op ervaring en bestaat uit een set verbindingsspelletjes en een stukje theorie. Leuk voor iedereen die op een authentieke manier met andere mensen wil verbinden. Aanraking kan een onderdeel zijn van de workshop. Je kunt altijd je eigen grenzen stellen en we respecteren ieders tempo. Iedereen is welkom om mee te doen!\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "Bourrée Berry",
+              "name": {
+                "en": "Bourrée Berry",
+                "nl": "Bourrée Berry"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Open stage",
+                  "nl": "Open podium"
+                },
+                "action": "area:openStage"
+              },
+              "teacher": "Saskia & Arthur",
+              "level": 1,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "It’s time for bourrée! We look forward to exploring possibilities of play in, what we call, bourrée de Berry. This workshop is great for those who enjoy dancing these bourrées, and could use some technical skills: to dance smoothly, have fun improvising and discover group bourrées. In this workshop we will spend some time on the steps and some key elements that make up the moves: the music, body orientation and body position in space. As a bonus, you will learn two choreographed group bourrées, in quartet and in lines, that have all these elements in them. We will then isolate the moves and use them as our improv skills with just one partner across from us (‘as usual’). This workshop is meant for everyone who’ve danced bourée before (a few times). You’ve got the enthusiasm, so now is a great time to polish off and spice up your moves. Best suited for those who feel at home with ‘(semi-)beginner’ or ‘intermediate’, but all are welcome. And, did you know? These bourrées are often called “bourrée in 2 times” but did you know that musically these can be in 3 times as well?\n\nNo workshop registration required!",
+                "nl": "Het is tijd voor bourrée! We kijken ernaar uit om de speelmogelijkheden te verkennen in wat wij bourrée de Berry noemen. Deze workshop is geweldig voor degenen die graag deze bourrées dansen en wat technische vaardigheden kunnen gebruiken: soepel dansen, plezier hebben bij het improviseren en groepsbourrées ontdekken. In deze workshop zullen we wat tijd besteden aan de passen en enkele sleutelelementen waaruit de bewegingen bestaan: de muziek, lichaamsoriëntatie en lichaamspositie in de ruimte. Als bonus leer je twee gechoreografeerde groepsbourrées, in kwartet en in rijen, die al deze elementen in zich hebben. Vervolgens zullen we de bewegingen isoleren en ze inzetten als onze improvisatie-vaardigheden met slechts één partner tegenover ons (‘zoals gewoonlijk’). Deze workshop van Saskia en Arthur is voor degenen die al eerder bourrée hebben gedanst (een aantal keer?). Je hebt het enthousiasme, dus nu is het een goed moment om je moves bij te poetsen en wat pit te geven. Meest geschikt voor wie zich thuis voelt bij ‘(semi-)beginner’ of ‘intermediate’, maar iedereen is welkom. Overigens…. deze bourrées worden vaak “bourrée in 2 tijden” genoemd, maar wist je dat ze muzikaal ook in 3 kunnen?\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "musicality",
+              "name": {
+                "en": "Musicality for dancers",
+                "nl": "Muzikaliteit voor dansers"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Gym Hall",
+                  "nl": "Gymzaal"
+                }
+              },
+              "teacher": "Koen Dhondt",
+              "level": 0,
+              "kind": "WORKSHOP_DANCE",
+              "description": {
+                "en": "The wonderful music of for example Naragonia is full of little treasures that we can use as a dancer. Curious about musical phenomena that are common in folk tunes? And ready to explore their impact on your dancing? Not afraid to (learn to) improvise on music? Then join this workshop! No musical knowledge required. We’re going to work with info & tips on understanding folk music : structure, rhythms, dances, styles, improvisations, differences, as well as different listening exercises, combined with variations in connection with the music of Naragonia and we’ll also practise how to improvise your own variations in connection with the music, during the dance.\n\nNo workshop registration required!",
+                "nl": "Hoe kun je spiralen in jigs en tovercirkels vermijden; het is de laatste tijd een echte epidemie en nee, het is niet de schuld van de beginners! Hoe wals-files bij het podium op te lossen? Hoe kan ik voorkomen dat mijn buren tegen me aan botsen…? Beter dansvloer-management kan de danservaring voor iedereen een stuk fijner  maken. De meeste dansers beschikken over basisvaardigheden die prima werken op kleine of middelgrote dansvloeren, maar missen de geavanceerde vaardigheden die nodig zijn op (drukke) festivals. Koen heeft veel over dit onderwerp nagedacht en heeft een aantal nieuwe inzichten die hij met jullie allemaal wil delen. Voor wie deze workshop bedoeld is, vraag je je af? Als je denkt dat je niets meer te leren hebt over dit onderwerp… dan moet je zeker naar deze workshop komen!\n\nGeen workshopaanmelding nodig!"
+              }
+            },
+            {
+              "id": "diatonic_accordeon_sa",
+              "name": {
+                "en": "Intro diatonic accordeon",
+                "nl": "Intro trekzak"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Music room Otter",
+                  "nl": "Muzieklokaal Otter"
+                }
+              },
+              "teacher": "Wouter Kuyper",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Have you always wanted to try out diatonic accordion? Curious how these instruments work? Or have you started playing recently, and could you use some help? Then join this beginner workshop!\n\nNB: There will be a limited number of instruments available. Do you have your own diatonic accordion or are able to borrow one? Take it with you!\nThere is a maximum of 10 participants.\nYou'll have to sign up for this workshop.",
+                "nl": "Altijd al eens trekzak willen uitproberen? Nieuwsgierig naar hoe zo’n instrument nou precies werkt? Of je eerste stappen al gezet, en je wilt graag wat verder komen? Kom dan naar deze introductieworkshop! Iedereen is welkom!\n\nNB: Er is een beperkt aantal instrumenten beschikbaar. Heb je een eigen trekzak of kan je er een lenen? Neem deze dan mee!\nEr is een maximum van 10 deelnemers.\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant!"
+                }
+              }
+            },
+            {
+              "id": "intro_bagpipe_sa",
+              "name": {
+                "en": "Intro bagpipe",
+                "nl": "Intro doedelzak"
+              },
+              "startTime": "14:00",
+              "endTime": "16:00",
+              "location": {
+                "title": {
+                  "en": "Music room Fox",
+                  "nl": "Muzieklokaal Vos"
+                }
+              },
+              "teacher": "Menno Wester",
+              "level": 0,
+              "kind": "WORKSHOP_MUSIC",
+              "description": {
+                "en": "Have you always wanted to play the bagpipes? During this workshop we will discover this instrument. But above all, we will play the bagpipes ourselves! Together we will try out a first melody and discover the instrument, always keeping the fun of playing first. We will delve into the bagpipes as they are played in France, Flanders and the Low Countries. These are the instruments that also appear in the paintings of Jan Steen or Pieter Brueghel. You don’t need to bring an instrument: they are provided by the Dutch Hurdy-gurdy and Bagpipe Foundation (Draailier & Doedelzak). We don’t have any Scottish or Irish bagpipes with us. This workshop is intended for anyone who wants to spend two hours of fun and is interested in these instruments from the Low Countries. No playing experience or knowledge of music is required, just some enthusiasm and courage.\n\nYou'll have to sign up for this workshop.",
+                "nl": "Heb je altijd al eens doedelzak willen spelen? In deze workshop gaan we dit instrument ontdekken. Maar bovenal gaan we zelf op een doedelzak spelen!  Samen gaan we een eerste melodie proberen en het instrument ontdekken, waarbij steeds het speelplezier voorop staat. We gaan ons verdiepen in de doedelzakken zoals die bespeeld worden in Frankrijk, Vlaanderen en de Lage Landen. Dit zijn de instrumenten die ook op de schilderijen van Jan Steen of Pieter Brueghel staan. Je hoeft geen instrument mee te nemen: die worden verzorgd door Stichting Draailier & Doedelzak. We hebben geen Schotse of Ierse doedelzakken bij ons. Deze workshop is bedoeld voor eenieder die zich twee uur met plezier wil inzetten en geïnteresseerd is in deze instrumenten uit de Lage Landen. Speelervaring of muziekkennis is niet vereist, alleen wat enthousiasme en durf.\n\nJe zal je voor deze workshop moeten inschrijven."
+              },
+              "website": {
+                "url": "https://www.eventbrite.nl/e/workshops-cadansa-2023-tickets-726102410857",
+                "icon": "clipboard-outline",
+                "text": {
+                  "en": "Register now!",
+                  "nl": "Registreer nu!",
+                  "fr": "Registrez-vous maintenant"
+                }
+              }
+            },
+            {
+              "name": {
+                "en": "Time to go to sleep",
+                "nl": "Tijd om te gaan slapen"
+              },
+              "startTime": "03:00",
+              "kind": "CLOSED"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

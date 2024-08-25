@@ -1,4 +1,4 @@
-{
+	{
   "workshopLevels": {
     "0": {
       "name": {
@@ -16,21 +16,21 @@
     },
     "2": {
       "name": {
-        "en": "Intermediate",
+        "en": "Slightly experienced",
         "nl": "Begonners"
       },
       "icon": "circle-slice-4"
     },
     "3": {
       "name": {
-        "en": "Advanced",
+        "en": "Intermediate",
         "nl": "Halfgevorderden"
       },
       "icon": "circle-slice-6"
     },
     "4": {
       "name": {
-        "en": "Expert",
+        "en": "Advanced",
         "nl": "Gevorderden"
       },
       "icon": "circle-slice-8"
@@ -377,9 +377,9 @@
               "alignment": 1,
               "fontSize": 48,
               "text": {
-                "en": "Music\nworkshops",
-                "nl": "Muziek-\nworkshops",
-                "fr": "Ateliers\nde musique"
+                "en": "Music\nrooms",
+                "nl": "Muziek-\nlokalen",
+                "fr": "Chambres\nde musique"
               }
             }
           ]
@@ -1347,9 +1347,10 @@
               "endTime": "16:30",
               "location": {
                 "title": {
-                  "en": "Music room Otter",
-                  "nl": "Muzieklokaal Otter"
-                }
+                  "en": "Quiet space",
+                  "nl": "Rustruimte"
+                },
+                "action": "area:quiet"
               },
               "teacher": "Bruno le Tron",
               "level": 3,
@@ -1378,8 +1379,8 @@
               "endTime": "16:30",
               "location": {
                 "title": {
-                  "en": "Music room Mouse",
-                  "nl": "Muzieklokaal Muis"
+                  "en": "Music room Otter",
+                  "nl": "Muzieklokaal Otter"
                 }
               },
               "teacher": "Ies Muller",
@@ -1800,39 +1801,6 @@
           ]
         }
       ]
-    },
-    {
-      "type": "FEED",
-      "title": {
-        "en": "News",
-        "nl": "Nieuws",
-        "fr": "Nouveautés"
-      },
-      "icon": "bullhorn",
-      "feedUrl": {
-        "en": "https://www.cadansa.nl/tag/app/feed/?post_type=nieuws",
-        "nl": "https://www.cadansa.nl/nl/tag/app-nl/feed/?post_type=nieuws"
-      },
-      "feedEmptyText": {
-        "en": "There is no news at the moment. Check again later!",
-        "nl": "Er is nu even geen nieuws. Kijk later nog eens!",
-        "fr": "Il n'y a pas de nouvelles pour l'instant. Veuillez réessayez plus tard!"
-      },
-      "supportsUnread": true
-    },
-    {
-      "type": "INFO",
-      "title": {
-        "en": "Info",
-        "nl": "Info",
-        "fr": "Infos"
-      },
-      "icon": "information",
-      "content": {
-        "en": "<h3><strong>FAQ</strong></h3><p><strong>How do I sign up for the open stage?</strong><br/>At this moment, the open stage is filled. You can sign up for the waitlist up until Monday October 17th, you can sign up by sending an e-mail to <a href=\"mailto:openstage@cadansa.nl\">openstage@cadansa.nl</a>. After this date, you can sign up at the festival if there are spots left, just check with the Open Stage Volunteers!</p><p><strong>Will there be a children's programme?</strong><br/>No, we don't have a children's programme this year. Of course, you're welcome to bring your kids. Children under the age of 14 can enter for free, but they do have to be under supervision of an adult (18+).</p><p><strong>Help! I lost my ticket, what should I do?</strong><br/>Don't panic! You can request your ticket through the <a href=\"https://www.eventbrite.co.uk/support/articles/en_US/Troubleshooting/where-are-my-tickets?lg=en_GB\">Eventbrite website</a>. Otherwise our heros at the entrance are happy to try to assist you.</p><p><strong>CaDaily? What is that and where can I send stuff for it?</strong><br/>The CaDaily is the festival newspaper of CaDansa. You can read all about the latest news, updates, fun facts, gossip and pictures about all that what was happening 'the night before the day after'. You can find the CaDaily often at the bar and see it digitally at our website. If you want to send us stuff for the CaDaily, you can do it through <a href=\"mailto:cadaily@cadansa.nl\">CaDaily@cadansa.nl</a> or at the information stand.</p><p><strong>I have another question. Where can I find more information?</strong><br/>Are you at the festival? Visit us at the information stand. They're happy to help you! Are you somewhere else? Contact us through our socials or send an e-mail to <a href=\"mailto:questions@cadansa.nl\">questions@cadansa.nl</a>.</p>",
-        "nl": "<h3><strong>FAQ</strong></h3><p><strong>Hoe geef ik me op voor het open podium?</strong><br/>Momenteel zijn de plekken voor het open podium vergeven. Je kan je opgeven voor de wachtlijst tot en met maandag 17 oktober door een e-mail te sturen naar <a href=\"mailto:openstage@cadansa.nl\">openstage@cadansa.nl</a>. Na deze datum kan je je opgeven op het festival als er nog plekken over zijn, check dit met onze open podium vrijwilligers!</p><p><strong>Is er een kinderprogramma?</strong><br/>Nee, dit jaar is er geen kinderprogramma. Je mag uiteraard je kinderen meenemen, maar we bieden geen opvang. Kinderen onder de 14 jaar kunnen gratis naar binnen, maar ze dienen wel onder begeleiding van een volwassene (18+) te staan.</p><p><strong>Help! Ik ben mijn ticket kwijt. Wat nu?</strong><br/>Geen paniek! Je kan ze opvragen op de <a href=\"https://www.eventbrite.nl/support/articles/nl_NL/Troubleshooting/waar-zijn-mijn-tickets?lg=nl_NL\">website van Eventbrite</a>, en anders kunnen onze helden bij de ingang je vast verder helpen.</p><p><strong>CaDaily? Wat is dat en waar kan ik kopij aanleveren?</strong><br/>De CaDaily is de festivalkrant van CaDansa. Hierin vind je de laatste nieuwtjes en updates, grappige feiten en interessante roddels en foto's over alles wat er gebeurde 'the night before the day after'. Je kan de CaDaily vaak bij de bar vinden en je kan hem digitaal bekijken op onze site. Kopij aanleveren voor de CaDaily kan via <a href=\"mailto:cadaily@cadansa.nl\">CaDaily@cadansa.nl</a> of bij de infostand.</p><p><strong>Ik heb een andere vraag. Waar kan ik meer informatie krijgen?</strong><br/>Ben je op het festival? Loop dan langs onze infostand, ze helpen je graag verder. Ben je niet op het festival? Stel ons een vraag via onze socials of mail ons op <a href=\"mailto:questions@cadansa.nl\">questions@cadansa.nl</a>.</p>"
-      },
-      "linkColor": [101, 36, 36]
     }
   ]
 }

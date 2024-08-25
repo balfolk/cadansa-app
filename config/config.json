@@ -38,6 +38,16 @@
       },
       "events": [
         {
+          "id": "cadansa2023",
+          "title": "CaDansa 2023",
+          "startDate": "2023-10-26",
+          "endDate": "2023-10-29",
+          "avatar": "assets/images/app_image_2023.png",
+          "config": "config/cadansa2023.json",
+          "primarySwatchColor": [255, 155, 0],
+          "secondaryColor": [85, 25, 235]
+        },
+        {
           "id": "cadansa2022",
           "title": "CaDansa 2022",
           "startDate": "2022-10-20",
