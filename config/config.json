@@ -32,6 +32,25 @@
   "eventSections": [
     {
       "title": {
+          "en": "Upcoming event",
+          "nl": "Komend evenement",
+          "fr": "Événement à venir"
+        },
+      "events": [
+        {
+          "id": "cadansa2024",
+          "title": "CaDansa 2024",
+          "startDate": "2024-10-31",
+          "endDate": "2024-11-03",
+          "avatar": "https://www.cadansa.nl/wp-content/uploads/app__image_2024.png",
+          "config": "config/cadansa2024.json",
+          "primarySwatchColor": [78, 86, 12],
+          "secondaryColor": [0, 0, 0]
+        }
+      ]
+    },
+    {
+      "title": {
         "en": "Past events",
         "nl": "Voorgaande evenementen",
         "fr": "Événements précédents"
@@ -84,13 +103,13 @@
       }
     },
     "terms": {
-      "en": "<p>This app is provided to you free of charge and without warranty of any kind, express or implied. No rights can be derived from the information in this app. Nor can Lennaert Bel, CaDansa Balfolk Festival, Stichting Balfolkfabriek, or any of their employees, associates or contractors be held liable for incorrect and/or incomplete information which might occur in this app as well as for any results, including damages, related to the usage of the app and the information contained therein.</p><p>No information or data in this app may be copied, distributed, or published without our explicit written permission.</p>",
-      "nl": "<p>Deze app wordt gratis aangeboden zonder enige vorm van garantie, expliciet of geïmpliceerd. Het is niet mogelijk enige rechten te ontlenen aan de informatie in deze app. Evenmin kan Lennaert Bel, CaDansa Balfolk Festival, Stichting Balfolkfabriek, of hun medewerkers of andere geassocieerde personen aansprakelijk gesteld worden voor onjuiste en/of onvolledige informatie welke in deze app zouden kunnen voorkomen, evenmin voor enige schade gerelateerd aan het gebruik van de app en de informatie in de app.</p><p>De informatie en gegevens van deze app mogen zonder onze nadrukkelijke schriftelijke toestemming niet worden vermenigvuldigd of gepubliceerd.</p>"
+      "en": "<p>This app is provided to you free of charge and without warranty of any kind, express or implied. No rights can be derived from the information in this app. Nor can CaDansa Balfolk Festival, Stichting Balfolkfabriek, or any of their employees, associates or contractors be held liable for incorrect and/or incomplete information which might occur in this app as well as for any results, including damages, related to the usage of the app and the information contained therein.</p><p>No information or data in this app may be copied, distributed, or published without our explicit written permission.</p>",
+      "nl": "<p>Deze app wordt gratis aangeboden zonder enige vorm van garantie, expliciet of geïmpliceerd. Het is niet mogelijk enige rechten te ontlenen aan de informatie in deze app. Evenmin kan CaDansa Balfolk Festival, Stichting Balfolkfabriek, of hun medewerkers of andere geassocieerde personen aansprakelijk gesteld worden voor onjuiste en/of onvolledige informatie welke in deze app zouden kunnen voorkomen, evenmin voor enige schade gerelateerd aan het gebruik van de app en de informatie in de app.</p><p>De informatie en gegevens van deze app mogen zonder onze nadrukkelijke schriftelijke toestemming niet worden vermenigvuldigd of gepubliceerd.</p>"
     },
     "copyright": {
-      "en": "Lennaert Bel. All rights reserved.",
-      "nl": "Lennaert Bel. Alle rechten voorbehouden.",
-      "fr": "Lennaert Bel. Tous droits réservés."
+      "en": "Stichting Balfolkfabriek. All rights reserved.",
+      "nl": "Stichting Balfolkfabriek. Alle rechten voorbehouden.",
+      "fr": "Stichting Balfolkfabriek. Tous droits réservés."
     }
   }
 }
