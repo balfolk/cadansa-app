@@ -19,5 +19,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - uses: subosito/flutter-action@v2
+      - run: flutter config --no-analytics --no-cli-animations
       - run: flutter pub get
       - run: flutter test
