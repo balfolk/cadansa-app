@@ -445,7 +445,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     await widget.sharedPreferences.setStringList(
         LOCALE_KEY,
         [locale.languageCode, locale.scriptCode, locale.countryCode]
-            .whereNotNull()
+            .nonNulls
             .toList());
   }
 

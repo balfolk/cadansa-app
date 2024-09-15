@@ -105,7 +105,7 @@ class FloorArea {
   Path get path => Path()..addPolygon(_points.toList(), true);
 
   Path? getTransformedPath(final Offset? Function(Offset) transformation) {
-    final points = List<Offset>.unmodifiable(_points.map(transformation).whereNotNull());
+    final points = List<Offset>.unmodifiable(_points.map(transformation).nonNulls);
     if (points.isEmpty) return null;
     return Path()..addPolygon(points, true);
   }
