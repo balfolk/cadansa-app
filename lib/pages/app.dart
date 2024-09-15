@@ -465,8 +465,12 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
           systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(legal.labelTerms.get(locale)),
         ),
-        body: Html(
-          data: '<h1>${widget.packageInfo.appName}</h1>${legal.terms.get(locale)}',
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Html(
+            data:
+                '<h1>${widget.packageInfo.appName}</h1>${legal.terms.get(locale)}',
+          ),
         ),
       );
     }));

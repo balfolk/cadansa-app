@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
@@ -252,13 +253,14 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
             ),
             child: TextButton(
               onPressed: hasAction ? () => _onAreaPopupPressed(action) : null,
-              child: Text(
+              child: AutoSizeText(
                 title,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: hasAction ? theme.primaryColor : null,
                   fontFamily: MAP_FONT_FAMILY,
                 ),
                 textAlign: TextAlign.center,
+                maxLines: 1,
               ),
             ),
           ),

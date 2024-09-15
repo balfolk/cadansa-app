@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/map.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/widgets/map.dart';
@@ -37,7 +38,15 @@ class MapPageState extends State<MapPage> {
   List<Tab> get tabs {
     final locale = Localizations.localeOf(context);
     return widget.mapData.floors
-        .map((floor) => Tab(text: floor.title.get(locale)))
+        .map(
+          (floor) => Tab(
+            child: AutoSizeText(
+              floor.title.get(locale),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+            ),
+          ),
+        )
         .toList(growable: false);
   }
 
