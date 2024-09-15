@@ -96,5 +96,5 @@ The simulated devices' language should be set to "English (UK)", and the region 
 Before taking the screenshots, use the following command to make the status bar prettier (noon local time on the first day of CaDansa that year, make sure to update the date):
 
 ```shell
-xcrun simctl status_bar booted override --time "2022-10-20T12:00:00+02:00" --cellularBars 4 --batteryLevel 100
+xcrun simctl status_bar booted override --time "2024-10-31T12:00:00+02:00" --cellularBars 4 --batteryLevel 100
 ```

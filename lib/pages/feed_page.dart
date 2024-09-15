@@ -3,7 +3,6 @@ import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:cadansa_app/util/refresher.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -207,7 +206,7 @@ class FeedItem extends StatelessWidget {
         ? DateFormat.yMMMMEEEEd(locale.toLanguageTag()).add_jm().format(pubDate)
         : null;
 
-    final parts = [item.author, dateTime].whereNotNull();
+    final parts = [item.author, dateTime].nonNulls;
     return parts.where((part) => part.isNotEmpty).join(' • ');
   }
 }
