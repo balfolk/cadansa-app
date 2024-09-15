@@ -128,6 +128,10 @@ Future<bool> _requestPermissions() async {
       badge: _requestBadge,
       sound: _requestSound,
     ) ?? false;
+  } else if (Platform.isAndroid) {
+    return await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission() ?? false;
   }
   return true;
 }
