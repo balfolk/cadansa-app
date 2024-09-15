@@ -1,5 +1,4 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sprintf/sprintf.dart';
@@ -175,10 +174,4 @@ Color? parseColor(final dynamic json) {
     parseNum(json[2])!.toInt(),
     parseNum((json as Iterable).elementAtOrNull(3))?.toDouble() ?? 1.0,
   );
-}
-
-MaterialColor? parseMaterialColor(final dynamic json) {
-  final color = parseColor(json);
-  if (color == null) return null;
-  return createMaterialColor(color);
 }

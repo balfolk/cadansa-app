@@ -29,7 +29,6 @@ const _LOAD_TIMEOUT = Duration(seconds: 10);
 
 const _CONFIG_LIFETIME = Duration(hours: 5);
 
-const _DEFAULT_SECONDARY_COLOR = Colors.tealAccent;
 const _DEFAULT_EVENT_INDEX = 0;
 
 const _EVENT_INDEX_KEY = 'eventIndex';
@@ -38,16 +37,14 @@ class CaDansaApp extends StatefulWidget {
   const CaDansaApp({
     super.key,
     required this.initialLocale,
-    required this.initialPrimarySwatch,
-    required this.initialSecondaryColor,
+    required this.initialSeedColor,
     required this.sharedPreferences,
     required this.env,
     required this.packageInfo,
   });
 
   final Locale? initialLocale;
-  final MaterialColor initialPrimarySwatch;
-  final Color? initialSecondaryColor;
+  final Color initialSeedColor;
   final SharedPreferences sharedPreferences;
   final Map<String, String> env;
   final PackageInfo packageInfo;
@@ -212,8 +209,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
   Widget build(final BuildContext context) {
     final currentEvent = _currentEvent;
     final title = currentEvent?.title ?? _config?.title ?? LText(APP_TITLE);
-    final primarySwatch = currentEvent?.primarySwatch ?? widget.initialPrimarySwatch;
-    final secondaryColor = currentEvent?.secondaryColor ?? widget.initialSecondaryColor ?? _DEFAULT_SECONDARY_COLOR;
+    final seedColor = currentEvent?.seedColor ?? widget.initialSeedColor;
 
     return StreamBuilder<Locale>(
       stream: _localeStreamController.stream,
@@ -222,16 +218,17 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
         final locale = localeSnapshot.hasData
             ? localeSnapshot.data
             : Localizations.maybeLocaleOf(context);
-        final theme = ThemeData(
-          primarySwatch: primarySwatch,
-          fontFamily: 'AppFontFamily',
+        final theme = ThemeData.from(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: seedColor,
+            dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+          ),
         );
         return MaterialApp(
           onGenerateTitle: (context) => title.get(locale ?? Localizations.localeOf(context)),
           theme: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(
-              secondary: secondaryColor,
-            ),
+            textTheme: theme.textTheme.apply(fontFamily: 'AppFontFamily'),
+            primaryTextTheme: theme.primaryTextTheme.apply(fontFamily: 'AppFontFamily'),
           ),
           home: _homePage,
           localizationsDelegates: const [
@@ -405,20 +402,11 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     await widget.sharedPreferences.setInt(_EVENT_INDEX_KEY, index);
 
     {
-      final primarySwatch = event.primarySwatch;
-      if (primarySwatch != null) {
-        await widget.sharedPreferences.setInt(PRIMARY_SWATCH_COLOR_KEY, primarySwatch.value);
+      final seedColor = event.seedColor;
+      if (seedColor != null) {
+        await widget.sharedPreferences.setInt(SEED_COLOR_KEY, seedColor.value);
       } else {
-        await widget.sharedPreferences.remove(PRIMARY_SWATCH_COLOR_KEY);
-      }
-    }
-
-    {
-      final secondaryColorIndex = event.secondaryColor;
-      if (secondaryColorIndex != null) {
-        await widget.sharedPreferences.setInt(SECONDARY_COLOR_KEY, secondaryColorIndex.value);
-      } else {
-        await widget.sharedPreferences.remove(SECONDARY_COLOR_KEY);
+        await widget.sharedPreferences.remove(SEED_COLOR_KEY);
       }
     }
   }

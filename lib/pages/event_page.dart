@@ -359,7 +359,7 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
           title: widget.event.constants.notificationTitle.get(locale).format(formatMap),
           body: widget.event.constants.notificationBody.get(locale).format(formatMap),
           payload: '$_ACTION_ITEM$_ACTION_SEPARATOR${widget.event.id}$_ACTION_SEPARATOR$id',
-          color: widget.event.primarySwatch,
+          color: widget.event.seedColor,
           when: notificationTime,
           whenStart: itemStart,
         )) {

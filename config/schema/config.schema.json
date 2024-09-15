@@ -98,10 +98,7 @@
                 "type": "string",
                 "minLength": 1
               },
-              "primarySwatchColor": {
-                "$ref": "definitions.json#/color"
-              },
-              "secondaryColor": {
+              "seedColor": {
                 "$ref": "definitions.json#/color"
               }
             },

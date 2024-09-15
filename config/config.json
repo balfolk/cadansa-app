@@ -44,8 +44,7 @@
           "endDate": "2024-11-03",
           "avatar": "https://www.cadansa.nl/wp-content/uploads/app__image_2024.png",
           "config": "config/cadansa2024.json",
-          "primarySwatchColor": [78, 86, 12],
-          "secondaryColor": [0, 0, 0]
+          "seedColor": [78, 86, 12]
         }
       ]
     },
@@ -63,8 +62,7 @@
           "endDate": "2023-10-29",
           "avatar": "assets/images/app_image_2023.png",
           "config": "config/cadansa2023.json",
-          "primarySwatchColor": [255, 155, 0],
-          "secondaryColor": [85, 25, 235]
+          "seedColor": [255, 155, 0]
         },
         {
           "id": "cadansa2022",
@@ -73,8 +71,7 @@
           "endDate": "2022-10-23",
           "avatar": "assets/images/app_image_2022.png",
           "config": "config/cadansa2022.json",
-          "primarySwatchColor": [101, 36, 36],
-          "secondaryColor": [255, 217, 142]
+          "seedColor": [101, 36, 36]
         },
         {
           "id": "cadansa2019",
@@ -83,8 +80,7 @@
           "endDate": "2019-10-27",
           "avatar": "assets/images/app_image_2019.png",
           "config": "config/cadansa2019.json",
-          "primarySwatchColor": [0, 150, 136],
-          "secondaryColor": [100, 255, 218]
+          "seedColor": [0, 150, 136]
         }
       ]
     }

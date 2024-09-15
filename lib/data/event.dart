@@ -23,8 +23,7 @@ class Event {
   LText get title => _globalEvent.title;
   DateTime get startDate => _globalEvent.startDate;
   DateTime get endDate => _globalEvent.endDate;
-  MaterialColor? get primarySwatch => _globalEvent.primarySwatch;
-  Color? get secondaryColor => _globalEvent.secondaryColor;
+  Color? get seedColor => _globalEvent.seedColor;
 
   /// Whether we should color icons on a programme page for this event.
   bool get doColorIcons => _temporalState == TemporalState.present;

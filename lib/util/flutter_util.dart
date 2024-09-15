@@ -71,28 +71,7 @@ String formatDateRange({
   return '${shortFormatter.format(startDay)} – ${fullFormatter.format(endDay)}';
 }
 
-const DEFAULT_PRIMARY_SWATCH = Colors.teal;
-
-MaterialColor? getPrimarySwatch(final int? colorValue) {
-  if (colorValue == null) return null;
-  return createMaterialColor(Color(colorValue));
-}
-
-const _MATERIAL_COLOR_INDICES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
-MaterialColor createMaterialColor(final Color color) {
-  final r = color.red, g = color.green, b = color.blue;
-  final swatch = <int, Color>{};
-  for (final index in _MATERIAL_COLOR_INDICES) {
-    final ds = 0.5 - (index / 1000);
-    swatch[index] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-      1,
-    );
-  }
-  return MaterialColor(color.value, swatch);
-}
+const DEFAULT_SEED_COLOR = Colors.teal;
 
 IconData? findIcon(final String? key) {
   return key != null ? MdiIcons.fromString(key) : null;

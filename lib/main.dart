@@ -30,12 +30,7 @@ Future<void> _main() async {
   await dotenv.load();
   final packageInfo = await PackageInfo.fromPlatform();
 
-  final primarySwatchColor = sharedPrefs.getInt(PRIMARY_SWATCH_COLOR_KEY);
-  final primarySwatch = getPrimarySwatch(primarySwatchColor) ?? DEFAULT_PRIMARY_SWATCH;
-  final secondaryColorValue = sharedPrefs.getInt(SECONDARY_COLOR_KEY);
-  final secondaryColor =
-      secondaryColorValue != null ? Color(secondaryColorValue) : null;
-
+  final seedColorValue = sharedPrefs.getInt(SEED_COLOR_KEY);
   final localeList = sharedPrefs.getStringList(LOCALE_KEY) ?? [];
   Locale? locale;
   if (localeList.isNotEmpty) {
@@ -50,8 +45,8 @@ Future<void> _main() async {
 
   runApp(CaDansaApp(
     initialLocale: locale,
-    initialPrimarySwatch: primarySwatch,
-    initialSecondaryColor: secondaryColor,
+    initialSeedColor:
+        seedColorValue != null ? Color(seedColorValue) : DEFAULT_SEED_COLOR,
     sharedPreferences: sharedPrefs,
     env: dotenv.env,
     packageInfo: packageInfo,

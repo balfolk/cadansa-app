@@ -24,14 +24,14 @@ class EventTile extends StatelessWidget {
           ? Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: event.primarySwatch ?? DEFAULT_PRIMARY_SWATCH,
+                  color: event.seedColor ?? DEFAULT_SEED_COLOR,
                   style: isSelected ? BorderStyle.solid : BorderStyle.none,
                   width: isLarge ? 3.0 : 2.0,
                 ),
                 shape: BoxShape.circle,
               ),
               child: CircleAvatar(
-                backgroundColor: event.primarySwatch ?? DEFAULT_PRIMARY_SWATCH,
+                backgroundColor: event.seedColor ?? DEFAULT_SEED_COLOR,
                 backgroundImage: backgroundImage,
                 radius: isLarge ? 24.0 : 20.0,
               ),

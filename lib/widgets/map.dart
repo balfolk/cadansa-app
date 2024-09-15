@@ -128,7 +128,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
         initialScale: widget._data.initialScale ?? PhotoViewComputedScale.contained,
         minScale: PhotoViewComputedScale.contained,
         maxScale: widget._data.maxScale ?? 1.0,
-        backgroundDecoration: const BoxDecoration(color: Colors.white),
+        backgroundDecoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
         filterQuality: FilterQuality.medium,
         errorBuilder: _buildLoadFailedChild,
         onTapUp: _onTapUp,

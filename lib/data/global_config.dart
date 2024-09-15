@@ -42,8 +42,7 @@ class GlobalEvent {
         endDate = parseDate(json['endDate']),
         avatarUri = json['avatar'] as String?,
         configUri = json['config'] as String,
-        primarySwatch = parseMaterialColor(json['primarySwatchColor']),
-        secondaryColor = parseColor(json['secondaryColor']),
+        seedColor = parseColor(json['seedColor']),
         isLarge = json['isLarge'] as bool? ?? false;
 
   final String id;
@@ -51,8 +50,7 @@ class GlobalEvent {
   final DateTime startDate, endDate;
   final String? avatarUri;
   final String configUri;
-  final MaterialColor? primarySwatch;
-  final Color? secondaryColor;
+  final Color? seedColor;
   final bool isLarge;
 
   bool get isCurrent =>
