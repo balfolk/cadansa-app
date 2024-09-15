@@ -1,47 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft/2020-12/schema#",
-  "type": "object",
-  "properties": {
-    "workshopLevels": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "$ref": "definitions.json#/text"
-          },
-          "icon": {
-            "$ref": "definitions.json#/icon"
-          }
-        },
-        "additionalProperties": false,
-        "required": [
-          "name",
-          "icon"
-        ]
-      }
-    },
-    "itemKinds": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "$ref": "definitions.json#/text"
-          },
-          "icon": {
-            "$ref": "definitions.json#/icon"
-          },
-          "showIcon": {
-            "enum": ["always", "during", "never"]
-          }
-        },
-        "additionalProperties": false,
-        "required": [
-          "icon"
-        ]
-      }
-    },
+  "$defs": {
     "pages": {
       "type": "array",
       "items": {
@@ -374,6 +333,55 @@
           }
         ]
       }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "workshopLevels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "definitions.json#/text"
+          },
+          "icon": {
+            "$ref": "definitions.json#/icon"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "icon"
+        ]
+      }
+    },
+    "itemKinds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "definitions.json#/text"
+          },
+          "icon": {
+            "$ref": "definitions.json#/icon"
+          },
+          "showIcon": {
+            "enum": ["always", "during", "never"]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "icon"
+        ]
+      }
+    },
+    "pages": {
+      "$ref": "#/$defs/pages"
+    },
+    "popupMenuPages": {
+      "$ref": "#/$defs/pages"
     }
   },
   "additionalProperties": false,
