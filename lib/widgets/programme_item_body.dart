@@ -102,26 +102,37 @@ class ProgrammeItemPropertyWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final hasAction = _onTap != null;
     final theme = Theme.of(context);
-    return InkWell(
-      onTap: _onTap,
-      onLongPress: () => _copyText(context),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 12.0),
-            child: Icon(_icon, color: theme.primaryColor),
-          ),
-          Expanded(
-            child: AutoSizeText(
-              _text,
-              maxLines: 1,
-            ),
-          ),
-        ],
-      ),
+    final Widget child =  Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: 12.0),
+          child: Icon(_icon, color: theme.primaryColor),
+        ),
+        Expanded(
+          child: AutoSizeText(
+            _text,
+            maxLines: 1,
+              style: hasAction
+                  ? theme.textTheme.bodyMedium
+                      ?.copyWith(color: theme.primaryColor)
+                  : null),
+        ),
+      ],
     );
+    if (hasAction) {
+      return InkWell(
+        onTap: _onTap,
+        child: child,
+      );
+    } else {
+      return GestureDetector(
+        onLongPress: () => _copyText(context),
+        child: child,
+      );
+    }
   }
 
   void _copyText(final BuildContext context) =>
