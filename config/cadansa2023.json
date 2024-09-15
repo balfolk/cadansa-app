@@ -90,7 +90,7 @@
             "nl": "Begane grond",
             "fr": "Rez-de-chaussée"
           },
-          "path": "https://www.cadansa.nl/app/v2/cadansa_map_2022_0_app.png",
+          "path": "assets/images/map_2022_0_app.png",
           "version": 2,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -401,7 +401,7 @@
             "nl": "Eerste verdieping",
             "fr": "À l'étage"
           },
-          "path": "https://www.cadansa.nl/app/v2/cadansa_map_2022_1_app.png",
+          "path": "assets/images/map_2022_1_app.png",
           "version": 2,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -503,7 +503,7 @@
               "kind": "OPEN"
             },
             {
-              "id": "starting_together",
+              "id": "starting_together_th",
               "name": {
                 "en": "Starting together",
                 "nl": "Samen beginnen"
@@ -582,7 +582,7 @@
               }
             },
             {
-              "id": "bedtime_story",
+              "id": "bedtime_story_th",
               "name": {
                 "en": "Bedtime story",
                 "nl": "Verhaaltje voor het slapengaan"
@@ -618,7 +618,7 @@
               "kind": "OPEN"
             },
             {
-              "id": "starting_together",
+              "id": "starting_together_fr",
               "name": {
                 "en": "Starting together",
                 "nl": "Samen beginnen"
@@ -720,7 +720,7 @@
               }
             },
             {
-              "id": "bedtime_story",
+              "id": "bedtime_story_fr",
               "name": {
                 "en": "Bedtime story",
                 "nl": "Verhaaltje voor het slapengaan"
@@ -776,7 +776,7 @@
               }
             },
             {
-              "id": "starting_together",
+              "id": "starting_together_sa",
               "name": {
                 "en": "Starting together",
                 "nl": "Samen beginnen"
@@ -868,7 +868,7 @@
                 "nl": "Kun je het je voorstellen? Een mix van Bretonse dans, Amerikaanse rap en raggamuffin gemixt met eigen, bijzondere teksten… wat een droom, nietwaar? De drie van Beat Bouet Trio maken het waar. De allereerste basis van deze band ontstond in de jaren ‘90, in de bus naar school. Daar waar de stoelen altijd bezet waren bij dezelfde drie lawaaiige, hiphop luisterende jongens die altijd kletsten over meiden, graffiti en hiphop. En niet alleen in het Frans, maar ook in hun eigen dialect: een mooie mix van Gallo, Frans en Engels. Het was bijna vanzelfsprekend dat zij drieën zich doorontwikkelden tot topmuzikanten. Zij mixen de muziek en zang geleerd van hun opa’s met de hiphopachtergrond van henzelf. B-Key is de accordeonspeler, T Burt de menselijke beat box en Faya Gur’s stem brengt dat alles samen tot een intergenerationeel samenspel van muziek.\n\nB-Key: accordeon\nT Burt: menselijke beatbox\nFaya Gur’: zang"
               },
               "website": {
-                "url": "http://beatbouettrio.wix.com/beatbouettrio",
+                "url": "https://beatbouettrio.wix.com/beatbouettrio",
                 "icon": "web",
                 "text": {
                   "en": "Website",
@@ -901,7 +901,7 @@
               }
             },
             {
-              "id": "bedtime_story",
+              "id": "bedtime_story_sa",
               "name": {
                 "en": "Bedtime story",
                 "nl": "Verhaaltje voor het slapengaan"
@@ -937,7 +937,7 @@
               "kind": "OPEN"
             },
             {
-              "id": "starting_together",
+              "id": "starting_together_su",
               "name": {
                 "en": "Starting together",
                 "nl": "Samen beginnen"
@@ -1006,7 +1006,7 @@
                 "nl": "Het Naragonia Quartet is meer dan enkel een instrumentale uitbreiding van het bekende duo van Pascale Rubens en Toon van Mierlo, al actief in de balfolk sinds 2003. Met een heel eigen repertoire en eigen klank garandeert het Naragonia Quartet een avond vol prachtige muziek geknipt voor een bal. Maarten Decombel (mandola en gitaar) en Luc Pilartz (viool) creëren in combinatie met Toon Van Mierlo (onder andere uillean pipes, Franse doedelzak, klarinet, sopraansaxofoon en diatonisch accordeon) en Pascale Rubens (viool en diatonisch accordeon) een heel eigenzinnig en swingend universum waar het fijn vertoeven is.\n\nMaarten Decombel: mandola en gitaar\nLuc Pilartz: viool\nToon Van Mierlo: uillean pipes, Franse doedelzak, klarinet, sopraansaxofoon en diatonisch accordeon\nPascale Rubens: viool en diatonisch accordeon"
               },
               "website": {
-                "url": "http://naragonia.com/quartet/",
+                "url": "https://naragonia.com/quartet/",
                 "icon": "web",
                 "text": {
                   "en": "Website",

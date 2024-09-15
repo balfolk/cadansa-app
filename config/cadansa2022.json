@@ -90,7 +90,7 @@
             "nl": "Begane grond",
             "fr": "Rez-de-chaussée"
           },
-          "path": "https://www.cadansa.nl/app/v2/cadansa_map_2022_0_app.png",
+          "path": "assets/images/map_2022_0_app.png",
           "version": 2,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -390,7 +390,7 @@
             "nl": "Eerste verdieping",
             "fr": "À l'étage"
           },
-          "path": "https://www.cadansa.nl/app/v2/cadansa_map_2022_1_app.png",
+          "path": "assets/images/map_2022_1_app.png",
           "version": 2,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -1207,7 +1207,7 @@
               }
             },
             {
-              "id": "name",
+              "id": "keep_calm_and_vary_on",
               "name": {
                 "en": "Keep calm and vary on",
                 "nl": "Blijf kalm (en blijf variëren)"
@@ -1230,7 +1230,7 @@
               }
             },
             {
-              "id": "name",
+              "id": "the_master_of_steps",
               "name": {
                 "en": "The master of steps (and how to tame your feet)",
                 "nl": "De meester van de stappen (en hoe tem je je voeten)"
@@ -1276,7 +1276,7 @@
               }
             },
             {
-              "id": "name",
+              "id": "hurdy_gurdy_1",
               "name": {
                 "en": "Introduction workshop Hurdy-gurdy",
                 "nl": "Introductieworkshop draailier"

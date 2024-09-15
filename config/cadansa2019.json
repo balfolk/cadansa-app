@@ -114,7 +114,7 @@
             "nl": "Begane grond",
             "fr": "Rez-de-chaussée"
           },
-          "path": "https://cadansa.nl/wp-content/uploads/cadansa_2019_map_0.png",
+           "path": "assets/images/map_2019_0_app.png",
           "version": 2,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -406,7 +406,7 @@
             "nl": "Eerste verdieping",
             "fr": "À l'étage"
           },
-          "path": "https://cadansa.nl/wp-content/uploads/cadansa_2019_map_1.png",
+          "path": "assets/images/map_2019_1_app.png",
           "version": 1,
           "minScale": 0.2,
           "maxScale": 1.0,
@@ -574,7 +574,7 @@
                 "nl": "Geïnspireerd door zowel traditionele violisten (Bretagne, Frankrijk, Zweden) als Midden-Oosterse klanken, door zowel klassieke harmonieën als rockmuziek, is dit kwartet een echte muzikale smeltkroes. Het Bretonse kwartet is ontstaan uit het duo Jonathan Dour en Floriane le Pottier, vergezeld door Mathilde Chevrel op de cello en Antonin Volson op percussie. De muziek van de band vecht strakke definities aan: het is subtiel en wild, hoogstaand en populair. Soepel noch mild klinkt dit als een kamerorkest van een wilde stam, en dat klinkt fantastisch! (“La Gallésie en Fete” Festival in Monterfil, Brittany)\n\nJonathan Dour: viool\nFloriane Le Pottier: viool\nMathilde Chevrel: cello\nAntonin Volson: percussie"
               },
               "website": {
-                "url": "http://www.dourlepottier4tet.bzh/",
+                "url": "https://www.dourlepottier4tet.bzh/",
                 "icon": "web",
                 "text": {
                   "en": "Website",
@@ -670,7 +670,7 @@
                 "nl": "Het Duo Muller & Munnelly werd gevormd door hun gezamenlijke liefde voor het presenteren van diep gewortelde muziek in hun eigen iconische stijl. Zowel Ies als David kwamen op heel jonge leeftijd in aanraking met folkmuziek, maar vanuit verschillende achtergronden. Terwijl Ies veel verschillende stijlen te horen kreeg en op zoek ging naar de wortels, kwam David ironisch genoeg precies van de andere kant. Hij begon bij de wortel van deze traditie om zich daarna steeds breder te ontwikkelen.\n\nIes Muller: houten dwarsfluiten\nDavid Munnelly: diatonische accordeon"
               },
               "website": {
-                "url": "http://www.iesmuller.com/groepen/",
+                "url": "https://www.iesmuller.com/#groepen",
                 "icon": "web",
                 "text": {
                   "en": "Website",
@@ -716,7 +716,7 @@
                 "nl": "Diep geworteld in de roots-traditie en met beide benen in het nu; dat is Red Herring. Of het nu om folk, bluegrass of Americana gaat, de Haringen voelen zich bij al deze stijlen even thuis. Red Herring roept een sfeer op waarin de ruimte wordt gegeven aan muzikale verhalen, eeuwenoude traditionele deunen en eigen composities, vlammende solo’s, intense meerstemmige zang, ontroering en humor.\n\nArthur Deighton: zang, mandoline, gitaar, bouzouki\nJoram Peeters: zang, viool, gitaar, mandoline, bouzouki\nPaul van Vlodrop: zang, vijf-snarige banjo, mandoline, gitaar\nLoes van Schaijk: zang, contrabas"
               },
               "website": {
-                "url": "http://www.redherringband.nl/index.php?lang=nl",
+                "url": "https://www.redherringband.nl/index.php?lang=nl",
                 "icon": "web",
                 "text": {
                   "en": "Website",
@@ -831,7 +831,7 @@
                 "nl": "De balfolkband “Les Folkeux de Pie” ontstond in december 2016 in Lyon, toen vijf muzikanten uit een symfonieorkest ernaar verlangden om eens iets anders dan luisterconcerten te spelen. Dit strijkkwartet wordt vergezeld door een een fluitist en heeft een repertoire van traditionele dansmuziek. Ze spelen dansen uit verschillende Franse en Europese regio’s, zoals mazurka’s, bourrées, tovercirkels en scottishes.\n\nHarmonie Malterre: dwarsfluit\nMaiwenn Mérer: viool\nLudovic Lanter: viool\nManuelle Renaud: altviool\nPierre Cordier: cello"
               },
               "website": {
-                "url": "http://www.folkeuxdepie.fr/",
+                "url": "https://www.folkeuxdepie.fr/",
                 "icon": "web",
                 "text": {
                   "en": "Website",
