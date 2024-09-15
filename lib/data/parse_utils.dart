@@ -1,6 +1,5 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sprintf/sprintf.dart';
@@ -30,6 +29,10 @@ abstract class LText {
   }
 
   String get(final Locale locale);
+
+  @mustBeOverridden
+  @override
+  String toString();
 }
 
 @immutable
@@ -38,7 +41,10 @@ class _EmptyLText implements LText {
   const _EmptyLText();
 
   @override
-  String get(final Locale locale) => '';
+  String get(final Locale locale) => toString();
+
+  @override
+  String toString() => '';
 }
 
 @immutable
@@ -50,7 +56,10 @@ class _StringLText implements LText {
 
   @override
   String get(final Locale locale) =>
-    sprintf(_string, [locale.languageCode, locale.countryCode ?? '']);
+      sprintf(_string, [locale.languageCode, locale.countryCode ?? '']);
+
+  @override
+  String toString() => _string;
 }
 
 @immutable
@@ -65,13 +74,16 @@ class _MapLText implements LText {
   final BuiltMap<Locale, String> _strings;
 
   @override
-  String get(final Locale locale) => _strings[locale]
-      ?? _strings.entries
+  String get(final Locale locale) =>
+      _strings[locale] ??
+      _strings.entries
           .where((s) => s.key.languageCode == locale.languageCode)
           .map((entry) => entry.value)
-          .firstOrNull
-      ?? _strings.values.firstOrNull
-      ?? '';
+          .firstOrNull ??
+      toString();
+
+  @override
+  String toString() => _strings.values.firstOrNull ?? '';
 }
 
 BuiltList<T> parseList<T>(final dynamic json, final T Function(dynamic) parseItem) {
