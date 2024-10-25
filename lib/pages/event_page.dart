@@ -192,18 +192,18 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
 
   Widget _buildBottomNavigationBar() {
     final locale = Localizations.localeOf(context);
-    return BottomNavigationBar(
-      items: widget.event.pages.map((pageData) => BottomNavigationBarItem(
-        icon: Icon(MdiIcons.fromString(pageData.icon)),
-        label: pageData.title.get(locale),
-      )).toList(growable: false),
-      onTap: (int index) {
+    return NavigationBar(
+      destinations: widget.event.pages
+          .map((final pageData) => NavigationDestination(
+                icon: Icon(MdiIcons.fromString(pageData.icon)),
+                label: pageData.title.get(locale),
+              ))
+          .toList(growable: false),
+      onDestinationSelected: (final index) {
         _selectPage(index);
         _storePageIndex(index);
       },
-      currentIndex: _currentIndex,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Theme.of(context).primaryColor,
+      selectedIndex: _currentIndex,
     );
   }
 
