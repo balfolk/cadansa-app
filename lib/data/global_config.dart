@@ -66,6 +66,7 @@ class GlobalDefaults {
         favoriteTooltip = LText(json['favoriteTooltip']),
         notificationTimeBefore = parseDuration(json['notificationTimeBefore'])!,
         favoriteSnackText = LText(json['favoriteSnackText']),
+        favoriteErrorSnackText = LText(json['favoriteErrorSnackText']),
         unfavoriteSnackText = LText(json['unfavoriteSnackText']),
         notificationTitle = LText(json['notificationTitle']),
         notificationBody = LText(json['notificationBody']);
@@ -76,6 +77,7 @@ class GlobalDefaults {
   final LText favoriteTooltip;
   final Duration notificationTimeBefore;
   final LText favoriteSnackText;
+  final LText favoriteErrorSnackText;
   final LText unfavoriteSnackText;
   final LText notificationTitle;
   final LText notificationBody;

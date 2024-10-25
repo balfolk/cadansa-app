@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:format/format.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,6 +22,7 @@ class CaDansaEventPage extends StatefulWidget {
     required this.initialAction,
     required this.buildDrawer,
     required this.sharedPreferences,
+    required this.packageInfo,
     required this.moveToEvent,
   });
 
@@ -28,6 +30,7 @@ class CaDansaEventPage extends StatefulWidget {
   final String? initialAction;
   final Widget? Function({required BuildContext context}) buildDrawer;
   final SharedPreferences sharedPreferences;
+  final PackageInfo packageInfo;
   final void Function({required String eventId, required String action}) moveToEvent;
 
   @override
@@ -329,8 +332,12 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
     final id = item.id;
     if (id == null) return false;
 
+    final itemStart = day.rangeOfItem(item)?.start;
+    if (itemStart == null) return false;
+
     final locale = Localizations.localeOf(context);
     final formatMap = {
+      'appName': widget.packageInfo.appName,
       'name': item.name.get(locale),
       'event': widget.event.title.get(locale),
       'days': widget.event.constants.notificationTimeBefore.inDays.toString(),
@@ -345,24 +352,23 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
       _maybeShowSnackBar(widget.event.constants.unfavoriteSnackText.get(locale).format(formatMap));
       await cancelNotification(id: id);
     } else {
-      favorites.add(id);
-      final itemStart = day.rangeOfItem(item)?.start;
       final notificationTime = kDebugMode
           ? DateTime.now().add(const Duration(seconds: 5))
-          : itemStart?.subtract(widget.event.constants.notificationTimeBefore);
-      if (notificationTime != null) {
-        if (await addNotification(
-          id: id,
-          eventId: widget.event.id,
-          title: widget.event.constants.notificationTitle.get(locale).format(formatMap),
-          body: widget.event.constants.notificationBody.get(locale).format(formatMap),
-          payload: '$_ACTION_ITEM$_ACTION_SEPARATOR${widget.event.id}$_ACTION_SEPARATOR$id',
-          color: widget.event.seedColor,
-          when: notificationTime,
-          whenStart: itemStart,
-        )) {
-          _maybeShowSnackBar(widget.event.constants.favoriteSnackText.get(locale).format(formatMap));
-        }
+          : itemStart.subtract(widget.event.constants.notificationTimeBefore);
+      if (await addNotification(
+        id: id,
+        eventId: widget.event.id,
+        title: widget.event.constants.notificationTitle.get(locale).format(formatMap),
+        body: widget.event.constants.notificationBody.get(locale).format(formatMap),
+        payload: '$_ACTION_ITEM$_ACTION_SEPARATOR${widget.event.id}$_ACTION_SEPARATOR$id',
+        color: widget.event.seedColor,
+        when: notificationTime,
+        whenStart: itemStart,
+      )) {
+        favorites.add(id);
+        _maybeShowSnackBar(widget.event.constants.favoriteSnackText.get(locale).format(formatMap));
+      } else {
+        _maybeShowSnackBar(widget.event.constants.favoriteErrorSnackText.get(locale).format(formatMap));
       }
     }
 

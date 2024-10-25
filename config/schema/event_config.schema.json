@@ -265,6 +265,9 @@
                   "favoriteSnackText": {
                     "$ref": "definitions.json#/text"
                   },
+                  "favoriteErrorSnackText": {
+                    "$ref": "definitions.json#/text"
+                  },
                   "unfavoriteSnackText": {
                     "$ref": "definitions.json#/text"
                   },

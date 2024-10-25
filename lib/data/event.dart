@@ -58,6 +58,7 @@ class EventConstants {
         _favoriteTooltip = LText.maybeParse(json['favoriteTooltip']),
         _notificationTimeBefore = parseDuration(json['notificationTimeBefore']),
         _favoriteSnackText = LText.maybeParse(json['favoriteSnackText']),
+        _favoriteErrorSnackText = LText.maybeParse(json['favoriteErrorSnackText']),
         _unfavoriteSnackText = LText.maybeParse(json['unfavoriteSnackText']),
         _notificationTitle = LText.maybeParse(json['notificationTitle']),
         _notificationBody = LText.maybeParse(json['notificationBody']);
@@ -70,6 +71,7 @@ class EventConstants {
   final LText? _favoriteTooltip;
   final Duration? _notificationTimeBefore;
   final LText? _favoriteSnackText;
+  final LText? _favoriteErrorSnackText;
   final LText? _unfavoriteSnackText;
   final LText? _notificationTitle;
   final LText? _notificationBody;
@@ -100,6 +102,9 @@ class EventConstants {
 
   LText get favoriteSnackText =>
       _favoriteSnackText ?? _globalDefaults.favoriteSnackText;
+
+  LText get favoriteErrorSnackText =>
+      _favoriteErrorSnackText ?? _globalDefaults.favoriteErrorSnackText;
 
   LText get unfavoriteSnackText =>
       _unfavoriteSnackText ?? _globalDefaults.unfavoriteSnackText;

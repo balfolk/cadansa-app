@@ -21,6 +21,11 @@
       "nl": "Je krijgt een melding {minutes} minuten voordat {name} begint.",
       "fr": "Tu recevras une notification {minutes} minutes avant le début de {name}."
     },
+    "favoriteErrorSnackText": {
+      "en": "An error occurred while trying to favorite {name}. You may not have granted {appName} permission to send notifications.",
+      "nl": "Er is een fout opgetreden bij het toevoegen van {name} aan je favorieten. Mogelijk heb je {appName} geen toestemming gegeven om meldingen te sturen.",
+      "fr": "Une erreur s'est produite lors de la tentative d'ajout de {name} à vos favoris. Vous n'avez peut-être pas accordé à {appName} l'autorisation d'envoyer des notifications."
+    },
     "unfavoriteSnackText": "",
     "notificationTitle": {
       "en": "{name} starts in {minutes} minutes!",

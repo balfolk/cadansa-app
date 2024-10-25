@@ -129,9 +129,11 @@ Future<bool> _requestPermissions() async {
       sound: _requestSound,
     ) ?? false;
   } else if (Platform.isAndroid) {
-    return await _flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission() ?? false;
+    final androidPermissions =
+        _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    return (await androidPermissions?.requestNotificationsPermission() ?? false)
+        && (await androidPermissions?.requestExactAlarmsPermission() ?? false);
   }
   return true;
 }
