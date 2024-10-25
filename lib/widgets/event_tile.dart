@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cadansa_app/data/global_config.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:flutter/material.dart';
@@ -37,17 +38,18 @@ class EventTile extends StatelessWidget {
               ),
             )
           : null,
-      title: Text(
+      title: AutoSizeText(
         event.title.get(locale),
-        textScaler: TextScaler.linear(isLarge ? 1.5 : 1.0),
+        textScaleFactor: isLarge ? 1.5 : 1.0,
       ),
-      subtitle: Text(
+      subtitle: AutoSizeText(
         formatDateRange(
           locale: locale,
           startDay: event.startDate,
           endDay: event.endDate,
         ),
-        textScaler: TextScaler.linear(isLarge ? 1.2 : 1.0),
+        textScaleFactor: isLarge ? 1.2 : 1.0,
+        maxLines: 1,
       ),
       selected: isSelected,
       onTap: onTap,
