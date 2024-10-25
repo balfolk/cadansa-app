@@ -5,7 +5,6 @@ import 'package:cadansa_app/data/page.dart';
 import 'package:cadansa_app/data/parse_utils.dart';
 import 'package:cadansa_app/data/programme.dart';
 import 'package:cadansa_app/global.dart';
-import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/util/page_util.dart';
 import 'package:flutter/foundation.dart';
@@ -48,7 +47,6 @@ class CaDansaEventPageState extends State<CaDansaEventPage> {
       final popupMenuPages = widget.event.popupMenuPages;
       return Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(widget.event.title.get(locale)),
           actions: (actions ?? [])
               .followedBy(popupMenuPages.isNotEmpty

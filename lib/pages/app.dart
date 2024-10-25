@@ -8,7 +8,6 @@ import 'package:cadansa_app/global.dart';
 import 'package:cadansa_app/pages/event_page.dart';
 import 'package:cadansa_app/pages/loading_page.dart';
 import 'package:cadansa_app/pages/timeout_page.dart';
-import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/flutter_util.dart';
 import 'package:cadansa_app/util/notifications.dart';
 import 'package:cadansa_app/widgets/event_tile.dart';
@@ -450,7 +449,6 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
       final locale = Localizations.localeOf(context);
       return Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
           title: Text(legal.labelTerms.get(locale)),
         ),
         body: Padding(

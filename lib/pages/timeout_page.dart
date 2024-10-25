@@ -1,5 +1,4 @@
 import 'package:cadansa_app/global.dart';
-import 'package:cadansa_app/util/extensions.dart';
 import 'package:cadansa_app/util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,7 +12,6 @@ class TimeoutPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: Theme.of(context).systemUiOverlayStyle,
         title: const Text(APP_TITLE),
       ),
       body: Container(
