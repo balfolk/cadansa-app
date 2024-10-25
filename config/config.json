@@ -1,5 +1,5 @@
 {
-  "version": "2",
+  "version": "3",
   "logo": "assets/images/header.png",
   "locales": [
     ["en", "GB"],
@@ -47,9 +47,10 @@
           "title": "CaDansa 2024",
           "startDate": "2024-10-31",
           "endDate": "2024-11-03",
-          "avatar": "https://www.cadansa.nl/wp-content/uploads/app__image_2024.png",
-          "config": "config/cadansa2024.json",
-          "seedColor": [78, 86, 12]
+          "avatar": "assets/images/app_image_2024.png",
+          "config": "https://www.cadansa.nl/app/v3/cadansa2024.json",
+          "seedColor": [78, 86, 12],
+          "isLarge": true
         }
       ]
     },
