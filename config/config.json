@@ -37,9 +37,9 @@
   "eventSections": [
     {
       "title": {
-          "en": "Upcoming event",
-          "nl": "Komend evenement",
-          "fr": "Événement à venir"
+          "en": "Current event",
+          "nl": "Huidig evenement",
+          "fr": "Événement actuel"
         },
       "events": [
         {
@@ -67,7 +67,7 @@
           "startDate": "2023-10-26",
           "endDate": "2023-10-29",
           "avatar": "assets/images/app_image_2023.png",
-          "config": "config/cadansa2023.json",
+          "config": "https://www.cadansa.nl/app/v3/cadansa2023.json",
           "seedColor": [255, 155, 0]
         },
         {
@@ -76,7 +76,7 @@
           "startDate": "2022-10-20",
           "endDate": "2022-10-23",
           "avatar": "assets/images/app_image_2022.png",
-          "config": "config/cadansa2022.json",
+          "config": "https://www.cadansa.nl/app/v3/cadansa2022.json",
           "seedColor": [101, 36, 36]
         },
         {
@@ -85,7 +85,7 @@
           "startDate": "2019-10-24",
           "endDate": "2019-10-27",
           "avatar": "assets/images/app_image_2019.png",
-          "config": "config/cadansa2019.json",
+          "config": "https://www.cadansa.nl/app/v3/cadansa2019.json",
           "seedColor": [0, 150, 136]
         }
       ]
