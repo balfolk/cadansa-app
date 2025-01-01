@@ -78,7 +78,6 @@ class FeedPageState extends State<FeedPage> {
       case _FeedPageStatus.DONE:
         return _buildFeed(context);
       case _FeedPageStatus.ERROR:
-      default:
         return _buildError(context);
     }
   }

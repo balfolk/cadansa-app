@@ -14,32 +14,10 @@ Future<void> initializeNotifications({
   required final BuildContext context,
   required final Future<void> Function(String?) onSelectNotification,
 }) async {
-  Future<void> onDidReceiveLocalNotification(final int? id, final String? title,
-      final String? body, final String? payload) async {
-    final isOk = await showDialog<bool>(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(title ?? ''),
-        content: Text(body ?? ''),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: Navigator.of(context, rootNavigator: true).pop,
-            isDefaultAction: true,
-            child: Text(MaterialLocalizations.of(context).okButtonLabel),
-          ),
-        ],
-      ),
-    );
-    if (isOk ?? false) {
-      await onSelectNotification(payload);
-    }
-  }
-
   final d = DarwinInitializationSettings(
     requestSoundPermission: false,
     requestBadgePermission: false,
     requestAlertPermission: false,
-    onDidReceiveLocalNotification: onDidReceiveLocalNotification,
   );
   final initializationSettings = InitializationSettings(
     android: const AndroidInitializationSettings('@drawable/notification'),

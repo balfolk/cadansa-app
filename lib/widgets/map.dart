@@ -71,7 +71,9 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
         final mapMoveAnimation = _mapMoveAnimation;
         if (mapMoveAnimationController == null ||
             mapMoveTargetArea == null ||
-            mapMoveAnimation == null) return;
+            mapMoveAnimation == null) {
+          return;
+        }
 
         _controller.position = mapMoveAnimation.value;
       if (mapMoveAnimationController.isCompleted &&
@@ -430,7 +432,7 @@ class _AreaPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0,
         _fillPaint = Paint()
-          ..color = theme.primaryColorLight.withOpacity(0.5)
+          ..color = theme.primaryColorLight.withValues(alpha: 0.5)
           ..style = PaintingStyle.fill
           ..strokeWidth = 0.0;
 

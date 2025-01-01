@@ -411,7 +411,7 @@ class CaDansaAppState extends State<CaDansaApp> with WidgetsBindingObserver {
     {
       final seedColor = event.seedColor;
       if (seedColor != null) {
-        await widget.sharedPreferences.setInt(SEED_COLOR_KEY, seedColor.value);
+        await widget.sharedPreferences.setInt(SEED_COLOR_KEY, colorToInt(seedColor));
       } else {
         await widget.sharedPreferences.remove(SEED_COLOR_KEY);
       }
