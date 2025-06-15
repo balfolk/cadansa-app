@@ -32,7 +32,7 @@ class FavoriteButtonState extends State<FavoriteButton>
   );
 
   /// Experimentally determined actor which makes the animation fill the heart exactly.
-  static const _HEART_SIZE_FACTOR = 1.0 / 2.6;
+  static const double _HEART_SIZE_FACTOR = 1.0 / 2.6;
 
   @override
   void didUpdateWidget(covariant final FavoriteButton oldWidget) {

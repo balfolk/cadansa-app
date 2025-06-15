@@ -49,7 +49,7 @@ class Indicator {
   final double width, length;
   final AlignmentDirectional alignment;
 
-  static const _defaultAlignment = AlignmentDirectional.bottomCenter;
+  static const AlignmentDirectional _defaultAlignment = AlignmentDirectional.bottomCenter;
 
   bool get hasStart => alignment.start == -1.0;
 

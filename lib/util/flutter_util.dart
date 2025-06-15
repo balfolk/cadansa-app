@@ -33,7 +33,7 @@ void reportClipboardText({
 
 const FONT_FEATURE_SMALL_CAPS = FontFeature.enable('smcp');
 
-const _DIFF_FLAG_LETTER = 0x01F1E6 - 0x41; // '🇦' - 'A';
+const int _DIFF_FLAG_LETTER = 0x01F1E6 - 0x41; // '🇦' - 'A';
 
 /// Convert a string to the corresponding Unicode flag emoji. To work properly,
 /// the input string must contain exactly two ASCII letters that together form
@@ -71,7 +71,7 @@ String formatDateRange({
   return '${shortFormatter.format(startDay)} – ${fullFormatter.format(endDay)}';
 }
 
-const DEFAULT_SEED_COLOR = Colors.teal;
+const MaterialColor DEFAULT_SEED_COLOR = Colors.teal;
 
 int colorToInt(final Color color) {
   final a = (color.a * 255).round();
