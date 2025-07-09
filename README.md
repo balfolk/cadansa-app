@@ -28,6 +28,7 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 ### Part 1: Installation and running tests
 
 *  First, install Flutter and associated programs (such as Android Studio) according to the instructions here: https://flutter.dev/docs/get-started/install.
+    * `fvm` can be used to manage Flutter versions. This can be installed e.g. using `sudo port install fvm` on macOS, followed by `fvm use` in the project root.
     *  If you install Git on Windows, make sure to select the option to commit using Unix-style line endings.
     *  Flutter automatically enables analytics reporting to Google. If you want to disable this, run `flutter config --no-analytics` on the command line.
     *  Make sure to follow the steps that help you set up Android Studio as an editor.
@@ -36,7 +37,6 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 *  Run `flutter upgrade` followed by `flutter update-packages` to update Flutter and its internal packages.
 *  Accept the Android licenses using `flutter doctor --android-licenses`.
 *  Open Android Studio and create a new project from this repository.
-    * On an Apple Silicon (ARM) machine, _do not_ attempt to set Android Studio to full screen - use Windows -> Zoom instead. For an unknown reason full screen breaks the application.
     * You need to have an SSH key set up in order to do so.
     * Make sure to add it as a Flutter project. If you can't do that, first ensure you have gone through the entire set-up process of Flutter.
 *  Head to Android Studio Settings -> Languages & Frameworks -> Dart and enable Dart support for this project. Set the Dart SDK location to `bin/cache/dart-sdk` relative your Flutter installation directory.
@@ -49,23 +49,23 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 
 ### Part 2a: Running the app on an Android Emulator
 
-* Make sure that you have an Android Emulator of a recent Android SDK version (eg. API 30) set up and ready to go.
+* Make sure that you have an Android Emulator of a recent Android SDK version (eg. API 35) set up and ready to go.
     * Starting with Ubuntu 19.10, 32-bit apps are no longer supported. Make sure you download and use a 64-bit Android image.
 * Now you can start the application and debug it. Enjoy!
 
 ### Part 2b: Running the app on an iOS emulator (macOS only)
 
-* First make sure to follow all the steps of part 2a.
-* Install command-line support for Cocoapods using `sudo gem install cocoapods`.
+* First make sure to follow all the steps of part 1.
+* Install a more modern version of Ruby, for instance using `sudo port install ruby34`. Make sure `which gem` points to the version you just installed.
+* Install command-line support for Cocoapods using `sudo gem update --system && sudo gem install cocoapods && sudo gem update`.
 * Update all pods using `cd ios; pod update`.
-* If you're on an Apple Silicon chip, configure XCode to run using Rosetta 2 by navigating to the application, right-clicking it, selecting "Get Info", and ticking "Open using Rosetta".
-* Open the project in XCode by starting XCode, selecting "Open a project or file", and opening the `ios` folder of this project.
-* If you're on an Apple Silicon chip, start the iOS emulator using Rosetta 2. The easiest way to find it is to start it from XCode using XCode -> Open Developer Tool -> Simulator, then right-clicking it in the dock and selecting Options -> Show in Finder. From this executable the setting can be modified similar to how you just did it for XCode.
-    * Make sure your iOS device has iOS 12.0 or greater installed, as that's the minimum supported version for this app.
-* Once a simulated iOS device is running, it should show up in the list of target devices in Android Studio. At this point XCode can safely be closed.
+* Start an iOS simulator, it should show up in the list of target devices in Android Studio.
 
-In case of errors on iOS, it is advised to first try cleaning everything before attempting a fresh build:
-```flutter clean; flutter upgrade; flutter build ios```
+### Part 3: Building the app for distribution on Android and iOS
+
+Run `./build_all.sh` to build both the Android and iOS apps.
+The created app bundle (Android) file can be uploaded to the [Google Play Console](https://play.google.com/console/).
+The easiest way to upload the IPA file (iOS) is using the [Transporter app](https://apps.apple.com/nl/app/transporter/id1450874784).
 
 ## Updating dependencies
 
@@ -98,3 +98,14 @@ Before taking the screenshots, use the following command to make the status bar 
 ```shell
 xcrun simctl status_bar booted override --time "2024-10-31T12:00:00+02:00" --cellularBars 4 --batteryLevel 100
 ```
+
+## Troubleshooting
+
+### iOS
+
+If the app doesn't build on iOS, you can try the following steps, in order:
+
+* `flutter clean`
+* `flutter upgrade`
+* `flutter create --platforms ios --org nl.cadansa.app .` to regenerate the iOS project. Make sure to check the `git diff` for changes!
+* Ensure that `which rsync` points to `/usr/bin/rsync`, not a version installed by Homebrew or MacPorts.
