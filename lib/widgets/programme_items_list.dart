@@ -40,7 +40,8 @@ class ProgrammeItemsList extends StatelessWidget {
       separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) {
         final item = day.items[index];
-        final isExpandable = item.description.get(locale).isNotEmpty;
+        final isExpandable =
+            item.description.get(locale).isNotEmpty || item.website.url != null;
         final startTime = item.startTime;
         final endTime = item.endTime;
 

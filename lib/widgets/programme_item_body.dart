@@ -52,8 +52,10 @@ class ProgrammeItemBody extends StatelessWidget {
         ),
     ];
 
+    final description = item.description.get(locale);
     final websiteText = item.website.text;
-    final websiteUrl = item.website.url?.get(locale) ?? '';
+    final websiteUrlText = item.website.url?.get(locale);
+    final websiteUri = websiteUrlText != null ? Uri.tryParse(websiteUrlText) : null;
     final columnItems = <Widget>[
       if (propertyItems.isNotEmpty)
         Padding(
@@ -62,17 +64,16 @@ class ProgrammeItemBody extends StatelessWidget {
             children: propertyItems,
           ),
         ),
-      Text(item.description.get(locale)),
-      if (websiteText != null && websiteUrl.isNotEmpty)
+      if (description.isNotEmpty)
         Padding(
-          padding: const EdgeInsets.only(top: 10.0),
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Text(description),
+        ),
+
+      if (websiteText != null && websiteUri != null && websiteUri.host.isNotEmpty)
+        Center(
           child: OutlinedButton.icon(
-            onPressed: () {
-              final uri = Uri.tryParse(websiteUrl);
-              if (uri != null) {
-                launchUrl(uri);
-              }
-            },
+            onPressed: () => launchUrl(websiteUri),
             icon: Icon(findIcon(item.website.icon)),
             label: Text(
               websiteText.get(locale),
