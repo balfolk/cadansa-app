@@ -5,8 +5,8 @@ version: 3.1.2+25
 publish_to: none
 
 environment:
-  sdk: '>=3.8.1 <4.0.0'
-  flutter: '>=3.32.6 <4.0.0'
+  sdk: '>=3.9.2 <4.0.0'
+  flutter: '>=3.35.3 <4.0.0'
 
 dependencies:
   flutter:
@@ -22,15 +22,15 @@ dependencies:
   custom_refresh_indicator: ^4.0.1
   expandable: ^5.0.1
   flutter_cache_manager: ^3.4.1
-  flutter_dotenv: ^5.2.1
+  flutter_dotenv: ^6.0.0
   flutter_html: ^3.0.0
-  flutter_local_notifications: ^19.3.0
+  flutter_local_notifications: ^19.4.1
   format: ^1.6.0
-  http: ^1.4.0
+  http: ^1.5.0
   intl:
   material_design_icons_flutter: ^7.0.7296
   meta:
-  package_info_plus: ^8.3.0
+  package_info_plus: ^8.3.1
   photo_view: ^0.15.0
   rss_dart: ^1.0.13
   sanitize_html: ^2.1.0
@@ -39,7 +39,7 @@ dependencies:
   shimmer: ^3.0.0
   sprintf: ^7.0.0
   timezone: ^0.10.1
-  url_launcher: ^6.3.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +63,8 @@ flutter:
     - config/cadansa2022.json
     - config/cadansa2023.json
     - config/cadansa2024.json
+    - cadansa-app-config/config/config.json
+    - cadansa-app-config/config/cadansa2025.json
 
   fonts:
     - family: AppFontFamily
