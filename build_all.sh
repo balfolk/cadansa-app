@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-if ! type flutter &>/dev/null -a type fvm &>/dev/null; then
+if ! type flutter &>/dev/null && type fvm &>/dev/null; then
   echo 'Flutter not found, but fvm is. Using fvm flutter.'
   fvm use
   FLUTTER_CMD='fvm flutter'
