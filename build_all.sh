@@ -9,9 +9,19 @@ else
   FLUTTER_CMD='flutter'
 fi
 
-echo 'Building IPA (iOS/iPadOS)...'
-${FLUTTER_CMD} build ipa --no-tree-shake-icons --obfuscate --split-debug-info=./ios/
+if ${BUILD_IOS:-true}
+then
+  echo 'Building IPA (iOS/iPadOS)...'
+  ${FLUTTER_CMD} build ipa --no-tree-shake-icons --obfuscate --split-debug-info=./ios/
+else
+  echo 'Skipping IPA (iOS/iPadOS)...'
+fi
 echo
 
-echo 'Building AppBundle (Android)...'
-${FLUTTER_CMD} build appbundle --no-tree-shake-icons --obfuscate --split-debug-info=./android/
+if ${BUILD_ANDROID:-true}
+then
+  echo 'Building AppBundle (Android)...'
+  ${BUILD_ANDROID:-true} && ${FLUTTER_CMD} build appbundle --no-tree-shake-icons --obfuscate --split-debug-info=./android/
+else
+  echo 'Skipping AppBundle (Android)...'
+fi

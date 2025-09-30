@@ -63,7 +63,7 @@ Before starting, please ensure your Windows 10 system has all the latest updates
 
 ### Part 3: Building the app for distribution on Android and iOS
 
-Run `./build_all.sh` to build both the Android and iOS apps.
+Run `./build_all.sh` to build both the Android and iOS apps. If you want to skip either of those two apps, set the environment variables `BUILD_IOS` or `BUILD_ANDROID` to `false`.
 The created app bundle (Android) file can be uploaded to the [Google Play Console](https://play.google.com/console/).
 The easiest way to upload the IPA file (iOS) is using the [Transporter app](https://apps.apple.com/nl/app/transporter/id1450874784).
 
