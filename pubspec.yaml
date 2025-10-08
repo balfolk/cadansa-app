@@ -6,7 +6,7 @@ publish_to: none
 
 environment:
   sdk: '>=3.9.2 <4.0.0'
-  flutter: '>=3.35.3 <4.0.0'
+  flutter: '>=3.35.5 <4.0.0'
 
 dependencies:
   flutter:
@@ -24,13 +24,13 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   flutter_dotenv: ^6.0.0
   flutter_html: ^3.0.0
-  flutter_local_notifications: ^19.4.1
+  flutter_local_notifications: ^19.4.2
   format: ^1.6.0
   http: ^1.5.0
   intl:
   material_design_icons_flutter: ^7.0.7296
   meta:
-  package_info_plus: ^8.3.1
+  package_info_plus: ^9.0.0
   photo_view: ^0.15.0
   rss_dart: ^1.0.13
   sanitize_html: ^2.1.0
