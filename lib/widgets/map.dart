@@ -15,6 +15,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:photo_view/photo_view.dart';
 
+// For some reason, all scales are off by this factor, and I can't figure out why
+const _MAGIC_SCALING_FACTOR = 0.61;
+
 class MapWidget extends StatefulWidget {
   const MapWidget(
       this._data,
@@ -161,7 +164,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
       }
 
       for (final area in widget._data.areas) {
-        final size = scale * area.buttonSize;
+        final size = scale * area.buttonSize * _MAGIC_SCALING_FACTOR;
         final location = _areaCoordinatesToMap(area.center)
             ?.translate(-2 * size, -size / 2);
 
@@ -189,7 +192,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               fontFamily: MAP_FONT_FAMILY,
-              fontSize: titleFontSize != null ? scale * titleFontSize : null,
+              fontSize: titleFontSize != null ? scale * _MAGIC_SCALING_FACTOR * titleFontSize : null,
             ),
           ));
         }
@@ -220,7 +223,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
               child: Text(
                 text.text.get(locale),
                 textAlign: text.textAlign,
-                textScaler: TextScaler.linear(scale),
+                textScaler: TextScaler.linear(scale * _MAGIC_SCALING_FACTOR),
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontFeatures: const [FONT_FEATURE_SMALL_CAPS],
                   fontSize: text.fontSize ?? theme.textTheme.displayMedium?.fontSize,
@@ -330,7 +333,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
     final mapMoveAnimationController = _mapMoveAnimationController;
     if (scale == null || mapMoveAnimationController == null) return;
 
-    final moveTo = -targetArea.center * scale;
+    final moveTo = -targetArea.center * scale * _MAGIC_SCALING_FACTOR;
     _mapMoveAnimation = Tween(begin: _controller.position, end: moveTo)
         .animate(mapMoveAnimationController);
     mapMoveAnimationController.forward(
@@ -388,7 +391,7 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
       return null;
     }
 
-    return (c * scale)
+    return (c * scale * _MAGIC_SCALING_FACTOR)
         .translate(lastKnownSize.width / 2.0, lastKnownSize.height / 2.0)
         + controllerValue.position;
   }
@@ -401,8 +404,8 @@ class MapWidgetState extends State<MapWidget> with SingleTickerProviderStateMixi
       return null;
     }
 
-    final controllerPosition = -controllerValue.position / scale;
-    final localPosition = c.translate(-lastKnownSize.width / 2.0, -lastKnownSize.height / 2.0) / scale;
+    final controllerPosition = -controllerValue.position / (scale * _MAGIC_SCALING_FACTOR);
+    final localPosition = c.translate(-lastKnownSize.width / 2.0, -lastKnownSize.height / 2.0) / (scale * _MAGIC_SCALING_FACTOR);
     return controllerPosition + localPosition;
   }
 
